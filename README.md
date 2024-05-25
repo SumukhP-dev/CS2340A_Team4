@@ -1,3 +1,4 @@
 # CS2340A_Team4
-# Sumukh Paspuleti
-# Ashley Vaia
+## :busts_in_silhouette: Contributors 
+- Sumukh Paspuleti
+- Ashley Vaia
