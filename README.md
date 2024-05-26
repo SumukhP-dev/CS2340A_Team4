@@ -2,3 +2,4 @@
 ## :busts_in_silhouette: Contributors 
 - Sumukh Paspuleti
 - Ashley Vaia
+- Miranda Dominguez
