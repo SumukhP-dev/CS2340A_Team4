@@ -33,6 +33,7 @@ public class MainMenuActivity extends AppCompatActivity {
                 // An intent to transition to QuizActivity
                 Intent intent = new Intent(MainMenuActivity.this, QuizActivity.class);
                 startActivity(intent);
+                //jj
             }
         });
     }
