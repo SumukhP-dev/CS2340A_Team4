@@ -1,5 +1,6 @@
 package com.example.androidstudioassignmentsu2024;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -21,6 +22,14 @@ public class CreateFlashcardActivity extends AppCompatActivity {
 
         // TODO 3: Program the btnSaveFlashcard button as a callback for saveFlashcardData
         // After the data is saved, the button should also have the application return to the main screen automatically
+        btnSaveFlashcard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveFlashcardData(etQuestion, etAnswer);
+                Intent intent = new Intent(CreateFlashcardActivity.this, MainMenuActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
 
