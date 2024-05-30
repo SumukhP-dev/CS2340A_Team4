@@ -24,6 +24,8 @@ public class FlashcardManagerSingleton {
     // TODO 2: Implement addFlashcard functionality
     // HINT: look at the data structure type!
     public void addFlashcard(Flashcard flashcard) {
+        // Adds a flashcard to the flashcards ArrayList
+        flashcards.add(flashcard);
     }
 
 
