@@ -13,6 +13,12 @@
         android:text="Create Flashcard"
         android:layout_marginBottom="16dp"/>
 
+    <Button
+        android:id="@+id/btnStartQuiz"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start Quiz" />
+
 
     <!--    TODO 4: Create XML button object that binds to the btnStartQuiz instance in MainMenuActivity-->
     <!--    Make sure to abide by the constraints outlined by LinearLayout when setting the layout width and height -->
