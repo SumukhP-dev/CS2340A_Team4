@@ -25,8 +25,7 @@ public class QuizActivity extends AppCompatActivity {
         Button btnMainMenu = findByViewID(R.id.btnMainMenu);
 
         // TODO 6: Retreive flashcard list from singleton implementation
-
-
+        flashcards = FlashcardManagerSingleton.getInstance().getFlashcards();
 
         // DO NOT MODIFY!
         updateQuestionAndAnswer(tvQuestion, tvAnswer);
