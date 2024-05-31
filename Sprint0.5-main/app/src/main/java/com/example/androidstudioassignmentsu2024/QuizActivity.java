@@ -16,7 +16,13 @@ public class QuizActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         // TODO 5: Set content view to activity_quiz.xml file and assign respective TextViews and button to XML bindings
         // HINT: look at the error messages below to see what you should name the differnt entities
+       setContentView(R.layout.activity_quiz);
 
+       TextView tvQuestion = findByViewID(R.id.tvQuestion);
+       TextView tvAnswer = findByViewID(R.id.tvAnswer);
+       Button btnShowAnswer = findByViewID(R.id.btnShowAnswer);
+       Button btnNextFlashcard = findByViewID(R.id.btnNextFlashcard);
+       Button btnMainMenu = findByViewID(R.id.btnMainMenu);
 
         // TODO 6: Retreive flashcard list from singleton implementation
 
