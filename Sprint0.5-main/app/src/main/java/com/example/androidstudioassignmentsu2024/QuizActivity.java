@@ -18,6 +18,8 @@ public class QuizActivity extends AppCompatActivity {
         // HINT: look at the error messages below to see what you should name the differnt entities
 
 
+
+
         // TODO 6: Retreive flashcard list from singleton implementation
 
 
