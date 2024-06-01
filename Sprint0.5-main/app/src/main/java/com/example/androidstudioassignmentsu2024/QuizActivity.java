@@ -18,8 +18,8 @@ public class QuizActivity extends AppCompatActivity {
         // HINT: look at the error messages below to see what you should name the differnt entities
         setContentView(R.layout.activity_quiz);
 
-        TextView tvQuestion = findByViewID(R.id.tvQuestion);
         TextView tvAnswer = findByViewID(R.id.tvAnswer);
+        TextView tvQuestion = findByViewID(R.id.tvQuestion);
         Button btnShowAnswer = findByViewID(R.id.btnShowAnswer);
         Button btnNextFlashcard = findByViewID(R.id.btnNextFlashcard);
         Button btnMainMenu = findByViewID(R.id.btnMainMenu);
