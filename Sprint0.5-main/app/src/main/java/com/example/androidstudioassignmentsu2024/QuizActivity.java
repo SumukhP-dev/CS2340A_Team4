@@ -18,11 +18,11 @@ public class QuizActivity extends AppCompatActivity {
         // HINT: look at the error messages below to see what you should name the differnt entities
         setContentView(R.layout.activity_quiz);
 
-        TextView tvAnswer = findByViewID(R.id.tvAnswer);
-        TextView tvQuestion = findByViewID(R.id.tvQuestion);
-        Button btnShowAnswer = findByViewID(R.id.btnShowAnswer);
-        Button btnNextFlashcard = findByViewID(R.id.btnNextFlashcard);
-        Button btnMainMenu = findByViewID(R.id.btnMainMenu);
+        TextView tvQuestion = findViewById(R.id.tvQuestion);
+        TextView tvAnswer = findViewById(R.id.tvAnswer);
+        Button btnShowAnswer = findViewById(R.id.btnShowAnswer);
+        Button btnNextFlashcard = findViewById(R.id.btnNextFlashcard);
+        Button btnMainMenu = findViewById(R.id.btnMainMenu);
 
         // TODO 6: Retreive flashcard list from singleton implementation
 
