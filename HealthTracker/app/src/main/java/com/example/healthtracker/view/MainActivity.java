@@ -1,4 +1,4 @@
-package com.example.healthtracker;
+package com.example.healthtracker.view;
 
 import android.os.Bundle;
 
