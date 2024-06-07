@@ -1,3 +1,3 @@
-package com.exaple.healthtracker.model;
+package com.example.healthtracker.model;
 
 public class Workout {}
