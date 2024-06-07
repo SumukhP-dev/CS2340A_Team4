@@ -1,3 +1,3 @@
-package com.exaple.healthtracker.ViewModel;
+package com.example.healthtracker.ViewModel;
 
 public class WorkoutDataBase {}
