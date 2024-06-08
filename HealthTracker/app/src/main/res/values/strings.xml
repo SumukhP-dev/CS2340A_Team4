@@ -43,4 +43,11 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+    <string name="username">Username:</string>
+    <string name="password">Password:</string>
+    <string name="username_hint">username</string>
+    <string name="password_hint">password</string>
+    <string name="press_here_to_exit">Press Here To Exit</string>
+    <string name="sign_up_button">Sign Up</string>
+    <string name="account_creation">Account Creation</string>
 </resources>
