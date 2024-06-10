@@ -66,7 +66,7 @@ public class SignUpViewModel extends ViewModel {
             correctCredentials = false;
         }
 
-        if (password.toString().length() < 6) {
+        if (password.toString().trim().length() < 6) {
             updatePasswordErrorMessage("Password needs to be 6 char or longer");
             correctCredentials = false;
         }
