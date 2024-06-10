@@ -62,7 +62,7 @@ public class SignUpViewModel extends ViewModel {
             updateUsernameErrorMessage("Username is empty");
             correctCredentials = false;
         } else if (username.toString().trim().length() == 0) {
-            updateUsernameErrorMessage("Username is only whitespace");
+            updateUsernameErrorMessage("Username cannot be only whitespace");
             correctCredentials = false;
         }
 
@@ -74,7 +74,7 @@ public class SignUpViewModel extends ViewModel {
             updatePasswordErrorMessage("Password is empty");
             correctCredentials = false;
         } else if (password.toString().trim().length() == 0) {
-            updatePasswordErrorMessage("Password is only whitespace");
+            updatePasswordErrorMessage("Password cannot be only whitespace");
             correctCredentials = false;
         }
         return correctCredentials;
