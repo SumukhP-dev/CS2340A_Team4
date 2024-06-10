@@ -58,10 +58,7 @@ public class SignUpViewModel extends ViewModel {
 
     public boolean checkUsernameAndPassword(Editable username, Editable password) {
         boolean correctCredentials = true;
-        if (username == null) {
-            updateUsernameErrorMessage("Username is null");
-            correctCredentials = false;
-        } else if (username.toString().length() == 0) {
+        if (username.toString().length() == 0) {
             updateUsernameErrorMessage("Username is empty");
             correctCredentials = false;
         } else if (username.toString().trim().length() == 0) {
@@ -69,10 +66,11 @@ public class SignUpViewModel extends ViewModel {
             correctCredentials = false;
         }
 
-        if (password == null) {
-            updatePasswordErrorMessage("Password is null");
+        if (password.toString().length() < 6) {
+            updatePasswordErrorMessage("Password needs to be 6 char or longer");
             correctCredentials = false;
-        } else if (password.toString().length() == 0) {
+        }
+        if (password.toString().length() == 0) {
             updatePasswordErrorMessage("Password is empty");
             correctCredentials = false;
         } else if (password.toString().trim().length() == 0) {
@@ -105,13 +103,17 @@ public class SignUpViewModel extends ViewModel {
 
             // Create user using Firebase Authentication
             user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
-                                password.toString())
+                            password.toString())
                     .addOnCompleteListener(signUp, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
                                 FirebaseUser newUser = user.getAuth().getCurrentUser();
+                            } else {
+                                // Sign in failure, update error message
+                                updateGeneralErrorMessage("Invalid Username/Password");
+                                checkFields[0] = false;
                             }
                         }
                     });
