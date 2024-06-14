@@ -18,7 +18,6 @@ public class SignUpActivity extends AppCompatActivity {
     private SignUpViewModel signUpViewModel;
     private Button signUpButton;
     private Button exitButton;
-
     private EditText usernameEditText;
     private EditText passwordEditText;
     private boolean checkAuthState;
@@ -39,7 +38,7 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAuthState = signUpViewModel.signUp(SignUpActivity.this,
-                        usernameEditText.getText(), passwordEditText.getText());
+                        usernameEditText.getText().toString(), passwordEditText.getText().toString());
 
                 if (signUpViewModel.getGeneralErrorMessage().getValue() != null) {
                     Log.d("Error Validation 1: ",
