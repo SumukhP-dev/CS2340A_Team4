@@ -1,5 +1,4 @@
 package com.example.healthtracker.view;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
@@ -11,9 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.LoginViewModel;
-
 public class LoginActivity extends AppCompatActivity {
-
     private LoginViewModel loginViewModel;
     private Button loginButton;
     private Button signUpButton;
@@ -21,42 +18,41 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText passwordEditText;
 
+    private boolean checkAuthState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
         loginViewModel = new ViewModelProvider(this).get(LoginViewModel.class);
-
         loginButton = findViewById(R.id.logInButton);
         signUpButton = findViewById(R.id.signUpButton);
         exitButton = findViewById(R.id.exitButton);
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
-
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loginViewModel.login(LoginActivity.this,
+                checkAuthState = loginViewModel.login(LoginActivity.this,
                         usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
+                if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
+                    Log.d("Error Validation",
+                            loginViewModel.getGeneralErrorMessage().getValue());
+                }
+                if (!checkAuthState) {
+                    if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
+                        Toast.makeText(LoginActivity.this,
+                                loginViewModel.getGeneralErrorMessage().getValue(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.d("Error Validation",
+                                loginViewModel.getGeneralErrorMessage().getValue());
+                    }
+                } else {
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(intent);
+                }
             }
         });
-
-        loginViewModel.getGeneralErrorMessage().observe(this, errorMessage -> {
-            if (errorMessage != null) {
-                Toast.makeText(LoginActivity.this, errorMessage, Toast.LENGTH_SHORT).show();
-                Log.d("Error Validation", errorMessage);
-            }
-        });
-
-        loginViewModel.getLoginSuccess().observe(this, isSuccess -> {
-            if (isSuccess) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -64,10 +60,10 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                LoginActivity.this.finish();
                 finish();
             }
         });

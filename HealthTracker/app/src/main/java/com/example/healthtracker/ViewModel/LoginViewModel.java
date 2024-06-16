@@ -1,8 +1,7 @@
 package com.example.healthtracker.ViewModel;
-
 import android.app.Activity;
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
+import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 import com.example.healthtracker.model.User;
@@ -11,64 +10,59 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-
 public class LoginViewModel extends ViewModel {
     private final User user;
     private MutableLiveData<String> generalErrorMessage;
-    private MutableLiveData<Boolean> loginSuccess;
-
+    private MutableLiveData<String> formattedUsername;
     public LiveData<String> getGeneralErrorMessage() {
         return generalErrorMessage;
     }
-
     public void setGeneralErrorMessage(String error) {
         generalErrorMessage.setValue(error);
     }
-
-    public LiveData<Boolean> getLoginSuccess() {
-        return loginSuccess;
-    }
-
     public LoginViewModel() {
         user = new User(FirebaseAuth.getInstance());
         generalErrorMessage = new MutableLiveData<>(null);
-        loginSuccess = new MutableLiveData<>(false);
+        formattedUsername = new MutableLiveData<String>(null);
     }
-
-    public void login(Activity loginActivity, String username, String password) {
-        generalErrorMessage.setValue(null);
-        final boolean[] checkFields = {checkUsernameAndPassword(username, password)};
-
-        if (checkFields[0]) {
-            if (!validateUsername(username)) {
-                username += "@gmail.com";
+    public boolean login(Activity loginActivity, String username, String password) {
+        formattedUsername = new MutableLiveData<String>(null);
+        generalErrorMessage = new MutableLiveData<>(null);
+        final boolean[] checkFields = {checkUsernameAndPassword(username,
+                password)};
+        try {
+            formattedUsername.setValue(username);
+            if (checkFields[0] && !(validateUsername(username))) {
+                formattedUsername.setValue(formattedUsername.getValue() + "@gmail.com");
             }
-        username = username.trim();
-
+            // Trims username to prevent errors in authentication
+            if (formattedUsername.getValue() != null) {
+                formattedUsername.setValue(formattedUsername.getValue().trim());
+            }
             user.getAuth().signInWithEmailAndPassword(username, password)
                     .addOnCompleteListener(loginActivity, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
+                                // Sign in success
                                 FirebaseUser signedInUser = user.getAuth().getCurrentUser();
-                                if (signedInUser != null) {
-                                    loginSuccess.setValue(true);
-                                } else {
-                                    setGeneralErrorMessage("Invalid username/password");
-                                    loginSuccess.setValue(false);
-                                }
                             } else {
+                                // If sign in fails, display a message to the user
                                 setGeneralErrorMessage("Invalid username/password");
-                                loginSuccess.setValue(false);
+                                checkFields[0] = false;
                             }
                         }
                     });
-        } else {
+        } catch (Exception e) {
+            // Sign in failure, display error message
             setGeneralErrorMessage("Invalid username/password");
-            loginSuccess.setValue(false);
+            checkFields[0] = false;
         }
+        return checkFields[0];
     }
-
+    /* adapted logic from SignUpViewModel, with generalized error messages for security purposes for login functionality
+    /  Sets error messages based on passed in username and password params
+    */
     public boolean checkUsernameAndPassword(String username, String password) {
         boolean correctCredentials = true;
 
@@ -92,8 +86,9 @@ public class LoginViewModel extends ViewModel {
         }
         return correctCredentials;
     }
-
+    // Adapted logic
+    // Returns true if the username passed in is a valid gmail account
     public boolean validateUsername(String username) {
-        return username.toLowerCase().matches("^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$");
-    }
+        return username.toLowerCase().matches("/^\\S+@\\S+\\.\\S+$/\n");
+    };
 }
