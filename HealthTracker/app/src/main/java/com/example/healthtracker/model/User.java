@@ -16,5 +16,4 @@ public class User {
     public void setAuth(FirebaseAuth mAuth) {
         this.mAuth = mAuth;
     }
-
 }
