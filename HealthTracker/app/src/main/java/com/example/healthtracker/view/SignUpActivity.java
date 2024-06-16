@@ -8,11 +8,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.SignUpViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
@@ -41,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                resultAuthState = signUpViewModel.signUp(SignUpActivity.this,
+                resultAuthState = signUpViewModel.signUp(
                         usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
                 if (Boolean.FALSE.equals(signUpViewModel.getErrorMessage().getValue())) {
@@ -64,14 +66,20 @@ public class SignUpActivity extends AppCompatActivity {
                         Log.d("Error Validation",
                                 signUpViewModel.getGeneralErrorMessage().getValue());
                     }
-                } else if (resultAuthState.getException() != null) {
-                    Toast.makeText(SignUpActivity.this,
-                            "Invalid username/password",
-                            Toast.LENGTH_SHORT).show();
-                    Log.d("Error Validation", "test");
                 } else {
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                    startActivity(intent);
+                resultAuthState.addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(SignUpActivity.this,
+                                    "Invalid username/password",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 }
             }
         });

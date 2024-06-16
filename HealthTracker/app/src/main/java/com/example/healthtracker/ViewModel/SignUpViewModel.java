@@ -92,7 +92,7 @@ public class SignUpViewModel extends ViewModel {
     };
 
     // Creates a user using Firebase Authentication
-    public Task<AuthResult> signUp(Activity signUp, String username, String password) {
+    public Task<AuthResult> signUp(String username, String password) {
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
