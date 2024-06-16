@@ -84,7 +84,7 @@ public class SignUpActivity extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignUpActivity.this.finish();
+                moveTaskToBack(true);
             }
         });
     }
