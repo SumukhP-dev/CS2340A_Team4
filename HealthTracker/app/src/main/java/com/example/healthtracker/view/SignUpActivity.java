@@ -38,7 +38,8 @@ public class SignUpActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 checkAuthState = signUpViewModel.signUp(SignUpActivity.this,
-                        usernameEditText.getText().toString(), passwordEditText.getText().toString());
+                        usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
 
                 if (signUpViewModel.getGeneralErrorMessage().getValue() != null) {
                     Log.d("Error Validation 1: ",
