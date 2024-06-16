@@ -82,21 +82,21 @@ public class LoginViewModel extends ViewModel {
         boolean correctCredentials = true;
 
         if (username == null || username.length() == 0) {
-            setGeneralErrorMessage("Invalid username");
+            setGeneralErrorMessage("Invalid username/password");
             correctCredentials = false;
         } else if (username.trim().length() == 0) {
-            setGeneralErrorMessage("Invalid username");
+            setGeneralErrorMessage("Invalid username/password");
             correctCredentials = false;
         }
 
         if (password == null || password.length() == 0) {
-            setGeneralErrorMessage("Invalid password");
+            setGeneralErrorMessage("Invalid username/password");
             correctCredentials = false;
         } else if (password.trim().length() == 0) {
-            setGeneralErrorMessage("Invalid password");
+            setGeneralErrorMessage("Invalid username/password");
             correctCredentials = false;
         } else if (password.trim().length() < 6) {
-            setGeneralErrorMessage("Invalid password");
+            setGeneralErrorMessage("Invalid username/password");
             correctCredentials = false;
         }
         return correctCredentials;
