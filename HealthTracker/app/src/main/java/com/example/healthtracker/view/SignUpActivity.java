@@ -8,11 +8,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.SignUpViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+
+import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
     private SignUpViewModel signUpViewModel;
@@ -20,7 +26,7 @@ public class SignUpActivity extends AppCompatActivity {
     private Button exitButton;
     private EditText usernameEditText;
     private EditText passwordEditText;
-    private boolean checkAuthState;
+    private Task<AuthResult> resultAuthState;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,24 +43,10 @@ public class SignUpActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkAuthState = signUpViewModel.signUp(SignUpActivity.this,
+                resultAuthState = signUpViewModel.signUp(
                         usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-
-                if (signUpViewModel.getGeneralErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 1: ",
-                            signUpViewModel.getGeneralErrorMessage().getValue());
-                }
-                if (signUpViewModel.getUsernameErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 2: ",
-                            signUpViewModel.getUsernameErrorMessage().getValue());
-                }
-                if (signUpViewModel.getPasswordErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 3: ",
-                            signUpViewModel.getPasswordErrorMessage().getValue());
-                }
-
-                if (!checkAuthState) {
+                if (Boolean.FALSE.equals(signUpViewModel.getErrorMessage().getValue())) {
                     if (signUpViewModel.getUsernameErrorMessage().getValue() != null) {
                         usernameEditText.setError("Error: "
                                 + signUpViewModel.getUsernameErrorMessage().getValue());
@@ -75,8 +67,19 @@ public class SignUpActivity extends AppCompatActivity {
                                 signUpViewModel.getGeneralErrorMessage().getValue());
                     }
                 } else {
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                    startActivity(intent);
+                resultAuthState.addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(SignUpActivity.this,
+                                    "Invalid username/password",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 }
             }
         });
@@ -84,7 +87,7 @@ public class SignUpActivity extends AppCompatActivity {
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SignUpActivity.this.finish();
+                moveTaskToBack(true);
             }
         });
     }
