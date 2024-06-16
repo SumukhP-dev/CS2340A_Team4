@@ -1,3 +1,4 @@
+.env
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+google-services.json
