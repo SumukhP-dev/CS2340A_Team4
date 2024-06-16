@@ -58,17 +58,17 @@ public class LoginViewModel extends ViewModel {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
+                            // Sign in success
                             FirebaseUser signedInUser = user.getAuth().getCurrentUser();
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If sign in fails, display a message to the user
                             setGeneralErrorMessage("Invalid username/password");
                             checkFields[0] = false;
                         }
                     }
                 });
         } catch (Exception e) {
-            // Sign in failure, update error message
+            // Sign in failure, display error message
             setGeneralErrorMessage("Invalid username/password");
             checkFields[0] = false;
         }
