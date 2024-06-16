@@ -10,6 +10,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.LoginViewModel;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
     private Button loginButton;
@@ -18,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     private EditText usernameEditText;
     private EditText passwordEditText;
 
-    private boolean checkAuthState;
+    private Task<AuthResult> checkAuthState;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,18 +38,14 @@ public class LoginActivity extends AppCompatActivity {
                 checkAuthState = loginViewModel.login(LoginActivity.this,
                         usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
+                Log.d("Status",
+                        String.valueOf(checkAuthState.isSuccessful()));
+                if (!checkAuthState.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this,
+                            loginViewModel.getGeneralErrorMessage().getValue(),
+                            Toast.LENGTH_SHORT).show();
                     Log.d("Error Validation",
-                            loginViewModel.getGeneralErrorMessage().getValue());
-                }
-                if (!checkAuthState) {
-                    if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                        Toast.makeText(LoginActivity.this,
-                                loginViewModel.getGeneralErrorMessage().getValue(),
-                                Toast.LENGTH_SHORT).show();
-                        Log.d("Error Validation",
                                 loginViewModel.getGeneralErrorMessage().getValue());
-                    }
                 } else {
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
