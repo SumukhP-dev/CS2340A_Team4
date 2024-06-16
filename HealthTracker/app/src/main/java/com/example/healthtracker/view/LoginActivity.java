@@ -47,31 +47,11 @@ public class LoginActivity extends AppCompatActivity {
                         passwordEditText.getText().toString());
 
                 if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 1: ",
-                            loginViewModel.getGeneralErrorMessage().getValue());
-                }
-                if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 2: ",
-                            loginViewModel.getGeneralErrorMessage().getValue());
-                }
-                if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                    Log.d("Error Validation 3: ",
+                    Log.d("Error Validation",
                             loginViewModel.getGeneralErrorMessage().getValue());
                 }
 
                 if (!checkAuthState) {
-                    if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                        usernameEditText.setError("Error: "
-                                + loginViewModel.getGeneralErrorMessage().getValue());
-                        Log.d("Error Validation",
-                                loginViewModel.getGeneralErrorMessage().getValue());
-                    }
-                    if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
-                        passwordEditText.setError("Error: "
-                                + loginViewModel.getGeneralErrorMessage().getValue());
-                        Log.d("Error Validation",
-                                loginViewModel.getGeneralErrorMessage().getValue());
-                    }
                     if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
                         Toast.makeText(LoginActivity.this,
                                 loginViewModel.getGeneralErrorMessage().getValue(),
@@ -102,20 +82,4 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    // Validate username and password inputs
-    private boolean validateInputs(String username, String password) {
-        if (TextUtils.isEmpty(username)) {
-            usernameEditText.setError("Username cannot be empty");
-            return false;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            passwordEditText.setError("Password cannot be empty");
-            return false;
-        }
-
-        // Add more validation logic as needed (e.g., password length)
-
-        return true;
-    }
 }
