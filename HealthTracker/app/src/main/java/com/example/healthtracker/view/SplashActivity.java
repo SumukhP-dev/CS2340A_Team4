@@ -14,16 +14,15 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
+        // Sets a thread to run the splash screen on startup for 3 seconds
         Thread thread = new Thread() {
-
             @Override
             public void run() {
-
-                try{
+                try {
                     sleep(3000);
-                }catch (Exception e) {
+                } catch (Exception e) {
                     e.printStackTrace();
-                }finally {
+                } finally {
                     startActivity((new Intent(SplashActivity.this, MainActivity.class)));
                 }
             }
