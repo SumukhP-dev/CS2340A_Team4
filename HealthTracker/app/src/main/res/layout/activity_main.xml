@@ -17,6 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- navigation bar element, starts where the current fragment ends. Draws from a nav_menu that
+    contains icons-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
         android:layout_width="match_parent"
@@ -25,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_main"/>
+        app:menu="@menu/bottom_nav_menu"/>
 
 
 
