@@ -19,6 +19,8 @@ public class LoginViewModel extends ViewModel {
     private final User user;
     private MutableLiveData<String> generalErrorMessage;
 
+    private MutableLiveData<String> formattedUsername;
+
     public LiveData<String> getGeneralErrorMessage() {
         return generalErrorMessage;
     }
@@ -27,10 +29,55 @@ public class LoginViewModel extends ViewModel {
         generalErrorMessage.setValue(error);
     }
 
+    public LoginViewModel() {
+        user = new User(FirebaseAuth.getInstance());
+        generalErrorMessage = new MutableLiveData<>(null);
+        formattedUsername = new MutableLiveData<String>(null);
+    }
+
+    public boolean login(Activity loginActivity, String username, String password) {
+        formattedUsername = new MutableLiveData<String>(null);
+        generalErrorMessage = new MutableLiveData<>(null);
+
+        final boolean[] checkFields = {checkUsernameAndPassword(username,
+                password)};
+
+        try {
+            formattedUsername.setValue(username);
+            if (checkFields[0] && !(validateUsername(username))) {
+                formattedUsername.setValue(formattedUsername.getValue() + "@gmail.com");
+            }
+
+            // Trims username to prevent errors in authentication
+            if (formattedUsername.getValue() != null) {
+                formattedUsername.setValue(formattedUsername.getValue().trim());
+            }
+
+            user.getAuth().signInWithEmailAndPassword(username, password)
+                .addOnCompleteListener(loginActivity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser signedInUser = user.getAuth().getCurrentUser();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            setGeneralErrorMessage("Invalid username/password");
+                            checkFields[0] = false;
+                        }
+                    }
+                });
+        } catch (Exception e) {
+            // Sign in failure, update error message
+            setGeneralErrorMessage("Invalid username/password");
+            checkFields[0] = false;
+        }
+        return checkFields[0];
+    }
+
     /* adapted logic from SignUpViewModel, with generalized error messages for security purposes for login functionality
     /  Sets error messages based on passed in username and password params
     */
-
     public boolean checkUsernameAndPassword(String username, String password) {
         boolean correctCredentials = true;
 
@@ -55,37 +102,9 @@ public class LoginViewModel extends ViewModel {
         return correctCredentials;
     }
 
-    public LoginViewModel() {
-        user = new User(FirebaseAuth.getInstance());
-        generalErrorMessage = new MutableLiveData<>(null);
-    }
-
-    public boolean login(Activity loginActivity, String username, String password) {
-        generalErrorMessage = new MutableLiveData<>(null);
-
-        final boolean[] checkFields = {checkUsernameAndPassword(username,
-                password)};
-
-        try {
-        user.getAuth().signInWithEmailAndPassword(username, password)
-                .addOnCompleteListener(loginActivity, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser signedInUser = user.getAuth().getCurrentUser();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            setGeneralErrorMessage("Invalid username/password");
-                            checkFields[0] = false;
-                        }
-                    }
-                });
-        } catch (Exception e) {
-            // Sign in failure, update error message
-            setGeneralErrorMessage("Invalid username/password");
-            checkFields[0] = false;
-        }
-        return checkFields[0];
-    }
+    // Adapted logic
+    // Returns true if the username passed in is a valid gmail account
+    public boolean validateUsername(String username) {
+        return username.toLowerCase().matches("/^\\S+@\\S+\\.\\S+$/\n");
+    };
 }
