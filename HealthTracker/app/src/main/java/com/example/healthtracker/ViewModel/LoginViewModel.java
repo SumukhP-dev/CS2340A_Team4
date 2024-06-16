@@ -13,7 +13,7 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<String> passwordErrorMessage;
     private MutableLiveData<String> changedUsername;
     private MutableLiveData<String> generalErrorMessage;
-    private MutableLiveData<Boolean> statusMessage;
+    private MutableLiveData<Boolean> errorMessage;
 
     public LoginViewModel() {
         user = new User(FirebaseAuth.getInstance());
@@ -21,7 +21,7 @@ public class LoginViewModel extends ViewModel {
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
         generalErrorMessage = new MutableLiveData<String>(null);
-        statusMessage = new MutableLiveData<Boolean>(null);
+        errorMessage = new MutableLiveData<Boolean>(null);
     }
 
     public LiveData<String> getUsernameErrorMessage() {
@@ -48,12 +48,12 @@ public class LoginViewModel extends ViewModel {
         generalErrorMessage.setValue(error);
     }
 
-    public LiveData<Boolean> getStatusMessage() {
-        return statusMessage;
+    public LiveData<Boolean> getErrorMessage() {
+        return errorMessage;
     }
 
-    public void setStatusMessage(boolean statusMessage) {
-        this.statusMessage.setValue(statusMessage);
+    public void setErrorMessage(boolean statusMessage) {
+        this.errorMessage.setValue(statusMessage);
     }
 
     // Sets error messages based on passed in username and password params
@@ -78,7 +78,7 @@ public class LoginViewModel extends ViewModel {
             updatePasswordErrorMessage("Password needs to be 6 char or longer");
             correctCredentials = false;
         }
-        setStatusMessage(correctCredentials);
+        setErrorMessage(correctCredentials);
     }
 
     // Returns true if the username passed in is a valid gmail account
@@ -87,13 +87,13 @@ public class LoginViewModel extends ViewModel {
                 .substring(username.length() - 10).equals("@gmail.com");
     };
 
-    // Logins in a user using Firebase Authentication
-    public Task<AuthResult> login(Activity signUp, String username, String password) {
+    // Creates a user using Firebase Authentication
+    public Task<AuthResult> login(String username, String password) {
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
         generalErrorMessage = new MutableLiveData<String>(null);
-        statusMessage = new MutableLiveData<Boolean>(null);
+        errorMessage = new MutableLiveData<Boolean>(null);
 
         checkUsernameAndPassword(username, password);
         changedUsername.setValue(username);
@@ -104,6 +104,10 @@ public class LoginViewModel extends ViewModel {
         // Trims username to prevent errors in authentication
         if (changedUsername.getValue() != null) {
             changedUsername.setValue(changedUsername.getValue().trim());
+        }
+
+        if (Boolean.FALSE.equals(errorMessage.getValue())) {
+            return null;
         }
 
         return user.getAuth().signInWithEmailAndPassword(changedUsername.getValue(),

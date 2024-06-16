@@ -1,4 +1,5 @@
 package com.example.healthtracker.view;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
@@ -10,8 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.LoginViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseUser;
 
 public class LoginActivity extends AppCompatActivity {
     private LoginViewModel loginViewModel;
@@ -20,8 +23,10 @@ public class LoginActivity extends AppCompatActivity {
     private Button exitButton;
     private EditText usernameEditText;
     private EditText passwordEditText;
+    private Task<AuthResult> resultAuthState;
 
-    private Task<AuthResult> checkAuthState;
+    private boolean checkAuthState;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,23 +37,48 @@ public class LoginActivity extends AppCompatActivity {
         exitButton = findViewById(R.id.exitButton);
         usernameEditText = findViewById(R.id.usernameEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
+
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkAuthState = loginViewModel.login(LoginActivity.this,
+                resultAuthState = loginViewModel.login(
                         usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
-                Log.d("Status",
-                        String.valueOf(checkAuthState.isSuccessful()));
-                if (!checkAuthState.isSuccessful()) {
-                    Toast.makeText(LoginActivity.this,
-                            loginViewModel.getGeneralErrorMessage().getValue(),
-                            Toast.LENGTH_SHORT).show();
-                    Log.d("Error Validation",
+
+                if (Boolean.FALSE.equals(loginViewModel.getErrorMessage().getValue())) {
+                    if (loginViewModel.getUsernameErrorMessage().getValue() != null) {
+                        usernameEditText.setError("Error: "
+                                + loginViewModel.getUsernameErrorMessage().getValue());
+                        Log.d("Error Validation",
+                                loginViewModel.getUsernameErrorMessage().getValue());
+                    }
+                    if (loginViewModel.getPasswordErrorMessage().getValue() != null) {
+                        passwordEditText.setError("Error: "
+                                + loginViewModel.getPasswordErrorMessage().getValue());
+                        Log.d("Error Validation",
+                                loginViewModel.getPasswordErrorMessage().getValue());
+                    }
+                    if (loginViewModel.getGeneralErrorMessage().getValue() != null) {
+                        Toast.makeText(LoginActivity.this,
+                                loginViewModel.getGeneralErrorMessage().getValue(),
+                                Toast.LENGTH_SHORT).show();
+                        Log.d("Error Validation",
                                 loginViewModel.getGeneralErrorMessage().getValue());
+                    }
                 } else {
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    startActivity(intent);
+                    resultAuthState.addOnCompleteListener(LoginActivity.this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                                startActivity(intent);
+                            } else {
+                                Toast.makeText(LoginActivity.this,
+                                        "Invalid username/password",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
                 }
             }
         });
