@@ -53,6 +53,7 @@ public class SignUpViewModel extends ViewModel {
         generalErrorMessage.setValue(error);
     }
 
+    // Sets error messages based on passed in username and password params
     public boolean checkUsernameAndPassword(String username, String password) {
         boolean correctCredentials = true;
 
@@ -68,8 +69,8 @@ public class SignUpViewModel extends ViewModel {
             updatePasswordErrorMessage("Password is empty");
             correctCredentials = false;
         } else if (password.trim().length() == 0) {
-                updatePasswordErrorMessage("Password cannot be only whitespace");
-                correctCredentials = false;
+            updatePasswordErrorMessage("Password cannot be only whitespace");
+            correctCredentials = false;
         } else if (password.trim().length() < 6) {
             updatePasswordErrorMessage("Password needs to be 6 char or longer");
             correctCredentials = false;
@@ -77,10 +78,12 @@ public class SignUpViewModel extends ViewModel {
         return correctCredentials;
     }
 
+    // Returns true if the username passed in is a valid gmail account
     public boolean validateUsername(String username) {
         return username.toLowerCase().matches("/^\\S+@\\S+\\.\\S+$/\n");
     };
 
+    // Creates a user using Firebase Authentication
     public boolean signUp(Activity signUp, String username, String password) {
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
@@ -95,18 +98,19 @@ public class SignUpViewModel extends ViewModel {
             if (checkFields[0] && !(validateUsername(username))) {
                 changedUsername.setValue(changedUsername.getValue() + "@gmail.com");
             }
+
+            // Trims username to prevent errors in authentication
             if (changedUsername.getValue() != null) {
                 changedUsername.setValue(changedUsername.getValue().trim());
             }
 
-            // Create user using Firebase Authentication
             user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
                             password)
                     .addOnCompleteListener(signUp, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
+                                // Sign in success
                                 FirebaseUser newUser = user.getAuth().getCurrentUser();
                             } else {
                                 // Sign in failure, update error message
