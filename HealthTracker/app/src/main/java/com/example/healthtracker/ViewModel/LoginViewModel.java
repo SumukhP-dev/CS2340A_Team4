@@ -1,17 +1,13 @@
 package com.example.healthtracker.ViewModel;
-
 import android.app.Activity;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.healthtracker.model.User;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-
-public class SignUpViewModel extends ViewModel {
+import com.google.android.gms.tasks.Task;
+public class LoginViewModel extends ViewModel {
     private User user;
     private MutableLiveData<String> usernameErrorMessage;
     private MutableLiveData<String> passwordErrorMessage;
@@ -19,7 +15,7 @@ public class SignUpViewModel extends ViewModel {
     private MutableLiveData<String> generalErrorMessage;
     private MutableLiveData<Boolean> errorMessage;
 
-    public SignUpViewModel() {
+    public LoginViewModel() {
         user = new User(FirebaseAuth.getInstance());
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
@@ -92,7 +88,7 @@ public class SignUpViewModel extends ViewModel {
     };
 
     // Creates a user using Firebase Authentication
-    public Task<AuthResult> signUp(String username, String password) {
+    public Task<AuthResult> login(String username, String password) {
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
@@ -101,20 +97,20 @@ public class SignUpViewModel extends ViewModel {
 
         checkUsernameAndPassword(username, password);
         changedUsername.setValue(username);
-            if (!(validateUsername(username))) {
-                changedUsername.setValue(changedUsername.getValue() + "@gmail.com");
-            }
+        if (!(validateUsername(username))) {
+            changedUsername.setValue(changedUsername.getValue() + "@gmail.com");
+        }
 
-            // Trims username to prevent errors in authentication
-            if (changedUsername.getValue() != null) {
-                changedUsername.setValue(changedUsername.getValue().trim());
-            }
+        // Trims username to prevent errors in authentication
+        if (changedUsername.getValue() != null) {
+            changedUsername.setValue(changedUsername.getValue().trim());
+        }
 
-            if (Boolean.FALSE.equals(errorMessage.getValue())) {
-                return null;
-            }
+        if (Boolean.FALSE.equals(errorMessage.getValue())) {
+            return null;
+        }
 
-            return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
-                            password);
+        return user.getAuth().signInWithEmailAndPassword(changedUsername.getValue(),
+                password);
     }
 }
