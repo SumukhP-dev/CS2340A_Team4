@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- This menu takes different xml files from drawable and adds them to menu-->
     <item
         android:id="@+id/calories"
         android:title="calories"
