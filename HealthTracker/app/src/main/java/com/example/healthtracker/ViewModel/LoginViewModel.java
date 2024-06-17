@@ -1,5 +1,4 @@
 package com.example.healthtracker.ViewModel;
-import android.app.Activity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
