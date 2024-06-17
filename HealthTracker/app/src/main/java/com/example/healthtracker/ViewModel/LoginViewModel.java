@@ -83,7 +83,7 @@ public class LoginViewModel extends ViewModel {
 
     // Returns true if the username passed in is a valid gmail account
     public boolean validateUsername(String username) {
-        return username.toLowerCase().length() >= 10 && username.toLowerCase()
+        return username.toLowerCase().length() > 10 && username.toLowerCase()
                 .substring(username.length() - 10).equals("@gmail.com");
     };
 
