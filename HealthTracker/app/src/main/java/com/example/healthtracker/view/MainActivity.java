@@ -1,21 +1,14 @@
 package com.example.healthtracker.view;
 
 import android.os.Bundle;
-
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.ui.AppBarConfiguration;
-
 import com.example.healthtracker.R;
 import com.example.healthtracker.databinding.ActivityMainBinding;
-import com.google.android.material.snackbar.Snackbar;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
         //listens to the navigation bar and sets the fragment corresponding to the icon clicked
         binding.bottomNavigationBar.setOnItemSelectedListener(item -> {
-            if(item.getItemId() == R.id.home) {
+            if (item.getItemId() == R.id.home) {
                 replaceCurrFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.community) {
                 replaceCurrFragment(new CommunityFragment());
