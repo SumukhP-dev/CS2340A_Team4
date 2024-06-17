@@ -1,3 +1,3 @@
 package com.example.healthtracker.ViewModel;
 
-public class WorkoutDataBase {}
+public class WorkoutDataBase { }

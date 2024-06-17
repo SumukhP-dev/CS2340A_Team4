@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 
-import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
     private SignUpViewModel signUpViewModel;
@@ -67,21 +66,23 @@ public class SignUpActivity extends AppCompatActivity {
                                 signUpViewModel.getGeneralErrorMessage().getValue());
                     }
                 } else {
-                resultAuthState.addOnCompleteListener(SignUpActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                            startActivity(intent);
-                        } else {
-                            Toast.makeText(SignUpActivity.this,
-                                    "Invalid username/password",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                    resultAuthState.addOnCompleteListener(SignUpActivity.this,
+                            new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    Intent intent = new Intent(SignUpActivity.this,
+                                            MainActivity.class);
+                                        startActivity(intent);
+                                } else {
+                                    Toast.makeText(SignUpActivity.this,
+                                            "Invalid username/password",
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
-                });
                 }
-            }
         });
 
         exitButton.setOnClickListener(new View.OnClickListener() {
