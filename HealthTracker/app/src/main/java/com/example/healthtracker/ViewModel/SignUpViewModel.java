@@ -1,11 +1,9 @@
 package com.example.healthtracker.ViewModel;
 
-import android.app.Activity;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.example.healthtracker.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -101,20 +99,20 @@ public class SignUpViewModel extends ViewModel {
 
         checkUsernameAndPassword(username, password);
         changedUsername.setValue(username);
-            if (!(validateUsername(username))) {
-                changedUsername.setValue(changedUsername.getValue() + "@gmail.com");
-            }
+        if (!(validateUsername(username))) {
+            changedUsername.setValue(changedUsername.getValue() + "@gmail.com");
+        }
 
-            // Trims username to prevent errors in authentication
-            if (changedUsername.getValue() != null) {
-                changedUsername.setValue(changedUsername.getValue().trim());
-            }
+        // Trims username to prevent errors in authentication
+        if (changedUsername.getValue() != null) {
+            changedUsername.setValue(changedUsername.getValue().trim());
+        }
 
-            if (Boolean.FALSE.equals(errorMessage.getValue())) {
-                return null;
-            }
+        if (Boolean.FALSE.equals(errorMessage.getValue())) {
+            return null;
+        }
 
-            return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
-                            password);
+        return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
+                password);
     }
 }
