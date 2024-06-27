@@ -1,7 +1,10 @@
 package com.example.healthtracker.view;
 
+import static android.content.ContentValues.TAG;
+
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -12,6 +15,17 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 import com.example.healthtracker.R;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
+import android.util.Log;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.firebase.firestore.DocumentReference;
+
+import com.google.android.gms.tasks.OnSuccessListener;
+
+
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -79,6 +93,36 @@ public class TrackerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 toggleSmallScreen();
+            }
+        });
+
+        Button testButton = view.findViewById(R.id.testAddButton);
+
+        // Set click listener for the test
+        testButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Write a message to the database
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                Map<String, Object> user = new HashMap<>();
+                user.put("first", "Ada");
+                user.put("last", "Lovelace");
+                user.put("born", 1815);
+                db.collection("Workout")
+                        .add(user)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Log.w(TAG, "Error adding document", e);
+                            }
+                        });
+
             }
         });
 
