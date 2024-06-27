@@ -27,6 +27,16 @@
         android:layout_marginBottom="251dp"
         android:text="Show Screen" />
 
+    <Button
+        android:id="@+id/testAddButton"
+        android:layout_width="158dp"
+        android:layout_height="64dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="26dp"
+        android:text="meow meow" />
+
     <FrameLayout
         android:id="@+id/smallScreen"
         android:layout_width="match_parent"
