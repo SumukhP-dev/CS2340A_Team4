@@ -15,7 +15,7 @@ public class LoginViewModel extends ViewModel {
     private MutableLiveData<Boolean> errorMessage;
 
     public LoginViewModel() {
-        user = new User(FirebaseAuth.getInstance());
+        user = User.getInstance();
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
@@ -108,6 +108,8 @@ public class LoginViewModel extends ViewModel {
         if (Boolean.FALSE.equals(errorMessage.getValue())) {
             return null;
         }
+
+        user.setUsername(changedUsername.getValue());
 
         return user.getAuth().signInWithEmailAndPassword(changedUsername.getValue(),
                 password);
