@@ -7,11 +7,65 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="37dp"
-        android:text="Small Screen Content" />
+    <EditText
+        android:id="@+id/workoutInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Workout name"
+        android:inputType="text"
+        android:textSize="16sp"/>
 
+    <EditText
+        android:id="@+id/setCompleted"
+        android:layout_width="134dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="169dp"
+        android:hint="Sets completed"
+        android:inputType="text"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/reps"
+        android:layout_width="109dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="18dp"
+        android:hint="Reps per set"
+        android:inputType="text"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/calories"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="114dp"
+        android:hint="Calories per set"
+        android:inputType="text"
+        android:textSize="16sp" />
+
+    <EditText
+        android:id="@+id/notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="66dp"
+        android:hint="Notes"
+        android:inputType="text"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/log_workout"
+        android:layout_width="245dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="-1dp"
+        android:text="Log workout" />
     <!-- Add more views as needed -->
 
 </RelativeLayout>
