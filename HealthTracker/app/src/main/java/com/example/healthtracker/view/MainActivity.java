@@ -31,10 +31,18 @@ public class MainActivity extends AppCompatActivity {
                 replaceCurrFragment(new CommunityFragment());
             } else if (item.getItemId() == R.id.calories) {
                 replaceCurrFragment(new CaloriesFragment());
-            } else if (item.getItemId() == R.id.tracker) {
-                replaceCurrFragment(new TrackerFragment());
+            }
+
+            return true;
+        });
+
+        binding.furtherBottomNavigationBar.setOnItemSelectedListener(item -> {
+            if (item.getItemId() == R.id.personal_info) {
+                replaceCurrFragment(new PersonalInformationFragment());
             } else if (item.getItemId() == R.id.workouts) {
                 replaceCurrFragment(new WorkoutsFragment());
+            } else if (item.getItemId() == R.id.tracker) {
+                replaceCurrFragment(new TrackerFragment());
             }
 
             return true;
