@@ -18,7 +18,7 @@ public class SignUpViewModel extends ViewModel {
     private MutableLiveData<Boolean> errorMessage;
 
     public SignUpViewModel() {
-        user = new User(FirebaseAuth.getInstance());
+        user = User.getInstance();
         changedUsername = new MutableLiveData<String>(null);
         passwordErrorMessage = new MutableLiveData<String>(null);
         usernameErrorMessage = new MutableLiveData<String>(null);
@@ -111,6 +111,8 @@ public class SignUpViewModel extends ViewModel {
         if (Boolean.FALSE.equals(errorMessage.getValue())) {
             return null;
         }
+
+        user.setUsername(changedUsername.getValue());
 
         return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
                 password);
