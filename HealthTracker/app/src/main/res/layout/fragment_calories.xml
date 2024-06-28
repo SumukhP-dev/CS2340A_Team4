@@ -15,20 +15,22 @@
             android:id="@+id/title_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_calories"
             android:layout_gravity="center_horizontal"
+            android:layout_marginTop="104dp"
+            android:text="@string/title_calories"
+            android:textColor="#000000"
             android:textSize="28sp"
             android:textStyle="bold"
-            android:textColor="#000000"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/calorie_burned"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calories Burned"
+            android:text="@string/calories_burned"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -52,7 +54,7 @@
             android:id="@+id/calorie_goal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Calorie Goal"
+            android:text="@string/calorie_goal"
             android:textSize="20sp"
             android:textStyle="bold"
             android:textColor="#000000"
@@ -64,20 +66,21 @@
             android:id="@+id/button_dataVis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44sp"
-            android:text="See Data Visualization"
+            android:layout_marginTop="120dp"
+            android:text="@string/button_dataVis"
             app:layout_constraintEnd_toEndOf="@id/title_calories"
-            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintHorizontal_bias="0.533"
             app:layout_constraintStart_toStartOf="@id/title_calories"
             app:layout_constraintTop_toBottomOf="@id/title_calories" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart_dataVisualization"
             android:layout_width="fill_parent"
-            android:layout_height="0sp"
-            app:layout_constraintTop_toBottomOf="@id/button_dataVis"
+            android:layout_height="359sp"
+            app:layout_constraintBaseline_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/button_dataVis"
             app:layout_constraintStart_toStartOf="@id/button_dataVis"
-            app:layout_constraintEnd_toEndOf="@id/button_dataVis"/>
+            app:layout_constraintTop_toBottomOf="@id/button_dataVis" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
