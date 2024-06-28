@@ -58,4 +58,5 @@ dependencies {
 
     implementation 'com.google.firebase:firebase-auth:18.0.0'
     implementation 'com.google.android.gms:play-services-gcm:17.0.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 }
