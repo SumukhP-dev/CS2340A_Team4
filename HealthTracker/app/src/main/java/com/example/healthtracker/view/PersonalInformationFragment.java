@@ -3,12 +3,16 @@ package com.example.healthtracker.view;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +29,16 @@ public class PersonalInformationFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private PersonalInformationViewModel personalInformationViewModel;
+    private EditText nameTextView;
+    private EditText heightEditTextNumberDecimal;
+    private EditText weightEditTextNumberDecimal;
+
+    private Button maleButton;
+    private Button femaleButton;
+    private Button otherButton;
+    private Button saveInformationButton;
 
     public PersonalInformationFragment() {
         // Required empty public constructor
@@ -57,10 +71,32 @@ public class PersonalInformationFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_personal_information, container, false);
+        View view =  inflater.inflate(R.layout.fragment_personal_information, container, false);
+
+        personalInformationViewModel = new ViewModelProvider(this)
+                .get(PersonalInformationViewModel.class);
+
+        nameTextView = view.findViewById(R.id.nameEditTextView);
+        heightEditTextNumberDecimal = view.findViewById(R.id.heightEditTextNumberDecimal);
+        weightEditTextNumberDecimal = view.findViewById(R.id.weightEditTextNumberDecimal);
+        maleButton = view.findViewById(R.id.maleButton);
+        femaleButton = view.findViewById(R.id.femaleButton);
+        otherButton = view.findViewById(R.id.otherButton);
+        saveInformationButton = view.findViewById(R.id.saveInformationButton);
+
+        saveInformationButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                personalInformationViewModel.addPersonalData("robin", "name",
+                        200.0, 200.0, "male");
+            }
+        });
+
+        return view;
     }
 }
