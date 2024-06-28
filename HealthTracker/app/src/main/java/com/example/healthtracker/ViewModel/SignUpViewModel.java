@@ -4,10 +4,10 @@ package com.example.healthtracker.ViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.example.healthtracker.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 
 public class SignUpViewModel extends ViewModel {
     private User user;
