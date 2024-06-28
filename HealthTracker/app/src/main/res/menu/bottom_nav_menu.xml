@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- This menu takes different xml files from drawable and adds them to menu-->
-    <item
+    <!--<item
         android:id="@+id/home"
         android:title="home"
+        android:icon="@drawable/home_button_nav"></item>-->
+
+    <item
+        android:id="@+id/home"
         android:icon="@drawable/home_button_nav"></item>
 
     <item
         android:id="@+id/calories"
-        android:title="calories"
         android:icon="@drawable/calories_button_nav"></item>>
 
     <item
         android:id="@+id/community"
-        android:title="community"
         android:icon="@drawable/community_button_nav"></item>
 
-    <item
+    <!--<item
         android:id="@+id/tracker"
-        android:title="tracker"
         android:icon="@drawable/tracker_button_nav"></item>
 
     <item
         android:id="@+id/workouts"
-        android:title="workouts"
-        android:icon="@drawable/workouts_button_nav"></item>
+        android:icon="@drawable/workouts_button_nav"></item>-->
 </menu>
