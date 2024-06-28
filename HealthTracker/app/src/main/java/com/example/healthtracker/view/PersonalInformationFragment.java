@@ -1,5 +1,6 @@
 package com.example.healthtracker.view;
 
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -21,12 +22,10 @@ import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
  */
 public class PersonalInformationFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -52,7 +51,6 @@ public class PersonalInformationFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment PersonalInformationFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static PersonalInformationFragment newInstance(String param1, String param2) {
         PersonalInformationFragment fragment = new PersonalInformationFragment();
         Bundle args = new Bundle();
@@ -89,11 +87,57 @@ public class PersonalInformationFragment extends Fragment {
         otherButton = view.findViewById(R.id.otherButton);
         saveInformationButton = view.findViewById(R.id.saveInformationButton);
 
+        maleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                personalInformationViewModel.setGender("male");
+                maleButton.setBackgroundColor(Color.parseColor("#FF000000"));
+                maleButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+
+                femaleButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                femaleButton.setTextColor(Color.parseColor("#FF000000"));
+                otherButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                otherButton.setTextColor(Color.parseColor("#FF000000"));
+            }
+        });
+
+        femaleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                personalInformationViewModel.setGender("female");
+                femaleButton.setBackgroundColor(Color.parseColor("#FF000000"));
+                femaleButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+
+                maleButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                maleButton.setTextColor(Color.parseColor("#FF000000"));
+                otherButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                otherButton.setTextColor(Color.parseColor("#FF000000"));
+            }
+        });
+
+        otherButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                personalInformationViewModel.setGender("other");
+                otherButton.setBackgroundColor(Color.parseColor("#FF000000"));
+                otherButton.setTextColor(Color.parseColor("#FFFFFFFF"));
+
+                maleButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                maleButton.setTextColor(Color.parseColor("#FF000000"));
+                femaleButton.setBackgroundColor(Color.parseColor("#D3D3D3"));
+                femaleButton.setTextColor(Color.parseColor("#FF000000"));
+            }
+        });
+
         saveInformationButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                personalInformationViewModel.addPersonalData("robin", "name",
-                        200.0, 200.0, "male");
+                personalInformationViewModel.addPersonalData(
+                        personalInformationViewModel.getUsername(),
+                        nameTextView.getText().toString(),
+                        Double.parseDouble(heightEditTextNumberDecimal.getText().toString()),
+                        Double.parseDouble(weightEditTextNumberDecimal.getText().toString()),
+                        personalInformationViewModel.getGender());
             }
         });
 

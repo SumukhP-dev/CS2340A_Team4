@@ -112,7 +112,8 @@ public class SignUpViewModel extends ViewModel {
             return null;
         }
 
-        user.setUsername(changedUsername.getValue());
+        user.setUsername(changedUsername.getValue().substring(0,
+                changedUsername.getValue().length() - 10));
 
         return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
                 password);

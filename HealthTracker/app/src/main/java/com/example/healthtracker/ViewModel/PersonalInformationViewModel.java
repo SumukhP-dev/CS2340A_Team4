@@ -1,6 +1,7 @@
 package com.example.healthtracker.ViewModel;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.healthtracker.model.User;
@@ -14,9 +15,27 @@ import java.util.Map;
 
 public class PersonalInformationViewModel extends ViewModel {
     private User user;
+    private MutableLiveData<String> gender;
 
     public PersonalInformationViewModel() {
         user = User.getInstance();
+        gender = new MutableLiveData<String>("male");
+    }
+
+    public String getGender() {
+        return gender.getValue();
+    }
+
+    public void setGender(String gender) {
+        this.gender.setValue(gender);
+    }
+
+    public String getUsername() {
+        return user.getUsername();
+    }
+
+    public void setUsername(String username) {
+        user.setUsername(username);
     }
 
     // Updates personal information or creates a
@@ -37,7 +56,7 @@ public class PersonalInformationViewModel extends ViewModel {
     }
 
     // Creates a new user with name, height, weight, gender, and username
-    public void createUserDocument (DatabaseReference userRef, String username, String name,
+    public void createUserDocument(DatabaseReference userRef, String username, String name,
                                     Double height, Double weight, String gender) {
         userRef.child(username).push();
         DatabaseReference ref = userRef.child(username);
@@ -56,7 +75,7 @@ public class PersonalInformationViewModel extends ViewModel {
     }
 
     // Updates personal information of user
-    public void updateDocument (DatabaseReference userRef, String username, String name,
+    public void updateDocument(DatabaseReference userRef, String username, String name,
                                 Double height, Double weight, String gender) {
         DatabaseReference ref = userRef.child(username);
 

@@ -1,11 +1,12 @@
 package com.example.healthtracker.ViewModel;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
 import com.example.healthtracker.model.User;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 public class LoginViewModel extends ViewModel {
     private User user;
     private MutableLiveData<String> usernameErrorMessage;
@@ -109,7 +110,8 @@ public class LoginViewModel extends ViewModel {
             return null;
         }
 
-        user.setUsername(changedUsername.getValue());
+        user.setUsername(changedUsername.getValue().substring(0,
+                changedUsername.getValue().length() - 10));
 
         return user.getAuth().signInWithEmailAndPassword(changedUsername.getValue(),
                 password);
