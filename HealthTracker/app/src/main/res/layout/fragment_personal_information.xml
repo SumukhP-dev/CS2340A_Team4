@@ -19,8 +19,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.06999999" />
 
-    <TextView
-        android:id="@+id/nameTextView"
+    <EditText
+        android:id="@+id/nameEditTextView"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_corner"
@@ -48,11 +48,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameTextView"
+        app:layout_constraintTop_toBottomOf="@+id/nameEditTextView"
         app:layout_constraintVertical_bias="0.061" />
 
     <EditText
-        android:id="@+id/editTextNumberDecimal2"
+        android:id="@+id/weightEditTextNumberDecimal"
         android:layout_width="300dp"
         android:layout_height="35dp"
         android:background="@drawable/rounded_corner"
@@ -79,7 +79,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.145"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal2"
+        app:layout_constraintTop_toBottomOf="@+id/weightEditTextNumberDecimal"
         app:layout_constraintVertical_bias="0.095" />
 
     <Button
@@ -92,7 +92,7 @@
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/maleButton"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal2"
+        app:layout_constraintTop_toBottomOf="@+id/weightEditTextNumberDecimal"
         app:layout_constraintVertical_bias="0.095" />
 
     <Button
@@ -106,7 +106,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.298"
         app:layout_constraintStart_toEndOf="@+id/femaleButton"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNumberDecimal2"
+        app:layout_constraintTop_toBottomOf="@+id/weightEditTextNumberDecimal"
         app:layout_constraintVertical_bias="0.095" />
 
     <Button
