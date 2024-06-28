@@ -22,6 +22,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentReference;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 
@@ -38,6 +40,7 @@ public class TrackerFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private DatabaseReference mDatabase;
     private FrameLayout frameLayout;
     private Button showScreenButton;
     private Button logWorkoutButton;
@@ -104,26 +107,14 @@ public class TrackerFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 // Write a message to the database
-                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                mDatabase = FirebaseDatabase.getInstance().getReference();
                 Map<String, Object> user = new HashMap<>();
-                user.put("first", "Ada");
-                user.put("last", "Lovelace");
-                user.put("born", 1815);
-                db.collection("Workout")
-                        .add(user)
-                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.w(TAG, "Error adding document", e);
-                            }
-                        });
-
+                user.put("additionalNotes", "Kitty kitty");
+                user.put("caloriesBurned", 500);
+                user.put("reps", 3);
+                user.put("sets", 10);
+                user.put("workoutName", "Bench");
+                mDatabase.child("Workouts").child("bob").child("workout3").setValue(user);
             }
         });
 
