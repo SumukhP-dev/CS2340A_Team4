@@ -1,18 +1,20 @@
 package com.example.healthtracker.model;
 
+import com.google.firebase.Firebase;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 public class User {
     private FirebaseAuth mAuth;
-    private FirebaseFirestore database;
+    private FirebaseDatabase database;
     private String username;
 
     private volatile static User uniqueInstance;
 
     private User() {
         mAuth = FirebaseAuth.getInstance();
-        database = FirebaseFirestore.getInstance();
+        database = FirebaseDatabase.getInstance();
         username = "";
     }
 
@@ -35,11 +37,11 @@ public class User {
         this.mAuth = mAuth;
     }
 
-    public FirebaseFirestore getDatabase() {
+    public FirebaseDatabase getDatabase() {
         return database;
     }
 
-    public void setDatabase(FirebaseFirestore database) {
+    public void setDatabase(FirebaseDatabase database) {
         this.database = database;
     }
 
