@@ -139,6 +139,15 @@ public class TrackerFragment extends Fragment {
         String caloriesPerSet = calories.getText().toString();
         String workoutNotes = notes.getText().toString();
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> user = new HashMap<>();
+        user.put("additionalNotes", workoutNotes);
+        user.put("caloriesBurned", caloriesPerSet);
+        user.put("reps", repsPerSet);
+        user.put("sets", sets);
+        user.put("workoutName", workout);
+        mDatabase.child("Workouts").child("bob").child("workout3").setValue(user);
+
         workoutInput.setText("");
         setCompleted.setText("");
         reps.setText("");
