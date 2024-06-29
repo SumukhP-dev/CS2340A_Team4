@@ -100,24 +100,6 @@ public class TrackerFragment extends Fragment {
                 logWorkoutAndDismissSmallScreen();
             }
         });
-        Button testButton = view.findViewById(R.id.testAddButton);
-
-        // Set click listener for the test
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Write a message to the database
-                mDatabase = FirebaseDatabase.getInstance().getReference();
-                Map<String, Object> user = new HashMap<>();
-                user.put("additionalNotes", "Kitty kitty");
-                user.put("caloriesBurned", 500);
-                user.put("reps", 3);
-                user.put("sets", 10);
-                user.put("workoutName", "Bench");
-                mDatabase.child("Workouts").child("bob").child("workout3").setValue(user);
-            }
-        });
-
 
         return view;
     }
