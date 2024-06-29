@@ -8,6 +8,7 @@
     tools:context=".view.CaloriesFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_layout_ID"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -62,7 +63,6 @@
             app:layout_constraintTop_toBottomOf="@id/title_calories"
             app:layout_constraintStart_toEndOf="@id/slash"
             app:layout_constraintEnd_toEndOf="@id/title_calories"/>
-
 
 
         <Button
