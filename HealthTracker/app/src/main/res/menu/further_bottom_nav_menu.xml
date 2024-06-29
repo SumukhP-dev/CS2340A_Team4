@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/personal_info"
+        android:icon="@drawable/personal_info_button_nav"></item>
+    <item
+        android:id="@+id/tracker"
+        android:icon="@drawable/tracker_button_nav"></item>
+
+    <item
+        android:id="@+id/workouts"
+        android:icon="@drawable/workouts_button_nav"></item>
+
+</menu>

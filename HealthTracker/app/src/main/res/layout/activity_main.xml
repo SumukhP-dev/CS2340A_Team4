@@ -22,12 +22,24 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationBar"
         android:layout_width="match_parent"
-        android:layout_height="75dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toTopOf="@id/furtherBottomNavigationBar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_nav_menu"/>
+
+    <!-- navigation bar element, starts where the current fragment ends. Draws from a nav_menu that
+    contains icons-->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/furtherBottomNavigationBar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintStart_toStartOf="parent"
+        app:menu="@menu/further_bottom_nav_menu"/>
 
 
 
