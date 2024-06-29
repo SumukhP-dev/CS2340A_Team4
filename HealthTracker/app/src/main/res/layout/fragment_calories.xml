@@ -26,6 +26,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <TextView
             android:id="@+id/calorie_burned"
             android:layout_width="wrap_content"
@@ -62,6 +63,8 @@
             app:layout_constraintStart_toEndOf="@id/slash"
             app:layout_constraintEnd_toEndOf="@id/title_calories"/>
 
+
+
         <Button
             android:id="@+id/button_dataVis"
             android:layout_width="wrap_content"
@@ -69,7 +72,7 @@
             android:layout_marginTop="120dp"
             android:text="@string/button_dataVis"
             app:layout_constraintEnd_toEndOf="@id/title_calories"
-            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintHorizontal_bias="0.2"
             app:layout_constraintStart_toStartOf="@id/title_calories"
             app:layout_constraintTop_toBottomOf="@id/title_calories" />
 
