@@ -1,15 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    app:barrierAllowsGoneWidgets="false"
     tools:context=".view.TrackerFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tracker"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginEnd="187dp"
+        android:text="Tracker" />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/showScreenButton"
+        android:layout_width="158dp"
+        android:layout_height="64dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="128dp"
+        android:layout_marginBottom="205dp"
+        android:text="Show Screen" />
+
+
+    <FrameLayout
+        android:id="@+id/smallScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <!-- This will be your small screen content -->
+        <include layout="@layout/small_screen_layout" />
+
+    </FrameLayout>
+
+
+
+</RelativeLayout>
