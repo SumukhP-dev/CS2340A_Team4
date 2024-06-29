@@ -1,15 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.CaloriesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Colories"
-        android:layout_gravity="center_horizontal"/>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/title_calories"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/title_calories"
+            android:layout_gravity="center_horizontal"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/calorie_burned"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calories Burned"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@id/title_calories"
+            app:layout_constraintStart_toStartOf="@id/title_calories"
+            app:layout_constraintEnd_toStartOf="@id/slash"/>
+
+        <TextView
+            android:id="@+id/slash"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="/"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@id/title_calories"
+            app:layout_constraintStart_toEndOf="@id/calorie_burned"
+            app:layout_constraintEnd_toStartOf="@id/calorie_goal"/>
+
+        <TextView
+            android:id="@+id/calorie_goal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Calorie Goal"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            app:layout_constraintTop_toBottomOf="@id/title_calories"
+            app:layout_constraintStart_toEndOf="@id/slash"
+            app:layout_constraintEnd_toEndOf="@id/title_calories"/>
+
+
+
+        <Button
+            android:id="@+id/button_dataVis"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="224dp"
+            android:text="See Data Visualization"
+            app:layout_constraintEnd_toEndOf="@id/title_calories"
+            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintStart_toStartOf="@id/title_calories"
+            app:layout_constraintTop_toBottomOf="@id/title_calories" />
+
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/chart_dataVisualization"
+            android:layout_width="fill_parent"
+            android:layout_height="0sp"
+            app:layout_constraintTop_toBottomOf="@id/button_dataVis"
+            app:layout_constraintStart_toStartOf="@id/button_dataVis"
+            app:layout_constraintEnd_toEndOf="@id/button_dataVis"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </FrameLayout>
