@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.model.User;
 import com.github.mikephil.charting.charts.PieChart;
 import com.github.mikephil.charting.data.PieData;
 import com.github.mikephil.charting.data.PieDataSet;
@@ -40,6 +41,12 @@ public class CaloriesFragment extends Fragment {
     private DatabaseReference databaseRef;
 
     private String curCalries;
+    private String username;
+
+    private String genderInfo;
+    private String heightInfo;
+    private String weightInfo;
+    private String age;
 
 
     public CaloriesFragment() {
@@ -82,8 +89,10 @@ public class CaloriesFragment extends Fragment {
         pieButton = view.findViewById(R.id.button_dataVis);
         pie=view.findViewById(R.id.chart_dataVisualization);
 
-        databaseRef= FirebaseDatabase.getInstance().getReference("Workouts");
-        databaseRef.child("boyucheng").child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        username= User.getInstance().getUsername();
+
+        databaseRef= FirebaseDatabase.getInstance().getReference();
+        databaseRef.child("Workouts").child(username).child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot dataSnapshot=task.getResult();
@@ -91,11 +100,43 @@ public class CaloriesFragment extends Fragment {
             }
         });
 
-        pieButton.setOnClickListener((l) ->{drawPie(pie,curCalries);});
+        databaseRef.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot dataSnapshot=task.getResult();
+                genderInfo=String.valueOf(dataSnapshot.child("gender").getValue());
+                heightInfo=String.valueOf(String.valueOf(dataSnapshot.child("height").getValue()));
+                weightInfo=String.valueOf(dataSnapshot.child("weight").getValue());
+            }
+        });
+
+        //double heightDouble = new Double(heightInfo).doubleValue();
+        //double weightDouble = new Double(weight).doubleValue();
+        double ageDouble=30;
+        double goalCal;
+        double heightDouble = 170;
+        double weightDouble = 100;
+
+        //if (genderInfo=="male"){
+            goalCal=goalMen(weightDouble,heightDouble,ageDouble);
+        //}else{
+        //    goalCal=goalWomen(weightDouble,heightDouble,ageDouble);
+        //}
+
+
+        pieButton.setOnClickListener((l) ->{drawPie(pie,curCalries,goalCal);});
         return view;
     }
 
-    public void drawPie(PieChart pie, String curCalries){
+    public double goalMen(double weight,double height,double age){
+        return 10*weight+6.25*height-5*age+5;
+    }
+
+    public double goalWomen(double weight,double height,double age){
+        return 10*weight+6.25*height-5*age-161;
+    }
+
+    public void drawPie(PieChart pie, String curCalries, double goalVal){
 
         ArrayList<PieEntry> entries = new ArrayList<>();
         List<Integer> colors = new ArrayList<>();
@@ -103,9 +144,12 @@ public class CaloriesFragment extends Fragment {
         Random rng = new Random();
         double cal = new Double(curCalries).doubleValue();
         float calFloat = (float) cal;
+
+        float goalFloat = (float) goalVal;
+
         entries.add(new PieEntry(calFloat,"Current burning"));
         colors.add(rng.nextInt());
-        entries.add(new PieEntry(200f,"Goal"));
+        entries.add(new PieEntry(goalFloat,"Goal"));
         colors.add(rng.nextInt());
 
         PieDataSet set = new PieDataSet(entries,"Subjects");
