@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.EditText;
 import com.example.healthtracker.R;
+import com.example.healthtracker.model.User;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.HashMap;
 import java.util.Map;
@@ -121,6 +122,8 @@ public class TrackerFragment extends Fragment {
         String caloriesPerSet = calories.getText().toString();
         String workoutNotes = notes.getText().toString();
 
+        String username = User.getInstance().getUsername();
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
         Map<String, Object> user = new HashMap<>();
         user.put("additionalNotes", workoutNotes);
@@ -128,7 +131,7 @@ public class TrackerFragment extends Fragment {
         user.put("reps", repsPerSet);
         user.put("sets", sets);
         user.put("workoutName", workout);
-        mDatabase.child("Workouts").child("bob").child("workout3").setValue(user);
+        mDatabase.child("Workouts").child(username).child(workout).setValue(user);
 
         workoutInput.setText("");
         setCompleted.setText("");
