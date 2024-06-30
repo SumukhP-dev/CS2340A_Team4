@@ -43,12 +43,12 @@ public class CaloriesFragment extends Fragment {
     private Button pieButton;
     private PieChart pie;
 
-    private TextView calorie_goal;
-    private TextView calorie_burned;
+    private TextView calorieGoal;
+    private TextView calorieBurned;
 
     private DatabaseReference databaseRef;
 
-    private String curCalries;
+    private String curCalories;
 
     private String username;
 
@@ -96,112 +96,116 @@ public class CaloriesFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_calories, container, false);
 
         pieButton = view.findViewById(R.id.button_dataVis);
-        pie=view.findViewById(R.id.chart_dataVisualization);
-        calorie_goal = view.findViewById(R.id.calorie_goal);
-        calorie_burned = view.findViewById(R.id.calorie_burned);
+        pie = view.findViewById(R.id.chart_dataVisualization);
+        calorieGoal = view.findViewById(R.id.calorie_goal);
+        calorieBurned = view.findViewById(R.id.calorie_burned);
 
 
 
 
-        username= User.getInstance().getUsername();
+        username = User.getInstance().getUsername();
 
         final double[] goalCal = new double[1];
 
-        databaseRef= FirebaseDatabase.getInstance().getReference();
+        databaseRef = FirebaseDatabase.getInstance().getReference();
 
 
-        databaseRef.child("Workouts").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Double totalCaloriesBurned = 0.0;
-                String stringCaloriesBurned;
-                Double doubleCaloriesBurned;
+        databaseRef.child("Workouts").child(username)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Double totalCaloriesBurned = 0.0;
+                        String stringCaloriesBurned;
+                        Double doubleCaloriesBurned;
 
-                String Date;
-                String Month;
-                int intDate;
-                int intMonth;
-                //
-
-                Calendar calendar = Calendar.getInstance();
-                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-                int currentMonth = calendar.get(Calendar.MONTH); // 0-indexed
+                        String date;
+                        String month;
+                        int intDate;
+                        int intMonth;
 
 
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Date=String.valueOf(dataSnapshot.child("Date").child("date").getValue());
-                    Month=String.valueOf(dataSnapshot.child("Date").child("month").getValue());
-                    intDate=Integer.parseInt(Date);
-                    intMonth=Integer.parseInt(Month);
+                        Calendar calendar = Calendar.getInstance();
+                        int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                        int currentMonth = calendar.get(Calendar.MONTH); // 0-indexed
 
-                    stringCaloriesBurned = String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
-                    doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
 
-                    if (intDate==currentDay && intMonth==currentMonth){
-                        totalCaloriesBurned += doubleCaloriesBurned;
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            date = String.valueOf(dataSnapshot.child("Date")
+                                .child("date").getValue());
+                            month = String.valueOf(dataSnapshot.child("Date")
+                                    .child("month").getValue());
+                            intDate = Integer.parseInt(date);
+                            intMonth = Integer.parseInt(month);
+
+                            stringCaloriesBurned = String.valueOf(dataSnapshot
+                                    .child("caloriesBurned").getValue());
+                            doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
+
+                            if (intDate == currentDay && intMonth == currentMonth) {
+                                totalCaloriesBurned += doubleCaloriesBurned;
+                            }
+
+                        }
+                        curCalories = String.valueOf(totalCaloriesBurned);
+                        calorieBurned.setText(curCalories);
+
                     }
 
-                }
-                curCalries = String.valueOf(totalCaloriesBurned);
-                calorie_burned.setText(curCalries);
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
+                    }
+                });
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+        databaseRef.child("User").child(username).get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        DataSnapshot dataSnapshot = task.getResult();
+                        genderInfo = String.valueOf(dataSnapshot.child("gender").getValue());
 
-            }
-        });
-        // =========================
-
-        databaseRef.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                DataSnapshot dataSnapshot=task.getResult();
-                genderInfo=String.valueOf(dataSnapshot.child("gender").getValue());
-
-                heightInfo=String.valueOf(String.valueOf(dataSnapshot.child("height").getValue()));
-                Double heightDouble = Double.parseDouble(heightInfo);
+                        heightInfo = String.valueOf(String.valueOf(dataSnapshot.child("height")
+                            .getValue()));
+                        Double heightDouble = Double.parseDouble(heightInfo);
 
 
-                weightInfo=String.valueOf(dataSnapshot.child("weight").getValue());
-                Double weightDouble = Double.parseDouble(weightInfo);
+                        weightInfo = String.valueOf(dataSnapshot.child("weight").getValue());
+                        Double weightDouble = Double.parseDouble(weightInfo);
 
-                if (genderInfo == "male"){
-                    goalCal[0] = goalMen(weightDouble,heightDouble, 30);
-                }else if (genderInfo == "female"){
-                    goalCal[0] = goalWomen(weightDouble,heightDouble,50);
-                } else {
-                    goalCal[0] = goalMen(weightDouble,heightDouble,30);
-                }
-                calorie_goal.setText(Double.toString(goalCal[0]));
-
-            }
-        });
+                        if (genderInfo == "male") {
+                            goalCal[0] = goalMen(weightDouble, heightDouble, 30);
+                        } else if (genderInfo == "female") {
+                            goalCal[0] = goalWomen(weightDouble, heightDouble, 50);
+                        } else {
+                            goalCal[0] = goalMen(weightDouble, heightDouble, 30);
+                        }
+                        calorieGoal.setText(Double.toString(goalCal[0]));
+                    }
+                });
 
 
         if (pieButton != null) {
             pieButton.setOnClickListener((l) -> {
-                if (pie != null && curCalries != null) {
-                    drawPie(pie, curCalries, goalCal[0]);
+                if (pie != null && curCalories != null) {
+                    drawPie(pie, curCalories, goalCal[0]);
                 } else {
-                    Log.e("PieChart", "Pie or curCalries is not initialized");
+                    Log.e("PieChart", "Pie or curCalories is not initialized");
                 }
             });
         } else {
             Log.e("PieButton", "PieButton is not initialized");
         }
 
-        // pieButton.setOnClickListener((l) ->{drawPie(pie,curCalries,goalCal);});
+        // pieButton.setOnClickListener((l) ->{drawPie(pie,curCalories,goalCal);});
         return view;
     }
 
-    public double goalMen(double weight,double height,double age){
-        return 10*weight+6.25*height-(5*age)+5;
+    public double goalMen(double weight, double height, double age) {
+        return 10 * weight + 6.25 * height - (5 * age) + 5;
     }
 
-    public double goalWomen(double weight,double height,double age){
-        return 10*weight+6.25*height-(5*age)-161;
+    public double goalWomen(double weight, double height, double age) {
+        return 10 * weight + 6.25 * height - (5 * age) - 161;
     }
 
     public List<PieEntry> getPieEntries(String curCalories, double goalVal) {
@@ -219,8 +223,8 @@ public class CaloriesFragment extends Fragment {
         return entries;
     }
 
-    public void drawPie(PieChart pie, String curCalries, double goalVal) {
-        List<PieEntry> entries = getPieEntries(curCalries, goalVal);
+    public void drawPie(PieChart pie, String curCalories, double goalVal) {
+        List<PieEntry> entries = getPieEntries(curCalories, goalVal);
 
         List<Integer> colors = new ArrayList<>();
         Random rng = new Random();
