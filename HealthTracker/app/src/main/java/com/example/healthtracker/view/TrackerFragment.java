@@ -143,7 +143,9 @@ public class TrackerFragment extends Fragment {
         user.put("reps", repsPerSet);
         user.put("sets", sets);
         user.put("workoutName", workout);
-        mDatabase.child("Workouts").child("bob").child("workout3").setValue(user);
+
+
+        mDatabase.child("Workouts").child("boyucheng").child("workout1").setValue(user);
 
 
         TextView textView = new TextView(getContext());
