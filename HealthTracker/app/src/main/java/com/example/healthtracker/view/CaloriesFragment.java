@@ -119,7 +119,7 @@ public class CaloriesFragment extends Fragment {
 //            }
 //        });
         // =========================
-        databaseRef.child("Workouts").child("arnava2004").addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseRef.child("Workouts").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Double totalCaloriesBurned = 0.0;
@@ -163,7 +163,7 @@ public class CaloriesFragment extends Fragment {
         });
         // =========================
 
-        databaseRef.child("User").child("arnava2004").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        databaseRef.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot dataSnapshot=task.getResult();
