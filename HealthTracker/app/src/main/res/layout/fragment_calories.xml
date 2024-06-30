@@ -18,7 +18,6 @@
             android:layout_height="wrap_content"
             android:text="@string/title_calories"
             android:layout_gravity="center_horizontal"
-            android:text="@string/title_calories"
             android:textSize="28sp"
             android:textStyle="bold"
             android:textColor="#000000"
