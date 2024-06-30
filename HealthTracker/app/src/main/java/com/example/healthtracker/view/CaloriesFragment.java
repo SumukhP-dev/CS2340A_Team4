@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.model.User;
@@ -41,10 +42,13 @@ public class CaloriesFragment extends Fragment {
     private Button pieButton;
     private PieChart pie;
 
+    private TextView calorie_goal;
+    private TextView calorie_burned;
+
     private DatabaseReference databaseRef;
 
     private String curCalries;
-    private Double totalCaloriesBurned;
+
     private String username;
 
     private String genderInfo;
@@ -92,7 +96,8 @@ public class CaloriesFragment extends Fragment {
 
         pieButton = view.findViewById(R.id.button_dataVis);
         pie=view.findViewById(R.id.chart_dataVisualization);
-
+        calorie_goal = view.findViewById(R.id.calorie_goal);
+        calorie_burned = view.findViewById(R.id.calorie_burned);
 
 
         username= User.getInstance().getUsername();
@@ -126,6 +131,8 @@ public class CaloriesFragment extends Fragment {
                 System.out.println("Total Calories Burned: " + totalCaloriesBurned);
                 curCalries = String.valueOf(totalCaloriesBurned);
                 System.out.println(curCalries);
+                calorie_burned.setText(curCalries);
+
             }
 
             @Override
@@ -159,6 +166,7 @@ public class CaloriesFragment extends Fragment {
                 } else {
                     goalCal[0] = goalMen(weightDouble,heightDouble,30);
                 }
+                calorie_goal.setText(Double.toString(goalCal[0]));
             }
         });
 
@@ -194,14 +202,18 @@ public class CaloriesFragment extends Fragment {
         List<Integer> colors = new ArrayList<>();
 
         Random rng = new Random();
+
         double cal = Double.parseDouble(curCalries);
+
         float calFloat = (float) cal;
 
         float goalFloat = (float) goalVal;
 
-        entries.add(new PieEntry(calFloat,"Current burning"));
-        colors.add(rng.nextInt());
-        entries.add(new PieEntry(goalFloat,"Goal"));
+        if (cal != 0) {
+            entries.add(new PieEntry(calFloat, "Current burning"));
+            colors.add(rng.nextInt());
+        }
+        entries.add(new PieEntry(goalFloat,"Calorie Goal"));
         colors.add(rng.nextInt());
 
         PieDataSet set = new PieDataSet(entries,"Subjects");
