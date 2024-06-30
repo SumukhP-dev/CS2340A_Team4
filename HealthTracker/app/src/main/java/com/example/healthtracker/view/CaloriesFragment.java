@@ -122,7 +122,7 @@ public class CaloriesFragment extends Fragment {
         //}else{
         //    goalCal=goalWomen(weightDouble,heightDouble,ageDouble);
         //}
-
+        //
 
         pieButton.setOnClickListener((l) ->{drawPie(pie,curCalries,goalCal);});
         return view;
