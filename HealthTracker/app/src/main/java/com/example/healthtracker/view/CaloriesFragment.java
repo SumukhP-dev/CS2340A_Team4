@@ -220,7 +220,9 @@ public class CaloriesFragment extends Fragment {
         float calFloat = (float) cal;
         float goalFloat = (float) goalVal;
 
-        entries.add(new PieEntry(calFloat, "Current burning"));
+        if (cal != 0) {
+            entries.add(new PieEntry(calFloat, "Current burning"));
+        }
         entries.add(new PieEntry(goalFloat, "Goal"));
 
         return entries;
