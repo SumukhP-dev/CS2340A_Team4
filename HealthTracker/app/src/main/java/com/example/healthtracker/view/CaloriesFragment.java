@@ -49,6 +49,8 @@ public class CaloriesFragment extends Fragment {
 
     private String curCalries;
 
+    private Double totalCaloriesBurned;
+
     private String username;
 
     private String genderInfo;
@@ -100,6 +102,8 @@ public class CaloriesFragment extends Fragment {
         calorie_burned = view.findViewById(R.id.calorie_burned);
 
 
+
+
         username= User.getInstance().getUsername();
 
         final double[] goalCal = new double[1];
@@ -125,12 +129,9 @@ public class CaloriesFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     stringCaloriesBurned = String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
                     doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
-                    System.out.println("Calories burned for a single workout: " + stringCaloriesBurned);
                     totalCaloriesBurned += doubleCaloriesBurned;
                 }
-                System.out.println("Total Calories Burned: " + totalCaloriesBurned);
                 curCalries = String.valueOf(totalCaloriesBurned);
-                System.out.println(curCalries);
                 calorie_burned.setText(curCalries);
 
             }
@@ -147,26 +148,23 @@ public class CaloriesFragment extends Fragment {
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot dataSnapshot=task.getResult();
                 genderInfo=String.valueOf(dataSnapshot.child("gender").getValue());
-                System.out.println("Gender: " + genderInfo);
 
                 heightInfo=String.valueOf(String.valueOf(dataSnapshot.child("height").getValue()));
                 Double heightDouble = Double.parseDouble(heightInfo);
-                System.out.println("Height: " + heightInfo);
+
 
                 weightInfo=String.valueOf(dataSnapshot.child("weight").getValue());
                 Double weightDouble = Double.parseDouble(weightInfo);
-                System.out.println("Weight: " + weightInfo);
-
 
                 if (genderInfo == "male"){
                     goalCal[0] = goalMen(weightDouble,heightDouble, 30);
-                    System.out.println(goalCal[0]);
                 }else if (genderInfo == "female"){
                     goalCal[0] = goalWomen(weightDouble,heightDouble,50);
                 } else {
                     goalCal[0] = goalMen(weightDouble,heightDouble,30);
                 }
                 calorie_goal.setText(Double.toString(goalCal[0]));
+
             }
         });
 
@@ -174,7 +172,6 @@ public class CaloriesFragment extends Fragment {
         if (pieButton != null) {
             pieButton.setOnClickListener((l) -> {
                 if (pie != null && curCalries != null) {
-                    System.out.println("Calorie goal: " + goalCal[0]);
                     drawPie(pie, curCalries, goalCal[0]);
                 } else {
                     Log.e("PieChart", "Pie or curCalries is not initialized");
