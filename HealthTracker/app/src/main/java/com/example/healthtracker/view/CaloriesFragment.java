@@ -109,16 +109,7 @@ public class CaloriesFragment extends Fragment {
 
         databaseRef= FirebaseDatabase.getInstance().getReference();
 
-        // =========================
-//        databaseRef.child("Workouts").child(username).child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                DataSnapshot dataSnapshot=task.getResult();
-//                curCalries=String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
-//                System.out.println("current calories burned: " + curCalries);
-//            }
-//        });
-        // =========================
+
         databaseRef.child("Workouts").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
