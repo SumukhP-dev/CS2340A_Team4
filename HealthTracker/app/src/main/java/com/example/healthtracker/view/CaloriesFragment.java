@@ -27,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
@@ -108,26 +109,38 @@ public class CaloriesFragment extends Fragment {
 
         databaseRef= FirebaseDatabase.getInstance().getReference();
 
-        // =========================
-//        databaseRef.child("Workouts").child(username).child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                DataSnapshot dataSnapshot=task.getResult();
-//                curCalries=String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
-//                System.out.println("current calories burned: " + curCalries);
-//            }
-//        });
-        // =========================
+
         databaseRef.child("Workouts").child(username).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Double totalCaloriesBurned = 0.0;
                 String stringCaloriesBurned;
                 Double doubleCaloriesBurned;
+
+                String Date;
+                String Month;
+                int intDate;
+                int intMonth;
+                //
+
+                Calendar calendar = Calendar.getInstance();
+                int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+                int currentMonth = calendar.get(Calendar.MONTH); // 0-indexed
+
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Date=String.valueOf(dataSnapshot.child("Date").child("date").getValue());
+                    Month=String.valueOf(dataSnapshot.child("Date").child("month").getValue());
+                    intDate=Integer.parseInt(Date);
+                    intMonth=Integer.parseInt(Month);
+
                     stringCaloriesBurned = String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
                     doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
-                    totalCaloriesBurned += doubleCaloriesBurned;
+
+                    if (intDate==currentDay && intMonth==currentMonth){
+                        totalCaloriesBurned += doubleCaloriesBurned;
+                    }
+
                 }
                 curCalries = String.valueOf(totalCaloriesBurned);
                 calorie_burned.setText(curCalries);
