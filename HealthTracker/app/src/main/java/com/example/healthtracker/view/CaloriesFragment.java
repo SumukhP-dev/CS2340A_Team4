@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.model.User;
@@ -41,10 +42,15 @@ public class CaloriesFragment extends Fragment {
     private Button pieButton;
     private PieChart pie;
 
+    private TextView calorie_goal;
+    private TextView calorie_burned;
+
     private DatabaseReference databaseRef;
 
     private String curCalries;
+
     private Double totalCaloriesBurned;
+
     private String username;
 
     private String genderInfo;
@@ -92,6 +98,9 @@ public class CaloriesFragment extends Fragment {
 
         pieButton = view.findViewById(R.id.button_dataVis);
         pie=view.findViewById(R.id.chart_dataVisualization);
+        calorie_goal = view.findViewById(R.id.calorie_goal);
+        calorie_burned = view.findViewById(R.id.calorie_burned);
+
 
 
 
@@ -120,11 +129,10 @@ public class CaloriesFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     stringCaloriesBurned = String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
                     doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
-
                     totalCaloriesBurned += doubleCaloriesBurned;
                 }
-
                 curCalries = String.valueOf(totalCaloriesBurned);
+                calorie_burned.setText(curCalries);
 
             }
 
@@ -141,7 +149,6 @@ public class CaloriesFragment extends Fragment {
                 DataSnapshot dataSnapshot=task.getResult();
                 genderInfo=String.valueOf(dataSnapshot.child("gender").getValue());
 
-
                 heightInfo=String.valueOf(String.valueOf(dataSnapshot.child("height").getValue()));
                 Double heightDouble = Double.parseDouble(heightInfo);
 
@@ -149,16 +156,15 @@ public class CaloriesFragment extends Fragment {
                 weightInfo=String.valueOf(dataSnapshot.child("weight").getValue());
                 Double weightDouble = Double.parseDouble(weightInfo);
 
-
-
                 if (genderInfo == "male"){
                     goalCal[0] = goalMen(weightDouble,heightDouble, 30);
-
                 }else if (genderInfo == "female"){
                     goalCal[0] = goalWomen(weightDouble,heightDouble,50);
                 } else {
                     goalCal[0] = goalMen(weightDouble,heightDouble,30);
                 }
+                calorie_goal.setText(Double.toString(goalCal[0]));
+
             }
         });
 
@@ -166,7 +172,6 @@ public class CaloriesFragment extends Fragment {
         if (pieButton != null) {
             pieButton.setOnClickListener((l) -> {
                 if (pie != null && curCalries != null) {
-
                     drawPie(pie, curCalries, goalCal[0]);
                 } else {
                     Log.e("PieChart", "Pie or curCalries is not initialized");
@@ -194,14 +199,18 @@ public class CaloriesFragment extends Fragment {
         List<Integer> colors = new ArrayList<>();
 
         Random rng = new Random();
+
         double cal = Double.parseDouble(curCalries);
+
         float calFloat = (float) cal;
 
         float goalFloat = (float) goalVal;
 
-        entries.add(new PieEntry(calFloat,"Current burning"));
-        colors.add(rng.nextInt());
-        entries.add(new PieEntry(goalFloat,"Goal"));
+        if (cal != 0) {
+            entries.add(new PieEntry(calFloat, "Current burning"));
+            colors.add(rng.nextInt());
+        }
+        entries.add(new PieEntry(goalFloat,"Calorie Goal"));
         colors.add(rng.nextInt());
 
         PieDataSet set = new PieDataSet(entries,"Subjects");
