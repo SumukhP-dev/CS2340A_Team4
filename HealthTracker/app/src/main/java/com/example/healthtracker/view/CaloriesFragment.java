@@ -194,6 +194,7 @@ public class CaloriesFragment extends Fragment {
     public List<PieEntry> getPieEntries(String curCalories, double goalVal) {
         ArrayList<PieEntry> entries = new ArrayList<>();
         double cal = Double.parseDouble(curCalories);
+
         float calFloat = (float) cal;
         float goalFloat = (float) goalVal;
 
@@ -212,11 +213,11 @@ public class CaloriesFragment extends Fragment {
             colors.add(rng.nextInt());
         }
 
+
         PieDataSet set = new PieDataSet(entries, "Subjects");
         set.setColors(colors);
 
         pie.setData(new PieData(set));
         pie.invalidate();
     }
-
 }
