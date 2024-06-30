@@ -83,7 +83,7 @@ public class CaloriesFragment extends Fragment {
         pie=view.findViewById(R.id.chart_dataVisualization);
 
         databaseRef= FirebaseDatabase.getInstance().getReference("Workouts");
-        databaseRef.child("boyu").child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        databaseRef.child("boyucheng").child("workout1").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
                 DataSnapshot dataSnapshot=task.getResult();
