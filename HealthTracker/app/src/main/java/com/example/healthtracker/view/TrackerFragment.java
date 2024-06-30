@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import com.example.healthtracker.R;
 import com.example.healthtracker.model.User;
@@ -26,13 +29,14 @@ import java.util.Map;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.google.firebase.database.DataSnapshot;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentReference;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import java.util.Date;
 
 
 
@@ -54,6 +58,7 @@ public class TrackerFragment extends Fragment {
     private Button showScreenButton;
     private Button logWorkoutButton;
     private LinearLayout spinnerContainer;
+    private String workoutString;
     private int spinnerCount = 0;
     private EditText workoutInput, setCompleted, reps, calories, notes;
 
@@ -144,8 +149,26 @@ public class TrackerFragment extends Fragment {
         user.put("sets", sets);
         user.put("workoutName", workout);
 
+        Date currentDate = Calendar.getInstance().getTime();
 
-        mDatabase.child("Workouts").child("boyucheng").child("workout1").setValue(user);
+        user.put("Date", currentDate);
+
+
+        mDatabase.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    DataSnapshot dataSnap = task.getResult();
+                    String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
+                    if (workoutNum.equals("null")) {
+                        workoutNum = String.valueOf(0);
+                    }
+                    workoutString = "workout " + String.valueOf(Integer.valueOf(workoutNum) + 1);
+                    mDatabase.child("Workouts").child(username).child(workoutString).setValue(user);
+            }
+        });
+
+
+
 
 
         TextView textView = new TextView(getContext());
