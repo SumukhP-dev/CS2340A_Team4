@@ -76,17 +76,17 @@ public class PersonalInformationViewModel extends ViewModel {
         ref.setValue("gender");
         ref.child("gender").setValue(gender);
 
+        ref.setValue("Counter");
+        ref.child("Counter").setValue(0);
+
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Map<String, Object> counter = new HashMap<>();
-        counter.put("Counter", 0);
-        mDatabase.child("Workouts").child(username).setValue(counter);
+        mDatabase.child("Workouts").setValue(username);
     }
 
     // Updates personal information of user
     public void updateDocument(DatabaseReference userRef, String username, String name,
                                 Double height, Double weight, String gender) {
         DatabaseReference ref = userRef.child(username);
-
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("name", name);
         childUpdates.put("height", height);
