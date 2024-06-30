@@ -2,7 +2,6 @@ package com.example.healthtracker;
 
 import org.junit.Before;
 import org.junit.Test;
-import androidx.lifecycle.ViewModelProvider;
 
 import static org.junit.Assert.*;
 
