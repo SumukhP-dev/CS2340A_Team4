@@ -163,6 +163,7 @@ public class TrackerFragment extends Fragment {
                         workoutNum = String.valueOf(0);
                     }
                     workoutString = "workout " + String.valueOf(Integer.valueOf(workoutNum) + 1);
+                    mDatabase.child("User").child(username).child("Counter").setValue(Integer.valueOf(workoutNum) + 1);
                     mDatabase.child("Workouts").child(username).child(workoutString).setValue(user);
             }
         });
