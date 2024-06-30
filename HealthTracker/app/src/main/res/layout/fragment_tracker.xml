@@ -9,13 +9,50 @@
 
     <!-- TODO: Update blank fragment layout -->
 
+
     <TextView
+        android:id="@+id/track"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="56dp"
         android:layout_alignParentEnd="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginEnd="187dp"
-        android:text="Tracker" />
+        android:layout_marginEnd="168dp"
+        android:layout_marginBottom="322dp"
+        android:text="Tracker"
+        android:textSize="24dp" />
+
+
+    <!--
+    <LinearLayout
+        android:id="@+id/spinnerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/showScreenButton"
+        android:layout_below="@id/track"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:layout_marginTop="604dp"
+        android:layout_marginBottom="-209dp"
+        android:visibility="visible"/>
+             -->
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/showScreenButton"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="57dp"
+        android:layout_marginBottom="34dp">
+
+        <LinearLayout
+            android:id="@+id/spinnerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+    </ScrollView>
 
     <Button
         android:id="@+id/showScreenButton"
@@ -23,10 +60,9 @@
         android:layout_height="64dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="128dp"
-        android:layout_marginBottom="205dp"
+        android:layout_marginEnd="125dp"
+        android:layout_marginBottom="109dp"
         android:text="Show Screen" />
-
 
     <FrameLayout
         android:id="@+id/smallScreen"
