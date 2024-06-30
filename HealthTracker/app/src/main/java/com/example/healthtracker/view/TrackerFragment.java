@@ -130,7 +130,7 @@ public class TrackerFragment extends Fragment {
         user.put("workoutName", workout);
 
 
-        mDatabase.child("Workouts").child("boyu").child("workout1").setValue(user);
+        mDatabase.child("Workouts").child("boyucheng").child("workout1").setValue(user);
 
         workoutInput.setText("");
         setCompleted.setText("");
