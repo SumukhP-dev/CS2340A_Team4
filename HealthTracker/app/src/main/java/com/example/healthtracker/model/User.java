@@ -3,7 +3,7 @@ package com.example.healthtracker.model;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class User {
+public class User implements UserInterface {
     private FirebaseAuth mAuth;
     private FirebaseDatabase database;
     private String username;
@@ -51,3 +51,9 @@ public class User {
         this.username = username;
     }
 }
+
+
+
+
+
+
