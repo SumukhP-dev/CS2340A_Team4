@@ -49,8 +49,6 @@ public class CaloriesFragment extends Fragment {
 
     private String curCalries;
 
-    private Double totalCaloriesBurned;
-
     private String username;
 
     private String genderInfo;
@@ -193,27 +191,32 @@ public class CaloriesFragment extends Fragment {
         return 10*weight+6.25*height-(5*age)-161;
     }
 
-    public void drawPie(PieChart pie, String curCalries, double goalVal){
-
+    public List<PieEntry> getPieEntries(String curCalories, double goalVal) {
         ArrayList<PieEntry> entries = new ArrayList<>();
-        List<Integer> colors = new ArrayList<>();
-
-        Random rng = new Random();
-
-        double cal = Double.parseDouble(curCalries);
+        double cal = Double.parseDouble(curCalories);
 
         float calFloat = (float) cal;
-
         float goalFloat = (float) goalVal;
 
         if (cal != 0) {
             entries.add(new PieEntry(calFloat, "Current burning"));
+        }
+        entries.add(new PieEntry(goalFloat, "Goal"));
+
+        return entries;
+    }
+
+    public void drawPie(PieChart pie, String curCalries, double goalVal) {
+        List<PieEntry> entries = getPieEntries(curCalries, goalVal);
+
+        List<Integer> colors = new ArrayList<>();
+        Random rng = new Random();
+        for (int i = 0; i < entries.size(); i++) {
             colors.add(rng.nextInt());
         }
-        entries.add(new PieEntry(goalFloat,"Calorie Goal"));
-        colors.add(rng.nextInt());
 
-        PieDataSet set = new PieDataSet(entries,"Subjects");
+
+        PieDataSet set = new PieDataSet(entries, "Subjects");
         set.setColors(colors);
 
         pie.setData(new PieData(set));
