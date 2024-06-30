@@ -15,7 +15,7 @@
             android:id="@+id/title_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="title_calories"
+            android:text="@string/title_calories"
             android:layout_gravity="center_horizontal"
             android:textSize="28sp"
             android:textStyle="bold"
