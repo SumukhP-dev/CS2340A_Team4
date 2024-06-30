@@ -15,7 +15,7 @@
             android:id="@+id/title_calories"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/title_calories"
+            android:text="title_calories"
             android:layout_gravity="center_horizontal"
             android:textSize="28sp"
             android:textStyle="bold"
@@ -62,25 +62,25 @@
             app:layout_constraintEnd_toEndOf="@id/title_calories"/>
 
 
-
         <Button
             android:id="@+id/button_dataVis"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="224dp"
+            android:layout_marginTop="36dp"
             android:text="See Data Visualization"
             app:layout_constraintEnd_toEndOf="@id/title_calories"
-            app:layout_constraintHorizontal_bias="0.2"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@id/title_calories"
             app:layout_constraintTop_toBottomOf="@id/title_calories" />
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart_dataVisualization"
             android:layout_width="fill_parent"
-            android:layout_height="0sp"
-            app:layout_constraintTop_toBottomOf="@id/button_dataVis"
-            app:layout_constraintStart_toStartOf="@id/button_dataVis"
-            app:layout_constraintEnd_toEndOf="@id/button_dataVis"/>
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/button_dataVis"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
