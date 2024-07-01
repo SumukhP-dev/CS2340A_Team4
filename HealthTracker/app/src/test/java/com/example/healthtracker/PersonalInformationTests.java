@@ -10,15 +10,15 @@ import static org.junit.Assert.*;
 
 import com.example.healthtracker.ViewModel.LoginViewModel;
 import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.database.FirebaseDatabase;
 import com.google.errorprone.annotations.DoNotMock;
 
 //@RunWith(MockitoJUnitRunner.class)
 public class PersonalInformationTests {
-    //@DoNotMock
+    //@Mock
     private PersonalInformationViewModel pivm;
-    //@DoNotMock
+    //@Mock
     private LoginViewModel loginViewModel;
 
     @Before
