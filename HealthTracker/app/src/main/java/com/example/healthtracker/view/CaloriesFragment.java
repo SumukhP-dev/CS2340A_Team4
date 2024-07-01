@@ -1,17 +1,14 @@
 package com.example.healthtracker.view;
 
 import android.os.Bundle;
-
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.example.healthtracker.R;
 import com.example.healthtracker.model.User;
 import com.github.mikephil.charting.charts.PieChart;
@@ -25,15 +22,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 
-
 public class CaloriesFragment extends Fragment {
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -42,34 +36,19 @@ public class CaloriesFragment extends Fragment {
 
     private Button pieButton;
     private PieChart pie;
-
     private TextView calorieGoal;
     private TextView calorieBurned;
-
     private DatabaseReference databaseRef;
-
     private String curCalories;
-
     private String username;
-
     private String genderInfo;
     private String heightInfo;
     private String weightInfo;
-    // private String age;
-
 
     public CaloriesFragment() {
         // Required empty public constructor
     }
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment WorkoutsFragment.
-     */
-    // Rename and change types and number of parameters
+
     public static CaloriesFragment newInstance(String param1, String param2) {
         CaloriesFragment fragment = new CaloriesFragment();
         Bundle args = new Bundle();
@@ -88,11 +67,9 @@ public class CaloriesFragment extends Fragment {
         }
     }
 
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
+    public View onCreateView(LayoutInflater inflater,
+                             ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_calories, container, false);
 
         pieButton = view.findViewById(R.id.button_dataVis);
@@ -100,15 +77,9 @@ public class CaloriesFragment extends Fragment {
         calorieGoal = view.findViewById(R.id.calorie_goal);
         calorieBurned = view.findViewById(R.id.calorie_burned);
 
-
-
-
         username = User.getInstance().getUsername();
-
         final double[] goalCal = new double[1];
-
         databaseRef = FirebaseDatabase.getInstance().getReference();
-
 
         databaseRef.child("Workouts").child(username)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
@@ -118,42 +89,38 @@ public class CaloriesFragment extends Fragment {
                         String stringCaloriesBurned;
                         Double doubleCaloriesBurned;
 
-                        String date;
-                        String month;
-                        int intDate;
-                        int intMonth;
-
-
                         Calendar calendar = Calendar.getInstance();
                         int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
                         int currentMonth = calendar.get(Calendar.MONTH); // 0-indexed
 
-
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            date = String.valueOf(dataSnapshot.child("Date")
-                                .child("date").getValue());
-                            month = String.valueOf(dataSnapshot.child("Date")
+                            String date = String.valueOf(dataSnapshot.child("Date")
+                                    .child("date").getValue());
+                            String month = String.valueOf(dataSnapshot.child("Date")
                                     .child("month").getValue());
-                            intDate = Integer.parseInt(date);
-                            intMonth = Integer.parseInt(month);
+
+                            if (date.equals("null") || month.equals("null")) {
+                                continue;
+                            }
+
+                            int intDate = Integer.parseInt(date);
+                            int intMonth = Integer.parseInt(month);
 
                             stringCaloriesBurned = String.valueOf(dataSnapshot
                                     .child("caloriesBurned").getValue());
-                            doubleCaloriesBurned =  Double.parseDouble(stringCaloriesBurned);
+                            doubleCaloriesBurned = Double.parseDouble(stringCaloriesBurned);
 
                             if (intDate == currentDay && intMonth == currentMonth) {
                                 totalCaloriesBurned += doubleCaloriesBurned;
                             }
-
                         }
                         curCalories = String.valueOf(totalCaloriesBurned);
                         calorieBurned.setText(curCalories);
-
                     }
 
                     @Override
                     public void onCancelled(@NonNull DatabaseError error) {
-
+                        Log.e("FirebaseError", "Error retrieving data", error.toException());
                     }
                 });
 
@@ -163,18 +130,20 @@ public class CaloriesFragment extends Fragment {
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         DataSnapshot dataSnapshot = task.getResult();
                         genderInfo = String.valueOf(dataSnapshot.child("gender").getValue());
-
-                        heightInfo = String.valueOf(String.valueOf(dataSnapshot.child("height")
-                            .getValue()));
-                        Double heightDouble = Double.parseDouble(heightInfo);
-
-
+                        heightInfo = String.valueOf(dataSnapshot.child("height").getValue());
                         weightInfo = String.valueOf(dataSnapshot.child("weight").getValue());
+
+                        if (heightInfo.equals("null") || weightInfo.equals("null")) {
+                            Log.e("DataError", "Height or weight data is null");
+                            return;
+                        }
+
+                        Double heightDouble = Double.parseDouble(heightInfo);
                         Double weightDouble = Double.parseDouble(weightInfo);
 
-                        if (genderInfo == "male") {
+                        if ("male".equals(genderInfo)) {
                             goalCal[0] = goalMen(weightDouble, heightDouble, 30);
-                        } else if (genderInfo == "female") {
+                        } else if ("female".equals(genderInfo)) {
                             goalCal[0] = goalWomen(weightDouble, heightDouble, 50);
                         } else {
                             goalCal[0] = goalMen(weightDouble, heightDouble, 30);
@@ -182,7 +151,6 @@ public class CaloriesFragment extends Fragment {
                         calorieGoal.setText(Double.toString(goalCal[0]));
                     }
                 });
-
 
         if (pieButton != null) {
             pieButton.setOnClickListener((l) -> {
@@ -196,7 +164,6 @@ public class CaloriesFragment extends Fragment {
             Log.e("PieButton", "PieButton is not initialized");
         }
 
-        // pieButton.setOnClickListener((l) ->{drawPie(pie,curCalories,goalCal);});
         return view;
     }
 
@@ -225,13 +192,11 @@ public class CaloriesFragment extends Fragment {
 
     public void drawPie(PieChart pie, String curCalories, double goalVal) {
         List<PieEntry> entries = getPieEntries(curCalories, goalVal);
-
         List<Integer> colors = new ArrayList<>();
         Random rng = new Random();
         for (int i = 0; i < entries.size(); i++) {
             colors.add(rng.nextInt());
         }
-
 
         PieDataSet set = new PieDataSet(entries, "Subjects");
         set.setColors(colors);
