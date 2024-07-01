@@ -117,6 +117,29 @@ public class TrackerFragment extends Fragment {
                 DataSnapshot dataSnap = task.getResult();
                 String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
                 spinnerCount = Integer.valueOf(workoutNum);
+                Log.d("counter inside class:", String.valueOf(spinnerCount));
+                for(int i = 0; i < spinnerCount && i < 5; i++) {
+                    mDatabase.child("Workouts").child(username).child("workout " + String.valueOf(spinnerCount - i)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            DataSnapshot dataSnap = task.getResult();
+                            String workoutNa = String.valueOf(dataSnap.child("workoutName").getValue());
+                            TextView textView = new TextView(getContext());
+                            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            textView.setPadding(16, 16, 16, 16);
+
+                            String displayText = String.format("Workout: %s", workoutNa);
+                            textView.setText(displayText);
+
+                            // Add the TextView to the container
+                            spinnerContainer.addView(textView);
+                        }
+                    });
+
+
+                }
             }
         });
 
@@ -207,6 +230,9 @@ public class TrackerFragment extends Fragment {
                     mDatabase.child("Workouts").child(username).child(workoutString).setValue(user);
             }
         });
+
+
+
 
 
 
