@@ -62,7 +62,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginEnd="125dp"
         android:layout_marginBottom="109dp"
-        android:text="Show Screen" />
+        android:text="Log Workout" />
 
     <FrameLayout
         android:id="@+id/smallScreen"
