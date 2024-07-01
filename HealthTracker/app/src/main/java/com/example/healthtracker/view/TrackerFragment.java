@@ -6,6 +6,8 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnCompleteListener;
 
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import com.example.healthtracker.R;
 import com.example.healthtracker.model.User;
@@ -26,13 +29,14 @@ import java.util.Map;
 import android.util.Log;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import com.google.firebase.database.DataSnapshot;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.firebase.firestore.DocumentReference;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import java.util.Date;
 
 
 
@@ -54,8 +58,12 @@ public class TrackerFragment extends Fragment {
     private Button showScreenButton;
     private Button logWorkoutButton;
     private LinearLayout spinnerContainer;
+    private String workoutString;
     private int spinnerCount = 0;
+    private String username = User.getInstance().getUsername();
     private EditText workoutInput, setCompleted, reps, calories, notes;
+
+    private String workoutNa;
 
     private String mParam1;
     private String mParam2;
@@ -93,12 +101,72 @@ public class TrackerFragment extends Fragment {
         logWorkoutButton = frameLayout.findViewById(R.id.log_workout);
         spinnerContainer = view.findViewById(R.id.spinnerContainer);
         spinnerContainer.setVisibility(View.VISIBLE);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
 
         workoutInput = frameLayout.findViewById(R.id.workoutInput);
         setCompleted = frameLayout.findViewById(R.id.setCompleted);
         reps = frameLayout.findViewById(R.id.reps);
         calories = frameLayout.findViewById(R.id.calories);
         notes = frameLayout.findViewById(R.id.notes);
+
+        Log.d("username: ", username);
+        mDatabase.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot dataSnap = task.getResult();
+                String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
+                spinnerCount = Integer.valueOf(workoutNum);
+                Log.d("counter inside class:", String.valueOf(spinnerCount));
+                for(int i = 0; i < spinnerCount && i < 5; i++) {
+                    mDatabase.child("Workouts").child(username).child("workout " + String.valueOf(spinnerCount - i)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            DataSnapshot dataSnap = task.getResult();
+                            String workoutNa = String.valueOf(dataSnap.child("workoutName").getValue());
+                            TextView textView = new TextView(getContext());
+                            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            textView.setPadding(16, 16, 16, 16);
+
+                            String displayText = String.format("Workout: %s", workoutNa);
+                            textView.setText(displayText);
+
+                            // Add the TextView to the container
+                            spinnerContainer.addView(textView);
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+        Log.d("counter:", String.valueOf(spinnerCount));
+
+        for(int i = 0; i < spinnerCount && i < 5; i++) {
+            mDatabase.child("Workouts").child(username).child("workout " + String.valueOf(spinnerCount - i)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    DataSnapshot dataSnap = task.getResult();
+                    String workout = String.valueOf(dataSnap.child("workoutName").getValue());
+                    workoutNa = workout;
+                }
+            });
+
+            TextView textView = new TextView(getContext());
+            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setPadding(16, 16, 16, 16);
+
+            String displayText = String.format("Workout: %s", workoutNa);
+            textView.setText(displayText);
+
+            // Add the TextView to the container
+            spinnerContainer.addView(textView);
+        }
 
         showScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -134,9 +202,9 @@ public class TrackerFragment extends Fragment {
         String caloriesPerSet = calories.getText().toString();
         String workoutNotes = notes.getText().toString();
 
-        String username = User.getInstance().getUsername();
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
         Map<String, Object> user = new HashMap<>();
         user.put("additionalNotes", workoutNotes);
         user.put("caloriesBurned", caloriesPerSet);
@@ -144,8 +212,30 @@ public class TrackerFragment extends Fragment {
         user.put("sets", sets);
         user.put("workoutName", workout);
 
+        Date currentDate = Calendar.getInstance().getTime();
 
-        mDatabase.child("Workouts").child("boyucheng").child("workout1").setValue(user);
+        user.put("Date", currentDate);
+
+
+        mDatabase.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                    DataSnapshot dataSnap = task.getResult();
+                    String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
+                    if (workoutNum.equals("null")) {
+                        workoutNum = String.valueOf(0);
+                    }
+                    workoutString = "workout " + String.valueOf(Integer.valueOf(workoutNum) + 1);
+                    mDatabase.child("User").child(username).child("Counter").setValue(String.valueOf(Integer.valueOf(workoutNum) + 1));
+                    mDatabase.child("Workouts").child(username).child(workoutString).setValue(user);
+            }
+        });
+
+
+
+
+
+
 
 
         TextView textView = new TextView(getContext());
@@ -155,8 +245,7 @@ public class TrackerFragment extends Fragment {
         textView.setPadding(16, 16, 16, 16);
 
         // Set the text
-        String displayText = String.format("Workout: %s\nSets: %s\nReps: %s\nCalories: %s\nNotes: %s",
-                workout, sets, repsPerSet, caloriesPerSet, workoutNotes);
+        String displayText = String.format("Workout: %s", workout);
         textView.setText(displayText);
 
         // Add the TextView to the container

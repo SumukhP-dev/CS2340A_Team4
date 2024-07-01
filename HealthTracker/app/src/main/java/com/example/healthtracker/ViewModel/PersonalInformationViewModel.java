@@ -9,6 +9,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +17,8 @@ import java.util.Map;
 public class PersonalInformationViewModel extends ViewModel {
     private User user;
     private MutableLiveData<String> gender;
+
+    private DatabaseReference mDatabase;
 
     public PersonalInformationViewModel() {
         user = User.getInstance();
@@ -72,13 +75,18 @@ public class PersonalInformationViewModel extends ViewModel {
 
         ref.setValue("gender");
         ref.child("gender").setValue(gender);
+
+        ref.setValue("Counter");
+        ref.child("Counter").setValue(0);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase.child("Workouts").setValue(username);
     }
 
     // Updates personal information of user
     public void updateDocument(DatabaseReference userRef, String username, String name,
                                 Double height, Double weight, String gender) {
         DatabaseReference ref = userRef.child(username);
-
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("name", name);
         childUpdates.put("height", height);
