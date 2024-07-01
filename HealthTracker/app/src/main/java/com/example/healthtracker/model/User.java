@@ -16,6 +16,8 @@ public class User implements UserInterface {
         username = "";
     }
 
+    // Singleton pattern that allows only one instance of the
+    // User class
     public static User getInstance() {
         if (uniqueInstance == null) {
             synchronized (User.class) {
@@ -27,6 +29,7 @@ public class User implements UserInterface {
         return uniqueInstance;
     }
 
+    // Allows user to get an instance of the Authentication database
     public FirebaseAuth getAuth() {
         return mAuth;
     }
@@ -35,6 +38,7 @@ public class User implements UserInterface {
         this.mAuth = mAuth;
     }
 
+    // Allows user to get an instance of the Realtime database
     public FirebaseDatabase getDatabase() {
         return database;
     }
