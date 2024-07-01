@@ -24,6 +24,7 @@ public class PersonalInformationTests {
     @Before
     public void setup() {
         loginViewModel =new LoginViewModel();
+        //loginViewModel = mock(LoginViewModel.class);
         //using useraccount miranda w/ password CS2340 to test
         loginViewModel.login("miranda", "CS2340");
         pivm = new PersonalInformationViewModel();
