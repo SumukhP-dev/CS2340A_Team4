@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.OnCompleteListener;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -62,7 +64,7 @@ public class TrackerFragment extends Fragment {
     private int spinnerCount = 0;
     private String username = User.getInstance().getUsername();
     private EditText workoutInput, setCompleted, reps, calories, notes;
-
+    private int count = 0;
     private String workoutNa;
 
     private String mParam1;
@@ -111,38 +113,9 @@ public class TrackerFragment extends Fragment {
         notes = frameLayout.findViewById(R.id.notes);
 
         Log.d("username: ", username);
-        mDatabase.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                DataSnapshot dataSnap = task.getResult();
-                String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
-                spinnerCount = Integer.valueOf(workoutNum);
-                Log.d("counter inside class:", String.valueOf(spinnerCount));
-                for(int i = 0; i < spinnerCount && i < 5; i++) {
-                    mDatabase.child("Workouts").child(username).child("workout " + String.valueOf(spinnerCount - i)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            DataSnapshot dataSnap = task.getResult();
-                            String workoutNa = String.valueOf(dataSnap.child("workoutName").getValue());
-                            TextView textView = new TextView(getContext());
-                            textView.setLayoutParams(new LinearLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            textView.setPadding(16, 16, 16, 16);
+        updateScreen();
 
-                            String displayText = String.format("Workout: %s", workoutNa);
-                            textView.setText(displayText);
-
-                            // Add the TextView to the container
-                            spinnerContainer.addView(textView);
-                        }
-                    });
-
-
-                }
-            }
-        });
-
+        /*
         Log.d("counter:", String.valueOf(spinnerCount));
 
         for(int i = 0; i < spinnerCount && i < 5; i++) {
@@ -167,7 +140,7 @@ public class TrackerFragment extends Fragment {
             // Add the TextView to the container
             spinnerContainer.addView(textView);
         }
-
+        */
         showScreenButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -227,30 +200,39 @@ public class TrackerFragment extends Fragment {
                     }
                     workoutString = "workout " + String.valueOf(Integer.valueOf(workoutNum) + 1);
                     mDatabase.child("User").child(username).child("Counter").setValue(String.valueOf(Integer.valueOf(workoutNum) + 1));
-                    mDatabase.child("Workouts").child(username).child(workoutString).setValue(user);
+                    mDatabase.child("Workouts").child(username).child(workoutString).setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                // Clear views and update screen after a short delay
+                                if (spinnerContainer != null) {
+                                    spinnerContainer.removeAllViews();
+                                }
+                                updateScreen();
+                            }
+                        }
+                    });
             }
         });
 
 
+        /*
+        if (count < 5) {
+            TextView textView = new TextView(getContext());
+            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            textView.setPadding(16, 16, 16, 16);
 
+            // Set the text
+            String displayText = String.format("Workout: %s", workout);
+            textView.setText(displayText);
 
-
-
-
-
-        TextView textView = new TextView(getContext());
-        textView.setLayoutParams(new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT));
-        textView.setPadding(16, 16, 16, 16);
-
-        // Set the text
-        String displayText = String.format("Workout: %s", workout);
-        textView.setText(displayText);
-
-        // Add the TextView to the container
-        spinnerContainer.addView(textView);
-
+            // Add the TextView to the container
+            spinnerContainer.addView(textView);
+            count++;
+        }
+        */
 
         workoutInput.setText("");
         setCompleted.setText("");
@@ -263,4 +245,41 @@ public class TrackerFragment extends Fragment {
         // Dismiss the small screen
         frameLayout.setVisibility(View.GONE);
     }
+
+    public void updateScreen() {
+        mDatabase.child("User").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                DataSnapshot dataSnap = task.getResult();
+                String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
+                spinnerCount = Integer.valueOf(workoutNum);
+                Log.d("counter inside class:", String.valueOf(spinnerCount));
+
+                for(int i = 0; i < spinnerCount && i < 5; i++) {
+                    count++;
+                    mDatabase.child("Workouts").child(username).child("workout " + String.valueOf(spinnerCount - i)).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            DataSnapshot dataSnap = task.getResult();
+                            String workoutNa = String.valueOf(dataSnap.child("workoutName").getValue());
+                            TextView textView = new TextView(getContext());
+                            textView.setLayoutParams(new LinearLayout.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            textView.setPadding(16, 16, 16, 16);
+
+                            String displayText = String.format("Workout: %s", workoutNa);
+                            textView.setText(displayText);
+
+                            // Add the TextView to the container
+                            spinnerContainer.addView(textView);
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+
 }
