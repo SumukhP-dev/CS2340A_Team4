@@ -112,10 +112,16 @@ public class SignUpViewModel extends ViewModel {
             return null;
         }
 
-        user.setUsername(changedUsername.getValue().substring(0,
-                changedUsername.getValue().length() - 10));
+        user.setUsername(cleanUsername(changedUsername.getValue()));
 
         return user.getAuth().createUserWithEmailAndPassword(changedUsername.getValue(),
                 password);
+    }
+
+    // Cleans username to remove punctuation and the email handle
+    public String cleanUsername(String username) {
+        String usernameHandleRemoved = username.substring(0,
+                changedUsername.getValue().length() - 10);
+        return usernameHandleRemoved.replaceAll("\\p{P}", "");
     }
 }
