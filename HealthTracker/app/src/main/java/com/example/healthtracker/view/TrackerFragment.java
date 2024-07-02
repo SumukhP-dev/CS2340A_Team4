@@ -111,7 +111,10 @@ public class TrackerFragment extends Fragment {
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
                         DataSnapshot dataSnap = task.getResult();
                         String workoutNum = String.valueOf(dataSnap.child("Counter").getValue());
-                        spinnerCount = Integer.valueOf(workoutNum);
+                        if (workoutNum.equals("null")) {
+                            workoutNum = "0";
+                        }
+                        spinnerCount = Integer.parseInt(workoutNum);
                         Log.d("counter inside class:", String.valueOf(spinnerCount));
                         for (int i = 0; i < spinnerCount && i < 5; i++) {
                             mDatabase.child("Workouts").child(username)
