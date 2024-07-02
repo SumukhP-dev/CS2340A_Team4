@@ -4,11 +4,17 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import androidx.annotation.NonNull;
+
 import com.example.healthtracker.view.CaloriesFragment;
 import com.example.healthtracker.view.PersonalInformationFragment;
 import com.example.healthtracker.view.SignUpActivity;
 import com.example.healthtracker.view.TrackerFragment;
 import com.github.mikephil.charting.data.PieEntry;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
 
 import org.junit.Test;
 
@@ -60,9 +66,17 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testStringToDoubleConversion() {
+    public void testStringToDoubleConversion1() {
         String calorieString = "500.5";
         double expectedCalories = 500.5;
+        double actualCalories = Double.parseDouble(calorieString);
+        assertEquals(expectedCalories, actualCalories, 0.0001);
+    }
+
+    @Test
+    public void testStringToDoubleConversion2() {
+        String calorieString = "0.000";
+        double expectedCalories = 0.000;
         double actualCalories = Double.parseDouble(calorieString);
         assertEquals(expectedCalories, actualCalories, 0.0001);
     }
