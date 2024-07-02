@@ -1,26 +1,13 @@
 package com.example.healthtracker;
 
-import org.junit.Test;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
-import static org.junit.Assert.*;
-
-import android.app.Activity;
-
-import androidx.annotation.NonNull;
-
-import com.example.healthtracker.ViewModel.SignUpViewModel;
-import com.example.healthtracker.model.User;
 import com.example.healthtracker.view.CaloriesFragment;
-import com.example.healthtracker.view.PersonalInformationFragment;
-import com.example.healthtracker.view.SignUpActivity;
 import com.github.mikephil.charting.data.PieEntry;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+
+import org.junit.Test;
 
 import java.util.List;
 
@@ -32,19 +19,19 @@ import java.util.List;
 public class ExampleUnitTest {
 
     @Test
-    public void CaloriesGoalMen_isCorrect(){
-        CaloriesFragment test= new CaloriesFragment();
+    public void caloriesGoalMenIsCorrect() {
+        CaloriesFragment test = new CaloriesFragment();
         double menGoal;
-        menGoal=test.goalMen(100,170,30);
-        assertEquals(1917.5, menGoal,0.0001);
+        menGoal = test.goalMen(100, 170, 30);
+        assertEquals(1917.5, menGoal, 0.0001);
     }
 
     @Test
-    public void  CaloriesGoalWomen_isCorrect(){
-        CaloriesFragment test= new CaloriesFragment();
+    public void  caloriesGoalWomenIsCorrect() {
+        CaloriesFragment test = new CaloriesFragment();
         double womenGoal;
-        womenGoal=test.goalWomen(100,170,30);
-        assertEquals(1751.5, womenGoal,0.0001);
+        womenGoal = test.goalWomen(100, 170, 30);
+        assertEquals(1751.5, womenGoal, 0.0001);
     }
 
     // Tests that the entries to the pie chart are created correctly
@@ -73,7 +60,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testPieEntriesCreation_negativeCalories() {
+    public void testPieEntriesCreationNegativeCalories() {
         CaloriesFragment fragment = new CaloriesFragment();
         String curCalories = "-300";
         double goalCalories = 500;

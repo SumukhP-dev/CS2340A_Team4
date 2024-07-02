@@ -68,8 +68,10 @@ public class CaloriesFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_calories, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_calories, container,
+                false);
 
         pieButton = view.findViewById(R.id.button_dataVis);
         pie = view.findViewById(R.id.chart_dataVisualization);
@@ -93,8 +95,10 @@ public class CaloriesFragment extends Fragment {
                         int currentMonth = calendar.get(Calendar.MONTH); // 0-indexed
 
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                            String date = String.valueOf(dataSnapshot.child("Date").child("date").getValue());
-                            String month = String.valueOf(dataSnapshot.child("Date").child("month").getValue());
+                            String date = String.valueOf(dataSnapshot
+                                    .child("Date").child("date").getValue());
+                            String month = String.valueOf(dataSnapshot
+                                    .child("Date").child("month").getValue());
 
                             if (date.equals("null") || month.equals("null")) {
                                 continue;
@@ -103,8 +107,10 @@ public class CaloriesFragment extends Fragment {
                             int intDate = Integer.parseInt(date);
                             int intMonth = Integer.parseInt(month);
 
-                            stringCaloriesBurned = String.valueOf(dataSnapshot.child("caloriesBurned").getValue());
-                            doubleCaloriesBurned = Double.parseDouble(stringCaloriesBurned);
+                            stringCaloriesBurned = String.valueOf(dataSnapshot
+                                    .child("caloriesBurned").getValue());
+                            doubleCaloriesBurned =
+                                    Double.parseDouble(stringCaloriesBurned);
 
                             if (intDate == currentDay && intMonth == currentMonth) {
                                 totalCaloriesBurned += doubleCaloriesBurned;
