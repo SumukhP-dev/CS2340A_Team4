@@ -7,8 +7,6 @@ import static org.junit.Assert.assertTrue;
 import androidx.annotation.NonNull;
 
 import com.example.healthtracker.view.CaloriesFragment;
-import com.example.healthtracker.view.PersonalInformationFragment;
-import com.example.healthtracker.view.SignUpActivity;
 import com.example.healthtracker.view.TrackerFragment;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -170,9 +168,8 @@ public class ExampleUnitTest {
                         "someguysemailcreatednow@gmail.com");
         assertEquals("someguysemailcreatednow", cleanUsername);
     }
-
-  public void TrackerDatabaseUpdate(){
-        TrackerFragment test= new TrackerFragment();
+    public void trackerDatabaseUpdate() {
+        TrackerFragment test = new TrackerFragment();
         String workoutName;
         String counter;
         String username = "TestName";
@@ -183,23 +180,35 @@ public class ExampleUnitTest {
         testUser.put("sets", "3");
         testUser.put("workoutName", "push");
         mDatabase.child("User").child(username).setValue("TestingCase");
-        mDatabase.child("Workouts").child(username).child("TestWorkout").setValue(testUser);
-        mDatabase.child("Workout").child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                DataSnapshot dataSnap = task.getResult();
-                String additionalNotes = String.valueOf(dataSnap.child("TestWorkout").child("additionalNotes").getValue());
-                assertEquals("", String.valueOf(additionalNotes));
-                String calories = String.valueOf(dataSnap.child("TestWorkout").child("caloriesBurned").getValue());
-                assertEquals("100", calories);
-                String reps = String.valueOf(dataSnap.child("TestWorkout").child("reps").getValue());
-                assertEquals("10", reps);
-                String sets = String.valueOf(dataSnap.child("TestWorkout").child("sets").getValue());
-                assertEquals("3", sets);
-                String workoutName = String.valueOf(dataSnap.child("TestWorkout").child("workoutName").getValue());
-                assertEquals("push", workoutName);
-            }
-        });
+        mDatabase.child("Workouts").child(username)
+                .child("TestWorkout").setValue(testUser);
+        mDatabase.child("Workout").child(username).get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        DataSnapshot dataSnap = task.getResult();
+                        String additionalNotes = String.valueOf(dataSnap
+                                .child("TestWorkout")
+                                .child("additionalNotes").getValue());
+                        assertEquals("", String.valueOf(additionalNotes));
+                        String calories = String.valueOf(dataSnap
+                                .child("TestWorkout")
+                                .child("caloriesBurned").getValue());
+                        assertEquals("100", calories);
+                        String reps = String.valueOf(dataSnap
+                                .child("TestWorkout")
+                                .child("reps").getValue());
+                        assertEquals("10", reps);
+                        String sets = String.valueOf(dataSnap
+                                .child("TestWorkout")
+                                .child("sets").getValue());
+                        assertEquals("3", sets);
+                        String workoutName = String.valueOf(dataSnap
+                                .child("TestWorkout")
+                                .child("workoutName").getValue());
+                        assertEquals("push", workoutName);
+                    }
+                });
 
         mDatabase.child("User").child(username).removeValue();
         mDatabase.child("Workouts").child(username).child("TestWorkout").removeValue();
