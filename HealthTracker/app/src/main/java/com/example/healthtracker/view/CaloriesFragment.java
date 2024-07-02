@@ -209,8 +209,13 @@ public class CaloriesFragment extends Fragment {
 
     // Cleans username to remove punctuation and the email handle
     public String cleanUsername(String username) {
-        String usernameHandleRemoved = username.substring(0,
-                username.length() - 10);
+        String usernameHandleRemoved = username;
+        if (username.length() >= 10
+                && username.substring(username.length() - 10)
+                        .equals("@gmail.com")) {
+            usernameHandleRemoved = username.substring(0,
+                    username.length() - 10);
+        }
         return usernameHandleRemoved.replaceAll("\\p{P}", "");
     }
 }
