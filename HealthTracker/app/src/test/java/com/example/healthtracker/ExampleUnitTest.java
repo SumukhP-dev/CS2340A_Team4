@@ -4,10 +4,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+import android.app.Activity;
+
 import androidx.annotation.NonNull;
 
+import com.example.healthtracker.ViewModel.SignUpViewModel;
 import com.example.healthtracker.model.User;
 import com.example.healthtracker.view.CaloriesFragment;
+import com.example.healthtracker.view.PersonalInformationFragment;
+import com.example.healthtracker.view.SignUpActivity;
 import com.github.mikephil.charting.data.PieEntry;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -126,4 +131,34 @@ public class ExampleUnitTest {
         assertTrue(goalWomen > 0);
     }
 
+    @Test
+    public void testCleanUsernameMethod1() {
+        CaloriesFragment fragment = new CaloriesFragment();
+        String cleanUsername =
+                fragment.cleanUsername("some@gmail.com");
+        assertEquals("some", cleanUsername);
+    }
+
+    @Test
+    public void testCleanUsernameMethod2() {
+        CaloriesFragment fragment = new CaloriesFragment();
+        String cleanUsername =
+                fragment.cleanUsername("g@gmail.com");
+        assertEquals("g", cleanUsername);
+    }
+    @Test
+    public void testCleanUsernameMethod3() {
+        CaloriesFragment fragment = new CaloriesFragment();
+        String cleanUsername =
+                fragment.cleanUsername("so.me.guy@gmail.com");
+        assertEquals("someguy", cleanUsername);
+    }
+    @Test
+    public void testCleanUsernameMethod4() {
+        CaloriesFragment fragment = new CaloriesFragment();
+        String cleanUsername =
+                fragment.cleanUsername(
+                        "someguysemailcreatednow@gmail.com");
+        assertEquals("someguysemailcreatednow", cleanUsername);
+    }
 }

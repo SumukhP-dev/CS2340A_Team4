@@ -76,7 +76,7 @@ public class CaloriesFragment extends Fragment {
         calorieGoal = view.findViewById(R.id.calorie_goal);
         calorieBurned = view.findViewById(R.id.calorie_burned);
 
-        username = User.getInstance().getUsername();
+        username = cleanUsername(User.getInstance().getUsername());
         final double[] goalCal = new double[1];
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
@@ -199,5 +199,12 @@ public class CaloriesFragment extends Fragment {
 
         pie.setData(new PieData(set));
         pie.invalidate();
+    }
+
+    // Cleans username to remove punctuation and the email handle
+    public String cleanUsername(String username) {
+        String usernameHandleRemoved = username.substring(0,
+                username.length() - 10);
+        return usernameHandleRemoved.replaceAll("\\p{P}", "");
     }
 }
