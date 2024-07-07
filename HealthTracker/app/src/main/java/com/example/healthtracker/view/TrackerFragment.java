@@ -98,11 +98,11 @@ public class TrackerFragment extends Fragment {
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
 
-        workoutInput = frameLayout.findViewById(R.id.workoutInput);
-        setCompleted = frameLayout.findViewById(R.id.setCompleted);
+        workoutInput = frameLayout.findViewById(R.id.workoutPlanNameEditTextView);
+        setCompleted = frameLayout.findViewById(R.id.timeEditTextView);
         reps = frameLayout.findViewById(R.id.reps);
-        calories = frameLayout.findViewById(R.id.calories);
-        notes = frameLayout.findViewById(R.id.notes);
+        calories = frameLayout.findViewById(R.id.expectedCaloriesEditTextView);
+        notes = frameLayout.findViewById(R.id.notesEditTextView);
 
         Log.d("username: ", username);
         mDatabase.child("User").child(username)
