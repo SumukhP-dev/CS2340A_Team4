@@ -8,7 +8,7 @@
     android:padding="16dp">
 
     <EditText
-        android:id="@+id/workoutInput"
+        android:id="@+id/workoutPlanNameEditTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Workout name"
@@ -16,7 +16,7 @@
         android:textSize="16sp"/>
 
     <EditText
-        android:id="@+id/setCompleted"
+        android:id="@+id/timeEditTextView"
         android:layout_width="134dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -38,7 +38,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/calories"
+        android:id="@+id/expectedCaloriesEditTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -48,7 +48,7 @@
         android:textSize="16sp" />
 
     <EditText
-        android:id="@+id/notes"
+        android:id="@+id/notesEditTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
