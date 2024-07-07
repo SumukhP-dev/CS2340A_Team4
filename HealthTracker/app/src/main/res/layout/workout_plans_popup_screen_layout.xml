@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout2"
+    android:layout_width="400dp"
+    android:layout_height="400dp"
+    android:layout_gravity="center"
+    android:background="@drawable/black_rounded_corner"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/workoutPlanNameEditTextView"
+        android:layout_width="0dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Workout plan name"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newWorkoutPlanTextView"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/setsEditTextView"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Sets"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesEditTextView"
+        app:layout_constraintVertical_bias="0.103" />
+
+    <EditText
+        android:id="@+id/repsEditTextView"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Reps"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/workoutPlanNameEditTextView"
+        app:layout_constraintHorizontal_bias="0.473"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesEditTextView"
+        app:layout_constraintVertical_bias="0.113" />
+
+    <EditText
+        android:id="@+id/timeEditTextView"
+        android:layout_width="100dp"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Time"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.947"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/notesEditTextView"
+        app:layout_constraintVertical_bias="0.113" />
+
+    <EditText
+        android:id="@+id/expectedCaloriesEditTextView"
+        android:layout_width="366dp"
+        android:layout_height="46dp"
+        android:layout_marginBottom="100dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Expected calories per set"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/timeEditTextView"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <EditText
+        android:id="@+id/notesEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginBottom="192dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Notes and instructions"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutPlanNameEditTextView"
+        app:layout_constraintVertical_bias="0.39" />
+
+    <Button
+        android:id="@+id/newWorkoutPlanButton"
+        android:layout_width="294dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/black_rounded_corner"
+        android:text="Publish workout plan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/expectedCaloriesEditTextView"
+        app:layout_constraintVertical_bias="1.0"
+        tools:backgroundTint="#000000" />
+
+    <TextView
+        android:id="@+id/newWorkoutPlanTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New workout plan"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+    <!-- Add more views as needed -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
