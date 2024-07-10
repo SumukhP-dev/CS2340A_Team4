@@ -1,15 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/frameLayout2"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".view.WorkoutsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
+        android:id="@+id/workoutPlansTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Workouts"
-        android:layout_gravity="center_horizontal"/>
+        android:text="Workout Plans"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.00999999" />
 
-</FrameLayout>
+    <SearchView
+        android:id="@+id/workoutPlansSearchView"
+        android:layout_width="354dp"
+        android:layout_height="46dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:queryHint="Search"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutPlansTextView"
+        app:layout_constraintVertical_bias="0.027" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workoutPlansRecyclerView"
+        android:layout_width="373dp"
+        android:layout_height="408dp"
+        android:layout_marginBottom="164dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutPlansSearchView" />
+
+    <Button
+        android:id="@+id/workoutPlansButton"
+        android:layout_width="294dp"
+        android:layout_height="48dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:text="Create new public workout plan"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/workoutPlansRecyclerView"
+        app:layout_constraintVertical_bias="0.183"
+        tools:backgroundTint="#000000" />
+</androidx.constraintlayout.widget.ConstraintLayout>

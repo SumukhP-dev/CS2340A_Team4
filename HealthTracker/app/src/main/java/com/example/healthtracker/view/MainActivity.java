@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
                 replaceCurrFragment(new HomeFragment());
             } else if (item.getItemId() == R.id.community) {
                 replaceCurrFragment(new CommunityFragment());
-            } else if (item.getItemId() == R.id.calories) {
+            } else if (item.getItemId() == R.id.expectedCaloriesEditTextView) {
                 replaceCurrFragment(new CaloriesFragment());
             }
 
