@@ -11,7 +11,7 @@
         android:icon="@drawable/home_button_nav"></item>
 
     <item
-        android:id="@+id/expectedCaloriesEditTextView"
+        android:id="@+id/calories"
         android:icon="@drawable/calories_button_nav"></item>>
 
     <item
