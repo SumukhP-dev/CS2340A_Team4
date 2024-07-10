@@ -85,7 +85,7 @@ public class LoginViewModel extends ViewModel {
     public boolean validateUsername(String username) {
         return username.toLowerCase().length() > 10 && username.toLowerCase()
                 .substring(username.length() - 10).equals("@gmail.com");
-    };
+    }
 
     // Creates a user using Firebase Authentication
     public Task<AuthResult> login(String username, String password) {
