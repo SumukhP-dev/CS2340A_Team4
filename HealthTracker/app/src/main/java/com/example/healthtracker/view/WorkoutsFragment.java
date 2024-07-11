@@ -1,5 +1,9 @@
 package com.example.healthtracker.view;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -18,6 +23,8 @@ import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
 import com.example.healthtracker.ViewModel.WorkoutsViewModel;
 import com.example.healthtracker.model.User;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -117,7 +124,13 @@ public class WorkoutsFragment extends Fragment {
                         time.getText().toString(),
                         expectedCalories.getText().toString(),
                         workoutsViewModel.getUsername());
+
                 displayErrorMessages();
+
+                hideKeyboard(requireActivity());
+
+                // Dismiss the small screen
+                frameLayout.setVisibility(View.GONE);
             }
         });
 
@@ -141,5 +154,16 @@ public class WorkoutsFragment extends Fragment {
 
     private void toggleSmallScreen() {
         frameLayout.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
