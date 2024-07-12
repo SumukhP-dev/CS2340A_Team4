@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout2"
-    android:layout_width="400dp"
+    android:layout_width="375dp"
     android:layout_height="400dp"
     android:layout_gravity="center"
     android:background="@drawable/black_rounded_corner"
@@ -26,12 +26,12 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/setsEditTextView"
+        android:id="@+id/setsTextNumberDecimal"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:background="@drawable/gray_rounded_corner"
         android:hint="    Sets"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,12 +41,12 @@
         app:layout_constraintVertical_bias="0.103" />
 
     <EditText
-        android:id="@+id/repsEditTextView"
+        android:id="@+id/repsTextNumberDecimal"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:background="@drawable/gray_rounded_corner"
         android:hint="    Reps"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/workoutPlanNameEditTextView"
@@ -56,12 +56,12 @@
         app:layout_constraintVertical_bias="0.113" />
 
     <EditText
-        android:id="@+id/timeEditTextView"
+        android:id="@+id/editTextTime"
         android:layout_width="100dp"
         android:layout_height="40dp"
         android:background="@drawable/gray_rounded_corner"
         android:hint="    Time"
-        android:inputType="text"
+        android:inputType="time"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -71,13 +71,13 @@
         app:layout_constraintVertical_bias="0.113" />
 
     <EditText
-        android:id="@+id/expectedCaloriesEditTextView"
+        android:id="@+id/expectedCaloriesTextNumberDecimal"
         android:layout_width="366dp"
         android:layout_height="46dp"
         android:layout_marginBottom="100dp"
         android:background="@drawable/gray_rounded_corner"
         android:hint="    Expected calories per set"
-        android:inputType="text"
+        android:inputType="numberDecimal"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -127,6 +127,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
+
     <!-- Add more views as needed -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
