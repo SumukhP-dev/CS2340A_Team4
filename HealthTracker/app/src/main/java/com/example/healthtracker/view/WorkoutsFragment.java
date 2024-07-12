@@ -1,14 +1,30 @@
 package com.example.healthtracker.view;
 
+import static androidx.core.content.ContextCompat.getSystemService;
+
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
+import com.example.healthtracker.ViewModel.WorkoutsViewModel;
+import com.example.healthtracker.model.User;
+
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +37,18 @@ public class WorkoutsFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private WorkoutsViewModel workoutsViewModel;
+
+    private FrameLayout frameLayout;
+    private EditText workoutPlanName;
+    private EditText notes;
+    private EditText sets;
+    private EditText reps;
+    private EditText time;
+    private EditText expectedCalories;
+    private Button publishWorkoutPlan;
+    private Button createWorkoutPlan;
 
     // Rename and change types of parameters
     private String mParam1;
@@ -51,6 +79,7 @@ public class WorkoutsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -60,7 +89,81 @@ public class WorkoutsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workouts, container, false);
+        View view = inflater.inflate(R.layout.fragment_workouts, container, false);
+
+        workoutsViewModel = new ViewModelProvider(this)
+                .get(WorkoutsViewModel.class);
+
+        frameLayout = view.findViewById(R.id.workoutPlansPopupScreenLayout);
+
+        workoutPlanName = frameLayout.findViewById(R.id.workoutPlanNameEditTextView);
+        notes = frameLayout.findViewById(R.id.notesEditTextView);
+        sets = frameLayout.findViewById(R.id.setsTextNumberDecimal);
+        reps = frameLayout.findViewById(R.id.repsTextNumberDecimal);
+        time = frameLayout.findViewById(R.id.editTextTime);
+        expectedCalories = frameLayout.findViewById(R.id.expectedCaloriesTextNumberDecimal);
+        publishWorkoutPlan = frameLayout.findViewById(R.id.newWorkoutPlanButton);
+
+        createWorkoutPlan = view.findViewById(R.id.createWorkoutPlansButton);
+
+        createWorkoutPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSmallScreen();
+            }
+        });
+
+        publishWorkoutPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                workoutsViewModel.publishWorkoutPlan(
+                        workoutPlanName.getText().toString(),
+                        notes.getText().toString(),
+                        sets.getText().toString(),
+                        reps.getText().toString(),
+                        time.getText().toString(),
+                        expectedCalories.getText().toString(),
+                        workoutsViewModel.getUsername());
+
+                displayErrorMessages();
+
+                hideKeyboard(requireActivity());
+
+                // Dismiss the small screen
+                frameLayout.setVisibility(View.GONE);
+            }
+        });
+
+        return view;
+    }
+
+    public void displayErrorMessages() {
+        String errorMessage = "";
+        if (workoutsViewModel.getCaloriesErrorMessage() != null) {
+            errorMessage += workoutsViewModel.getCaloriesErrorMessage();
+        }
+        if (workoutsViewModel.getNameErrorMessage() != null) {
+            errorMessage = errorMessage + " " + workoutsViewModel.getNameErrorMessage();
+        }
+        if (errorMessage.length() != 0) {
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
+    }
+
+
+    private void toggleSmallScreen() {
+        frameLayout.setVisibility(View.VISIBLE);
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view, so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 }
