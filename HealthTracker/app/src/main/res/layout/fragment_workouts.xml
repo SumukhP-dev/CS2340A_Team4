@@ -58,7 +58,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/workoutPlansButton"
+        android:id="@+id/createWorkoutPlansButton"
         android:layout_width="294dp"
         android:layout_height="48dp"
         android:background="@drawable/gray_rounded_corner"
@@ -70,9 +70,8 @@
         app:layout_constraintTop_toBottomOf="@+id/workoutPlansRecyclerView"
         app:layout_constraintVertical_bias="0.342"
         tools:backgroundTint="#000000" />
-
-    <FrameLayout
-        android:id="@+id/displayScreen"
+  
+        android:id="@+id/workoutPlansPopupScreenLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
