@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -40,7 +41,7 @@ public class WorkoutsFragment extends Fragment {
 
     private WorkoutsViewModel workoutsViewModel;
 
-    private FrameLayout frameLayout;
+    private ConstraintLayout constraintLayout;
     private EditText workoutPlanName;
     private EditText notes;
     private EditText sets;
@@ -94,17 +95,21 @@ public class WorkoutsFragment extends Fragment {
         workoutsViewModel = new ViewModelProvider(this)
                 .get(WorkoutsViewModel.class);
 
-        frameLayout = view.findViewById(R.id.workoutPlansPopupScreenLayout);
+        constraintLayout = view.findViewById(R.id.constraintLayout2);
 
-        workoutPlanName = frameLayout.findViewById(R.id.workoutPlanNameEditTextView);
-        notes = frameLayout.findViewById(R.id.notesEditTextView);
-        sets = frameLayout.findViewById(R.id.setsTextNumberDecimal);
-        reps = frameLayout.findViewById(R.id.repsTextNumberDecimal);
-        time = frameLayout.findViewById(R.id.editTextTime);
-        expectedCalories = frameLayout.findViewById(R.id.expectedCaloriesTextNumberDecimal);
-        publishWorkoutPlan = frameLayout.findViewById(R.id.newWorkoutPlanButton);
+        workoutPlanName = constraintLayout.findViewById(R.id.workoutPlanNameEditTextView);
+        notes = constraintLayout.findViewById(R.id.notesEditTextView);
+        sets = constraintLayout.findViewById(R.id.setsTextNumberDecimal);
+        reps = constraintLayout.findViewById(R.id.repsTextNumberDecimal);
+        time = constraintLayout.findViewById(R.id.editTextTime);
+        expectedCalories = constraintLayout.findViewById(R.id.expectedCaloriesTextNumberDecimal);
+        publishWorkoutPlan = constraintLayout.findViewById(R.id.newWorkoutPlanButton);
 
         createWorkoutPlan = view.findViewById(R.id.createWorkoutPlansButton);
+
+
+        // Dismiss the small screen
+        constraintLayout.setVisibility(View.GONE);
 
         createWorkoutPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,7 +135,7 @@ public class WorkoutsFragment extends Fragment {
                 hideKeyboard(requireActivity());
 
                 // Dismiss the small screen
-                frameLayout.setVisibility(View.GONE);
+                constraintLayout.setVisibility(View.GONE);
             }
         });
 
@@ -153,7 +158,7 @@ public class WorkoutsFragment extends Fragment {
 
 
     private void toggleSmallScreen() {
-        frameLayout.setVisibility(View.VISIBLE);
+        constraintLayout.setVisibility(View.VISIBLE);
     }
 
     public static void hideKeyboard(Activity activity) {
