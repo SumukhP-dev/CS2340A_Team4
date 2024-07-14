@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -31,7 +32,21 @@ import java.util.Map;
 
 
 public class ExampleUnitTest {
-    private DatabaseReference mDatabase;
+    private MockDatabase mDatabase;
+    private FakeUser test1;
+    private FakeUser test2;
+    private FakeUser test3;
+
+    @Before
+    public void setUp() {
+        mDatabase = new MockDatabase();
+        test1 = new FakeUser("test1", "1234");
+        mDatabase.addUser(test1);
+        test2 = new FakeUser("test2", "5678");
+        mDatabase.addUser(test2);
+        test3 = new FakeUser("test3", "abcd");
+        mDatabase.addUser(test3);
+    }
 
 
 
