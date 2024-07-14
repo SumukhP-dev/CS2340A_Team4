@@ -13,6 +13,8 @@ public class FakeUser {
     private ArrayList<FakeWorkout> workouts;
     private ArrayList<FakeWorkoutPlan> workoutPlans;
 
+
+
     public FakeUser(String username, String password) {
         this.username = username;
         this.password = password;
@@ -79,9 +81,15 @@ public class FakeUser {
 
     public void addWorkout(FakeWorkout workout) {
         workouts.add(workout);
+        incrementCounter();
     }
 
     public void addWorkoutPlan(FakeWorkoutPlan workoutPlan) {
         workoutPlans.add(workoutPlan);
     }
+
+    public ArrayList<FakeWorkout> getWorkout(){ return workouts;}
+
+    public ArrayList<FakeWorkoutPlan> getWorkoutPlan(){ return workoutPlans;}
+
 }
