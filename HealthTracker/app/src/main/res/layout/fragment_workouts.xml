@@ -19,6 +19,7 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.00999999" />
 
+
     <SearchView
         android:id="@+id/workoutPlansSearchView"
         android:layout_width="354dp"
@@ -27,30 +28,50 @@
         android:queryHint="Search"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workoutPlansTextView"
-        app:layout_constraintVertical_bias="0.027" />
+        app:layout_constraintVertical_bias="0.028" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <ScrollView
         android:id="@+id/workoutPlansRecyclerView"
-        android:layout_width="373dp"
-        android:layout_height="408dp"
-        android:layout_marginBottom="164dp"
+        android:layout_width="412dp"
+        android:layout_height="434dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="57dp"
+        android:layout_marginBottom="34dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/workoutPlansSearchView" />
+        app:layout_constraintTop_toBottomOf="@+id/workoutPlansSearchView"
+        app:layout_constraintVertical_bias="0.0">
+
+
+        <LinearLayout
+            android:id="@+id/spinnerContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+    </ScrollView>
 
     <Button
-        android:id="@+id/workoutPlansButton"
+        android:id="@+id/createWorkoutPlansButton"
         android:layout_width="294dp"
         android:layout_height="48dp"
         android:background="@drawable/gray_rounded_corner"
         android:text="Create new public workout plan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/workoutPlansRecyclerView"
-        app:layout_constraintVertical_bias="0.183"
+        app:layout_constraintVertical_bias="0.342"
         tools:backgroundTint="#000000" />
+
+        <!-- This will be your small screen content -->
+        <include layout="@layout/workout_plans_popup_screen_layout" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
