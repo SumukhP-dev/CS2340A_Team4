@@ -1,9 +1,6 @@
 package com.example.healthtracker.view;
 
-import static androidx.core.content.ContextCompat.getSystemService;
-
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -19,24 +16,19 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.healthtracker.R;
-import com.example.healthtracker.ViewModel.PersonalInformationViewModel;
 import com.example.healthtracker.ViewModel.WorkoutsViewModel;
-import com.example.healthtracker.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Objects;
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -64,6 +56,11 @@ public class WorkoutsFragment extends Fragment {
     private Button createWorkoutPlan;
     private LinearLayout Container;
 
+    private androidx.appcompat.widget.SearchView searchView;
+    private SearchModel searchModel;
+    private WorkoutPlanNameSearchStrategy workoutPlanNameSearchStrategy;
+    private WorkoutPlanAuthorSearchStrategy workoutPlanAuthorSearchStrategy;
+    private ArrayList<Button> listOfButtons;
 
     // Rename and change types of parameters
     private String mParam1;
@@ -122,6 +119,9 @@ public class WorkoutsFragment extends Fragment {
         Container = view.findViewById(R.id.Container);
         Container.setVisibility(View.VISIBLE);
 
+        searchView = view.findViewById(R.id.searchView);
+        searchModel = new SearchModel();
+
         createWorkoutPlan = view.findViewById(R.id.createWorkoutPlansButton);
 
         getInfoToUpdateScreen();
@@ -156,6 +156,23 @@ public class WorkoutsFragment extends Fragment {
                 constraintLayout.setVisibility(View.GONE);
                 getInfoToUpdateScreen();
 
+            }
+        });
+
+        searchView.setOnQueryTextListener(
+                new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                searchModel.setStrategy(workoutPlanNameSearchStrategy);
+                searchModel.remove(Container, query, listOfButtons);
+                searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
+                searchModel.remove(Container, query, listOfButtons);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
             }
         });
 
@@ -194,6 +211,7 @@ public class WorkoutsFragment extends Fragment {
 
     private void getInfoToUpdateScreen() {
         DatabaseReference workoutPlansRef = mDatabase.child("WorkoutPlans");
+        listOfButtons = new ArrayList<>();
 
         workoutPlansRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -220,7 +238,7 @@ public class WorkoutsFragment extends Fragment {
                             workoutButton.setPadding(16, 16, 16, 16);
                             workoutButton.setBackgroundResource(R.drawable.gray_rounded_corner);
 
-                            String buttonText = String.format("User: %s\t%s ", userId, name);
+                            String buttonText = String.format("%s\t%s ", userId, name);
                             workoutButton.setText(buttonText);
 
                             workoutButton.setOnClickListener(v -> {
@@ -246,6 +264,7 @@ public class WorkoutsFragment extends Fragment {
                             });
 
                             Container.addView(workoutButton);
+                            listOfButtons.add(workoutButton);
 
                             // Add some space between buttons
                             View spacer = new View(getContext());
@@ -263,6 +282,7 @@ public class WorkoutsFragment extends Fragment {
                 Log.e("WorkoutsFragment", "Error fetching workouts: " + databaseError.getMessage());
             }
         });
+
         /**
         mDatabase.child("WorkoutPlans")
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
