@@ -13,6 +13,8 @@ public class FakeUser {
     private ArrayList<FakeWorkout> workouts;
     private ArrayList<FakeWorkoutPlan> workoutPlans;
 
+
+
     public FakeUser(String username, String password) {
         this.username = username;
         this.password = password;
