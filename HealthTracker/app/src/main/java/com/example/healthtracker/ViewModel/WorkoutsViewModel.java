@@ -1,7 +1,5 @@
 package com.example.healthtracker.ViewModel;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,7 +13,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +21,10 @@ public class WorkoutsViewModel extends ViewModel {
     private MutableLiveData<String> nameErrorMessage;
     private MutableLiveData<String> caloriesErrorMessage;
     private MutableLiveData<Integer> numOfUserWorkoutPlans;
+
+    public FirebaseDatabase getDatabase() {
+        return user.getDatabase();
+    }
 
     public String getNameErrorMessage() {
         return nameErrorMessage.getValue();
@@ -58,12 +59,13 @@ public class WorkoutsViewModel extends ViewModel {
 
 
     public void publishWorkoutPlan(String name, String notes,
-                                      String sets,
-                                      String reps, String time,
-                                      String expectedCalories,
-                                      String username) {
+                                   String sets,
+                                   String reps, String time,
+                                   String expectedCalories,
+                                   String username) {
         nameErrorMessage = new MutableLiveData<String>(null);
         caloriesErrorMessage = new MutableLiveData<String>(null);
+
         boolean valid = true;
         valid = checkForEmptyNameOrCalories(name, expectedCalories);
 
@@ -72,16 +74,17 @@ public class WorkoutsViewModel extends ViewModel {
         }
 
         DatabaseReference workoutPlanRef = user.getDatabase().getReference("WorkoutPlans");
-        workoutPlanRef.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    addUsernameToWorkoutsPlan(workoutPlanRef, username);
-                }
-            }
-        });
+        workoutPlanRef.child(username).get()
+                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                        if (!task.isSuccessful()) {
+                            addUsernameToWorkoutsPlan(workoutPlanRef, username);
+                        }
+                    }
+                });
 
-        createWorkoutPlan(workoutPlanRef, name, notes, sets, reps, time,
+        createWorkoutPlan(name, notes, sets, reps, time,
                 expectedCalories, username);
     }
 
@@ -90,11 +93,11 @@ public class WorkoutsViewModel extends ViewModel {
     }
 
 
-    public void createWorkoutPlan(DatabaseReference workoutPlanRef,
-                                       String name, String notes, String sets,
-                                       String reps, String time,
-                                       String expectedCalories,
-                                       String username) {
+    public void createWorkoutPlan(String name, String notes, String sets,
+                                  String reps, String time,
+                                  String expectedCalories,
+                                  String username) {
+        DatabaseReference workoutPlanRef = user.getDatabase().getReference("WorkoutPlans");
         workoutPlanRef.child(username).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -160,18 +163,19 @@ public class WorkoutsViewModel extends ViewModel {
         return check;
     }
 
-    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+    public boolean checkForNegativeSetsOrRepsOrTime(String setsInput,
+                                                    String repsInput, String timeInput) {
         boolean check = true;
-        double sets=Double.parseDouble(Sets);
-        double reps=Double.parseDouble(Reps);
-        double time=Double.parseDouble(Time);
-        if (sets<0) {
+        double sets = Double.parseDouble(setsInput);
+        double reps = Double.parseDouble(repsInput);
+        double time = Double.parseDouble(timeInput);
+        if (sets < 0) {
             check = false;
         }
-        if (reps<0) {
+        if (reps < 0) {
             check = false;
         }
-        if (time<0) {
+        if (time < 0) {
 
             check = false;
         }
