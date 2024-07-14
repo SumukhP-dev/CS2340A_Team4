@@ -1,6 +1,5 @@
 package com.example.healthtracker.view;
 
-import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
