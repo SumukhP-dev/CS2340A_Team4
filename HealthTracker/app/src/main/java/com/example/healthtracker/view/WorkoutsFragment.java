@@ -57,10 +57,11 @@ public class WorkoutsFragment extends Fragment {
     private LinearLayout Container;
 
     private androidx.appcompat.widget.SearchView searchView;
-    private SearchModel searchModel;
     private WorkoutPlanNameSearchStrategy workoutPlanNameSearchStrategy;
     private WorkoutPlanAuthorSearchStrategy workoutPlanAuthorSearchStrategy;
     private ArrayList<Button> listOfButtons;
+
+    private SearchModel searchModel = new SearchModel();
 
     // Rename and change types of parameters
     private String mParam1;
@@ -120,13 +121,10 @@ public class WorkoutsFragment extends Fragment {
         Container.setVisibility(View.VISIBLE);
 
         searchView = view.findViewById(R.id.searchView);
-        searchModel = new SearchModel();
 
         createWorkoutPlan = view.findViewById(R.id.createWorkoutPlansButton);
 
         getInfoToUpdateScreen();
-        constraintLayout.setVisibility(View.GONE);
-
 
         createWorkoutPlan.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,8 +161,10 @@ public class WorkoutsFragment extends Fragment {
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
+                workoutPlanNameSearchStrategy = new WorkoutPlanNameSearchStrategy();
                 searchModel.setStrategy(workoutPlanNameSearchStrategy);
                 searchModel.remove(Container, query, listOfButtons);
+                workoutPlanAuthorSearchStrategy = new WorkoutPlanAuthorSearchStrategy();
                 searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
                 searchModel.remove(Container, query, listOfButtons);
                 return true;
@@ -172,7 +172,7 @@ public class WorkoutsFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                return true;
             }
         });
 
@@ -238,7 +238,7 @@ public class WorkoutsFragment extends Fragment {
                             workoutButton.setPadding(16, 16, 16, 16);
                             workoutButton.setBackgroundResource(R.drawable.gray_rounded_corner);
 
-                            String buttonText = String.format("%s\t%s ", userId, name);
+                            String buttonText = String.format("%s\t%s ", name, userId);
                             workoutButton.setText(buttonText);
 
                             workoutButton.setOnClickListener(v -> {
