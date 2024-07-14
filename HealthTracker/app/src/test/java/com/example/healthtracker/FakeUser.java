@@ -8,8 +8,8 @@ public class FakeUser {
     private String name;
     private String gender;
     private int counter;
-    private int height;
-    private int weight;
+    private double height;
+    private double weight;
     private ArrayList<FakeWorkout> workouts;
     private ArrayList<FakeWorkoutPlan> workoutPlans;
 
@@ -63,19 +63,19 @@ public class FakeUser {
         this.gender = gender;
     }
 
-    public int getHeight() {
+    public double getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
+    public void setHeight(double height) {
         this.height = height;
     }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(int weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 
