@@ -59,50 +59,16 @@ public class ExampleUnitTest {
 
 
 
+    @Test
+    public void testDatabaseUpdate() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "Workout Test";
+        FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
+                100, 3, 10);
+        user.addWorkout(workout);
 
-    public void trackerDatabaseUpdate() {
-        TrackerFragment test = new TrackerFragment();
-        String workoutName;
-        String counter;
-        String username = "TestName";
-        Map<String, Object> testUser = new HashMap<>();
-        testUser.put("additionalNotes", "");
-        testUser.put("caloriesBurned", "100");
-        testUser.put("reps", "10");
-        testUser.put("sets", "3");
-        testUser.put("workoutName", "push");
-        mDatabase.child("User").child(username).setValue("TestingCase");
-        mDatabase.child("Workouts").child(username)
-                .child("TestWorkout").setValue(testUser);
-        mDatabase.child("Workout").child(username).get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        DataSnapshot dataSnap = task.getResult();
-                        String additionalNotes = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("additionalNotes").getValue());
-                        assertEquals("", String.valueOf(additionalNotes));
-                        String calories = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("caloriesBurned").getValue());
-                        assertEquals("100", calories);
-                        String reps = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("reps").getValue());
-                        assertEquals("10", reps);
-                        String sets = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("sets").getValue());
-                        assertEquals("3", sets);
-                        String workoutName = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("workoutName").getValue());
-                        assertEquals("push", workoutName);
-                    }
-                });
-
-        mDatabase.child("User").child(username).removeValue();
-        mDatabase.child("Workouts").child(username).child("TestWorkout").removeValue();
+        FakeWorkout check = user.getWorkout().get(0);
+        assertEquals(check, workout);
+        assertEquals(1, user.getCounter());
     }
 }
