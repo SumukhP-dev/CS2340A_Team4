@@ -1,8 +1,7 @@
-package com.example.healthtracker.ViewModel;
+package com.example.healthtracker;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.ViewModel;
 
 import com.example.healthtracker.model.User;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,10 +12,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.HashMap;
 import java.util.Map;
-
-public class PersonalInformationViewModel extends ViewModel {
+//requires some editing
+public class MockPersonalInformationViewModel {
     private User user;
-    private MutableLiveData<String> gender;
+    private String gender;
 
     private DatabaseReference mDatabase;
 
@@ -49,7 +48,7 @@ public class PersonalInformationViewModel extends ViewModel {
         userRef.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (task.getResult().getValue() == null) {
+                if (!task.isSuccessful()) {
                     createUserDocument(userRef, username, name, height, weight, gender);
                 } else {
                     updateDocument(userRef, username, name, height, weight, gender);
@@ -60,7 +59,7 @@ public class PersonalInformationViewModel extends ViewModel {
 
     // Creates a new user with name, height, weight, gender, and username
     public void createUserDocument(DatabaseReference userRef, String username, String name,
-                                    Double height, Double weight, String gender) {
+                                   Double height, Double weight, String gender) {
         userRef.child(username).push();
         DatabaseReference ref = userRef.child(username);
 
@@ -77,7 +76,7 @@ public class PersonalInformationViewModel extends ViewModel {
         ref.child("gender").setValue(gender);
 
         ref.setValue("Counter");
-        ref.child("Counter").setValue("0");
+        ref.child("Counter").setValue(0);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("Workouts").setValue(username);
@@ -85,7 +84,7 @@ public class PersonalInformationViewModel extends ViewModel {
 
     // Updates personal information of user
     public void updateDocument(DatabaseReference userRef, String username, String name,
-                                Double height, Double weight, String gender) {
+                               Double height, Double weight, String gender) {
         DatabaseReference ref = userRef.child(username);
         Map<String, Object> childUpdates = new HashMap<>();
         childUpdates.put("name", name);
