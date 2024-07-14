@@ -164,4 +164,22 @@ public class WorkoutsViewModel extends ViewModel {
         }
         return check;
     }
+
+    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+        boolean check = true;
+        double sets=Double.parseDouble(Sets);
+        double reps=Double.parseDouble(Reps);
+        double time=Double.parseDouble(Time);
+        if (sets<0) {
+            check = false;
+        }
+        if (reps<0) {
+            check = false;
+        }
+        if (time<0) {
+
+            check = false;
+        }
+        return check;
+    }
 }
