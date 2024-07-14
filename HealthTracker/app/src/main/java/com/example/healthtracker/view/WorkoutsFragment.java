@@ -124,6 +124,9 @@ public class WorkoutsFragment extends Fragment {
 
         createWorkoutPlan = view.findViewById(R.id.createWorkoutPlansButton);
 
+        // Dismiss the small screen
+        constraintLayout.setVisibility(View.GONE);
+
         getInfoToUpdateScreen();
 
         createWorkoutPlan.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +153,9 @@ public class WorkoutsFragment extends Fragment {
                 hideKeyboard(requireActivity());
 
                 // Dismiss the small screen
-
                 constraintLayout.setVisibility(View.GONE);
-                getInfoToUpdateScreen();
 
+                getInfoToUpdateScreen();
             }
         });
 
