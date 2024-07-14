@@ -2,11 +2,15 @@ package com.example.healthtracker.view;
 
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
+import android.widget.TextView;
 
 import com.example.healthtracker.R;
 
@@ -26,6 +30,19 @@ public class WorkoutsIndividualFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ConstraintLayout constraintLayout;
+
+    private TextView setAuthor;
+    private TextView setSets;
+    private TextView setReps;
+    private TextView setTime;
+    private TextView setNotes;
+    private TextView setCals;
+    private TextView setName;
+
+    private ImageButton back;
+
 
     public WorkoutsIndividualFragment() {
         // Required empty public constructor
@@ -64,6 +81,17 @@ public class WorkoutsIndividualFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_workouts_individual, container, false);
 
+        constraintLayout = view.findViewById(R.id.frameLayout3);
+
+        setAuthor = constraintLayout.findViewById(R.id.authorDataTextView);
+        setSets = constraintLayout.findViewById(R.id.setsDataTextView);
+        setReps = constraintLayout.findViewById(R.id.repsDataTextView);
+        setTime = constraintLayout.findViewById(R.id.timeDataTextView);
+        setCals = constraintLayout.findViewById(R.id.caloriesDataTextView);
+        setNotes = constraintLayout.findViewById(R.id.notesDataTextView);
+        setName = constraintLayout.findViewById(R.id.workoutPlanTitleTextView);
+        back = constraintLayout.findViewById(R.id.imageButton3);
+
         Bundle args = getArguments();
         if (args != null) {
             String userId = args.getString("userId");
@@ -74,7 +102,23 @@ public class WorkoutsIndividualFragment extends Fragment {
             String sets = args.getString("sets");
             String time = args.getString("time");
 
+            setAuthor.setText(userId);
+            setSets.setText(sets);
+            setReps.setText(reps);
+            setTime.setText(time);
+            setNotes.setText(notes);
+            setCals.setText(cals);
+            setName.setText(name);
+
         }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
         return view;
 
     }
