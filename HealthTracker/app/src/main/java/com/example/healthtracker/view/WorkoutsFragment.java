@@ -7,6 +7,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -23,7 +24,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.healthtracker.R;
@@ -183,6 +183,11 @@ public class WorkoutsFragment extends Fragment {
                         return true;
                     }
                 });
+
+        searchView.setOnCloseListener(() -> {
+            getInfoToUpdateScreen();
+            return true;
+        });
 
         return view;
     }
