@@ -1,12 +1,18 @@
 package com.example.healthtracker.view;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -161,22 +167,22 @@ public class WorkoutsFragment extends Fragment {
 
         searchView.setOnQueryTextListener(
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                workoutPlanNameSearchStrategy = new WorkoutPlanNameSearchStrategy();
-                searchModel.setStrategy(workoutPlanNameSearchStrategy);
-                searchModel.remove(Container, query, listOfButtons);
-                workoutPlanAuthorSearchStrategy = new WorkoutPlanAuthorSearchStrategy();
-                searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
-                searchModel.remove(Container, query, listOfButtons);
-                return true;
-            }
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        workoutPlanNameSearchStrategy = new WorkoutPlanNameSearchStrategy();
+                        searchModel.setStrategy(workoutPlanNameSearchStrategy);
+                        searchModel.remove(Container, query, listOfButtons);
+                        workoutPlanAuthorSearchStrategy = new WorkoutPlanAuthorSearchStrategy();
+                        searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
+                        searchModel.remove(Container, query, listOfButtons);
+                        return true;
+                    }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return true;
-            }
-        });
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        return true;
+                    }
+                });
 
         return view;
     }
@@ -232,7 +238,7 @@ public class WorkoutsFragment extends Fragment {
                         String sets = workoutSnapshot.child("sets").getValue(String.class);
                         String time = workoutSnapshot.child("time").getValue(String.class);
 
-                        if (name != null) {
+                        if ((name != null) && (getContext() != null)) {
                             Button workoutButton = new Button(getContext());
                             workoutButton.setLayoutParams(new LinearLayout.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -244,25 +250,51 @@ public class WorkoutsFragment extends Fragment {
                             workoutButton.setText(buttonText);
 
                             workoutButton.setOnClickListener(v -> {
-                                WorkoutsIndividualFragment detailFragment = new WorkoutsIndividualFragment();
+                                boolean check = false;
+                                int color = 0;
+                                if(workoutButton.getBackground().getClass().equals(GradientDrawable.class)) {
+                                    check = true;
+                                } else {
+                                    ColorDrawable workoutButtonColorDrawable = (ColorDrawable) workoutButton.getBackground();
+                                    color = workoutButtonColorDrawable.getColor();
+                                }
+                                if (check || color != Color.GREEN) {
+                                    WorkoutsIndividualFragment detailFragment = new WorkoutsIndividualFragment();
 
-                                // Create a Bundle to pass data to the new fragment
-                                Bundle args = new Bundle();
-                                args.putString("userId", userId);
-                                args.putString("expectedCalories", cals);
-                                args.putString("name", name);
-                                args.putString("notes", notes);
-                                args.putString("reps", reps);
-                                args.putString("sets", sets);
-                                args.putString("time", time);
-                                detailFragment.setArguments(args);
+                                    // Create a Bundle to pass data to the new fragment
+                                    Bundle args = new Bundle();
+                                    args.putString("userId", userId);
+                                    args.putString("expectedCalories", cals);
+                                    args.putString("name", name);
+                                    args.putString("notes", notes);
+                                    args.putString("reps", reps);
+                                    args.putString("sets", sets);
+                                    args.putString("time", time);
+                                    detailFragment.setArguments(args);
 
-                                // Perform the fragment transaction
-                                FragmentManager fragmentManager = getParentFragmentManager();
-                                fragmentManager.beginTransaction()
-                                        .replace(R.id.frameLayout2, detailFragment) // Replace R.id.frameLayout2 with your container ID
-                                        .addToBackStack(null)
-                                        .commit();
+                                    // Perform the fragment transaction
+                                    FragmentManager fragmentManager = getParentFragmentManager();
+                                    fragmentManager.beginTransaction()
+                                            .replace(R.id.frameLayout2, detailFragment) // Replace R.id.frameLayout2 with your container ID
+                                            .addToBackStack(null)
+                                            .commit();
+                                }
+                            });
+
+                            DatabaseReference userRef = workoutsViewModel.getDatabase().getReference("Workouts");
+                            userRef.child(workoutsViewModel.getUsername()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                                        if (name.equals(postSnapshot.child("workoutName").getValue())) {
+                                            workoutButton.setBackgroundColor(Color.GREEN);
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                }
                             });
 
                             Container.addView(workoutButton);
@@ -286,52 +318,59 @@ public class WorkoutsFragment extends Fragment {
         });
 
         /**
-        mDatabase.child("WorkoutPlans")
-                .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        DataSnapshot dataSnap = task.getResult();
-                        for (DataSnapshot childSnapshot : dataSnap.getChildren()) {
-                            String childKey = childSnapshot.getKey();
-                            String childValue = String.valueOf(childSnapshot.getValue());
-                            Log.d("childKey", String.valueOf(childKey));
-                            Log.d("childValue:", childValue);
-                            mDatabase.child("WorkoutPlans").child(childKey)
-                                    .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                            DataSnapshot data = task.getResult();
-                                            for (DataSnapshot childData: data.getChildren()) {
-                                                String workout = childData.getKey();
-                                                String workoutinfo = String.valueOf(childData.getValue());
-                                                Log.d("childKey", String.valueOf(workout));
-                                                Log.d("childValue:", workoutinfo);
-                                                mDatabase.child("WorkoutPlans").child(childKey).child(workout)
-                                                        .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                                                            @Override
-                                                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                                                DataSnapshot info = task.getResult();
-                                                                for (DataSnapshot childInfo: info.getChildren()) {
-                                                                    String infoKey = childInfo.getKey();
-                                                                    String infoValue = String.valueOf(childInfo.getValue());
-                                                                    TextView textView = new TextView(getContext());
-                                                                    textView.setLayoutParams(new LinearLayout.LayoutParams(
-                                                                            ViewGroup.LayoutParams.MATCH_PARENT,
-                                                                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                                                                    textView.setPadding(16, 16, 16, 16);
+         mDatabase.child("WorkoutPlans")
+         .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        DataSnapshot dataSnap = task.getResult();
+        for (DataSnapshot childSnapshot : dataSnap.getChildren()) {
+        String childKey = childSnapshot.getKey();
+        String childValue = String.valueOf(childSnapshot.getValue());
+        Log.d("childKey", String.valueOf(childKey));
+        Log.d("childValue:", childValue);
+        mDatabase.child("WorkoutPlans").child(childKey)
+        .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        DataSnapshot data = task.getResult();
+        for (DataSnapshot childData: data.getChildren()) {
+        String workout = childData.getKey();
+        String workoutinfo = String.valueOf(childData.getValue());
+        Log.d("childKey", String.valueOf(workout));
+        Log.d("childValue:", workoutinfo);
+        mDatabase.child("WorkoutPlans").child(childKey).child(workout)
+        .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+        @Override
+        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        DataSnapshot info = task.getResult();
+        for (DataSnapshot childInfo: info.getChildren()) {
+        String infoKey = childInfo.getKey();
+        String infoValue = String.valueOf(childInfo.getValue());
+        TextView textView = new TextView(getContext());
+        textView.setLayoutParams(new LinearLayout.LayoutParams(
+        ViewGroup.LayoutParams.MATCH_PARENT,
+        ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setPadding(16, 16, 16, 16);
 
-                                                                    String displayText = String.format("%s: %b", infoKey, infoValue);
-                                                                    textView.setText(displayText);
+        String displayText = String.format("%s: %b", infoKey, infoValue);
+        textView.setText(displayText);
 
-                                                                    // Add the TextView to the container
-                                                                    Container.addView(textView);
-                                                                }
-                                            }
-                                        }
-                                    });
-                        }
-                    }
-                });
-        **/
+        // Add the TextView to the container
+        Container.addView(textView);
+        }
+        }
+        }
+        });
+        }
+        }
+        });
+         **/
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("test", "test1");
+        getInfoToUpdateScreen();
     }
 }

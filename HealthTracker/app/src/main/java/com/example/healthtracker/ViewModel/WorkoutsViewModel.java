@@ -25,6 +25,10 @@ public class WorkoutsViewModel extends ViewModel {
     private MutableLiveData<String> caloriesErrorMessage;
     private MutableLiveData<Integer> numOfUserWorkoutPlans;
 
+    public FirebaseDatabase getDatabase() {
+        return user.getDatabase();
+    }
+
     public String getNameErrorMessage() {
         return nameErrorMessage.getValue();
     }
@@ -58,12 +62,13 @@ public class WorkoutsViewModel extends ViewModel {
 
 
     public void publishWorkoutPlan(String name, String notes,
-                                      String sets,
-                                      String reps, String time,
-                                      String expectedCalories,
-                                      String username) {
+                                   String sets,
+                                   String reps, String time,
+                                   String expectedCalories,
+                                   String username) {
         nameErrorMessage = new MutableLiveData<String>(null);
         caloriesErrorMessage = new MutableLiveData<String>(null);
+
         boolean valid = true;
         valid = checkForEmptyNameOrCalories(name, expectedCalories);
 
@@ -91,10 +96,10 @@ public class WorkoutsViewModel extends ViewModel {
 
 
     public void createWorkoutPlan(DatabaseReference workoutPlanRef,
-                                       String name, String notes, String sets,
-                                       String reps, String time,
-                                       String expectedCalories,
-                                       String username) {
+                                  String name, String notes, String sets,
+                                  String reps, String time,
+                                  String expectedCalories,
+                                  String username) {
         workoutPlanRef.child(username).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
