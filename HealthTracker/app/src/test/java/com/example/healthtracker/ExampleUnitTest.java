@@ -9,10 +9,13 @@ import androidx.annotation.NonNull;
 import com.example.healthtracker.view.CaloriesFragment;
 import com.example.healthtracker.view.TrackerFragment;
 import com.github.mikephil.charting.data.PieEntry;
+import com.example.healthtracker.ViewModel.WorkoutsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Test;
 
@@ -51,6 +54,39 @@ public class ExampleUnitTest {
         assertEquals(expectedCalories, actualCalories, 0.0001);
     }
 
+    @Test
+    public void CheckForNegativeSetsOrRepsOrTime1() {
+        String SetsString = "-1";
+        String RepsString = "-1";
+        String TimeString = "-1";
+        boolean expectedRes = false;
+        boolean actualRes = checkForNegativeSetsOrRepsOrTime(SetsString, RepsString, TimeString);
+        assertEquals(expectedRes, actualRes);
+    }
+
+    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+        boolean check = true;
+        double sets=Double.parseDouble(Sets);
+        double reps=Double.parseDouble(Reps);
+        double time=Double.parseDouble(Time);
+        //
+        if (sets<0) {
+            check = false;
+        }
+        if (reps<0) {
+            check = false;
+        }
+        if (time<0) {
+
+            check = false;
+        }
+        return check;
+    }
+
+    public int logNumberOfWorkoutPlansForUser(FakeUser user) {
+        int res= user.getCounter();;
+        return res;
+    }
 
 
 
