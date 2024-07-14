@@ -5,16 +5,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.OnLifecycleEvent;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,8 +13,13 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.WorkoutsViewModel;
@@ -60,7 +55,7 @@ public class WorkoutsFragment extends Fragment {
     private EditText expectedCalories;
     private Button publishWorkoutPlan;
     private Button createWorkoutPlan;
-    private LinearLayout Container;
+    private LinearLayout container;
 
     private androidx.appcompat.widget.SearchView searchView;
     private WorkoutPlanNameSearchStrategy workoutPlanNameSearchStrategy;
@@ -123,8 +118,8 @@ public class WorkoutsFragment extends Fragment {
         expectedCalories = constraintLayout.findViewById(R.id.expectedCaloriesTextNumberDecimal);
         publishWorkoutPlan = constraintLayout.findViewById(R.id.newWorkoutPlanButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        Container = view.findViewById(R.id.Container);
-        Container.setVisibility(View.VISIBLE);
+        this.container = view.findViewById(R.id.Container);
+        this.container.setVisibility(View.VISIBLE);
 
         searchView = view.findViewById(R.id.searchView);
 
@@ -171,10 +166,10 @@ public class WorkoutsFragment extends Fragment {
                     public boolean onQueryTextSubmit(String query) {
                         workoutPlanNameSearchStrategy = new WorkoutPlanNameSearchStrategy();
                         searchModel.setStrategy(workoutPlanNameSearchStrategy);
-                        searchModel.remove(Container, query, listOfButtons);
+                        searchModel.remove(WorkoutsFragment.this.container, query, listOfButtons);
                         workoutPlanAuthorSearchStrategy = new WorkoutPlanAuthorSearchStrategy();
                         searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
-                        searchModel.remove(Container, query, listOfButtons);
+                        searchModel.remove(WorkoutsFragment.this.container, query, listOfButtons);
                         return true;
                     }
 
@@ -183,6 +178,11 @@ public class WorkoutsFragment extends Fragment {
                         return true;
                     }
                 });
+
+        searchView.setOnCloseListener(() -> {
+            getInfoToUpdateScreen();
+            return true;
+        });
 
         return view;
     }
@@ -207,10 +207,13 @@ public class WorkoutsFragment extends Fragment {
     }
 
     public static void hideKeyboard(Activity activity) {
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        //Find the currently focused view, so we can grab the correct window token from it.
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view,
+        // so we can grab the correct window token from it.
         View view = activity.getCurrentFocus();
-        //If no view currently has focus, create a new one, just so we can grab a window token from it
+        //If no view currently has focus,
+        // create a new one, just so we can grab a window token from it
         if (view == null) {
             view = new View(activity);
         }
@@ -224,90 +227,10 @@ public class WorkoutsFragment extends Fragment {
         workoutPlansRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Container.removeAllViews(); // Clear existing views
+                container.removeAllViews(); // Clear existing views
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String userId = userSnapshot.getKey();
-
-                    for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
-                        String workoutId = workoutSnapshot.getKey();
-                        String cals = workoutSnapshot.child("expectedCalories").getValue(String.class);
-                        String name = workoutSnapshot.child("name").getValue(String.class);
-                        String notes = workoutSnapshot.child("notes").getValue(String.class);
-                        String reps = workoutSnapshot.child("reps").getValue(String.class);
-                        String sets = workoutSnapshot.child("sets").getValue(String.class);
-                        String time = workoutSnapshot.child("time").getValue(String.class);
-
-                        if ((name != null) && (getContext() != null)) {
-                            Button workoutButton = new Button(getContext());
-                            workoutButton.setLayoutParams(new LinearLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            workoutButton.setPadding(16, 16, 16, 16);
-                            workoutButton.setBackgroundResource(R.drawable.gray_rounded_corner);
-
-                            String buttonText = String.format("%s\t%s ", name, userId);
-                            workoutButton.setText(buttonText);
-
-                            workoutButton.setOnClickListener(v -> {
-                                boolean check = false;
-                                int color = 0;
-                                if(workoutButton.getBackground().getClass().equals(GradientDrawable.class)) {
-                                    check = true;
-                                } else {
-                                    ColorDrawable workoutButtonColorDrawable = (ColorDrawable) workoutButton.getBackground();
-                                    color = workoutButtonColorDrawable.getColor();
-                                }
-                                if (check || color != Color.GREEN) {
-                                    WorkoutsIndividualFragment detailFragment = new WorkoutsIndividualFragment();
-
-                                    // Create a Bundle to pass data to the new fragment
-                                    Bundle args = new Bundle();
-                                    args.putString("userId", userId);
-                                    args.putString("expectedCalories", cals);
-                                    args.putString("name", name);
-                                    args.putString("notes", notes);
-                                    args.putString("reps", reps);
-                                    args.putString("sets", sets);
-                                    args.putString("time", time);
-                                    detailFragment.setArguments(args);
-
-                                    // Perform the fragment transaction
-                                    FragmentManager fragmentManager = getParentFragmentManager();
-                                    fragmentManager.beginTransaction()
-                                            .replace(R.id.frameLayout2, detailFragment) // Replace R.id.frameLayout2 with your container ID
-                                            .addToBackStack(null)
-                                            .commit();
-                                }
-                            });
-
-                            DatabaseReference userRef = workoutsViewModel.getDatabase().getReference("Workouts");
-                            userRef.child(workoutsViewModel.getUsername()).addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                                        if (name.equals(postSnapshot.child("workoutName").getValue())) {
-                                            workoutButton.setBackgroundColor(Color.GREEN);
-                                        }
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                }
-                            });
-
-                            Container.addView(workoutButton);
-                            listOfButtons.add(workoutButton);
-
-                            // Add some space between buttons
-                            View spacer = new View(getContext());
-                            spacer.setLayoutParams(new LinearLayout.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    8)); // 8dp height
-                            Container.addView(spacer);
-                        }
-                    }
+                    addDataToScrollView(userSnapshot);
                 }
             }
 
@@ -365,6 +288,104 @@ public class WorkoutsFragment extends Fragment {
         }
         });
          **/
+    }
+
+    public void addDataToScrollView(DataSnapshot userSnapshot) {
+        String userId = userSnapshot.getKey();
+
+        for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
+            String workoutId = workoutSnapshot.getKey();
+            String cals = workoutSnapshot.child("expectedCalories")
+                    .getValue(String.class);
+            String name = workoutSnapshot.child("name")
+                    .getValue(String.class);
+            String notes = workoutSnapshot.child("notes")
+                    .getValue(String.class);
+            String reps = workoutSnapshot.child("reps")
+                    .getValue(String.class);
+            String sets = workoutSnapshot.child("sets")
+                    .getValue(String.class);
+            String time = workoutSnapshot.child("time")
+                    .getValue(String.class);
+
+            if ((name != null) && (getContext() != null)) {
+                Button workoutButton = new Button(getContext());
+                workoutButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                workoutButton.setPadding(16, 16, 16, 16);
+                workoutButton.setBackgroundResource(R.drawable.gray_rounded_corner);
+
+                String buttonText = String.format("%s\t%s ", name, userId);
+                workoutButton.setText(buttonText);
+
+                workoutButton.setOnClickListener(v -> {
+                    boolean check = false;
+                    int color = 0;
+                    if (workoutButton.getBackground()
+                            .getClass().equals(GradientDrawable.class)) {
+                        check = true;
+                    } else {
+                        ColorDrawable workoutButtonColorDrawable
+                                = (ColorDrawable) workoutButton.getBackground();
+                        color = workoutButtonColorDrawable.getColor();
+                    }
+                    if (check || color != Color.GREEN) {
+                        WorkoutsIndividualFragment detailFragment
+                                = new WorkoutsIndividualFragment();
+
+                        // Create a Bundle to pass data to the new fragment
+                        Bundle args = new Bundle();
+                        args.putString("userId", userId);
+                        args.putString("expectedCalories", cals);
+                        args.putString("name", name);
+                        args.putString("notes", notes);
+                        args.putString("reps", reps);
+                        args.putString("sets", sets);
+                        args.putString("time", time);
+                        detailFragment.setArguments(args);
+
+                        // Perform the fragment transaction
+                        FragmentManager fragmentManager = getParentFragmentManager();
+                        fragmentManager.beginTransaction()
+                                .replace(R.id.frameLayout2, detailFragment)
+                                // Replace R.id.frameLayout2 with your container ID
+                                .addToBackStack(null)
+                                .commit();
+                    }
+                });
+
+                DatabaseReference userRef = workoutsViewModel
+                        .getDatabase().getReference("Workouts");
+                userRef.child(workoutsViewModel.getUsername())
+                        .addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for (DataSnapshot postSnapshot
+                                        : dataSnapshot.getChildren()) {
+                                    if (name.equals(postSnapshot
+                                            .child("workoutName").getValue())) {
+                                        workoutButton.setBackgroundColor(Color.GREEN);
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+                            }
+                        });
+
+                container.addView(workoutButton);
+                listOfButtons.add(workoutButton);
+
+                // Add some space between buttons
+                View spacer = new View(getContext());
+                spacer.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        8)); // 8dp height
+                container.addView(spacer);
+            }
+        }
     }
 
     @Override
