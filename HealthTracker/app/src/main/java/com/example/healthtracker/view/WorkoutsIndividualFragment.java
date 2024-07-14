@@ -22,6 +22,7 @@ public class WorkoutsIndividualFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -55,12 +56,26 @@ public class WorkoutsIndividualFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_workouts_individual, container, false);
+        View view = inflater.inflate(R.layout.fragment_workouts_individual, container, false);
+
+        Bundle args = getArguments();
+        if (args != null) {
+            String userId = args.getString("userId");
+            String cals = args.getString("expectedCalories");
+            String name = args.getString("name");
+            String notes = args.getString("notes");
+            String reps = args.getString("reps");
+            String sets = args.getString("sets");
+            String time = args.getString("time");
+
+        }
+        return view;
+
     }
 }
