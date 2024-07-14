@@ -5,7 +5,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.healthtracker.model.User;
@@ -37,7 +36,7 @@ public class CaloriesViewModel extends ViewModel {
         user = User.getInstance();
     }
 
-    public void CaloriesBurned(String username,TextView calorieBurned){
+    public void caloriesBurned(String username, TextView calorieBurned) {
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
         databaseRef.child("Workouts").child(username)
@@ -85,7 +84,7 @@ public class CaloriesViewModel extends ViewModel {
                 });
 
     }
-    public void CaloriesGoal(String username,double[] goalCal,TextView calorieGoal){
+    public void caloriesGoal(String username, double[] goalCal, TextView calorieGoal) {
         databaseRef = FirebaseDatabase.getInstance().getReference();
         databaseRef.child("User").child(username).get()
                 .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -108,13 +107,13 @@ public class CaloriesViewModel extends ViewModel {
                         Double weightDouble = Double.parseDouble(weightInfo);
 
                         if ("male".equals(genderInfo)) {
-                            goalCal[0] =goalMen(weightDouble, heightDouble, 30);
+                            goalCal[0] = goalMen(weightDouble, heightDouble, 30);
                             //goalCal[0] = goalMen(weightDouble, heightDouble, 30);
                         } else if ("female".equals(genderInfo)) {
-                            goalCal[0]=goalWomen(weightDouble, heightDouble, 50);
+                            goalCal[0] = goalWomen(weightDouble, heightDouble, 50);
                             //goalCal[0] = goalWomen(weightDouble, heightDouble, 50);
                         } else {
-                            goalCal[0] =goalMen(weightDouble, heightDouble, 30);
+                            goalCal[0] = goalMen(weightDouble, heightDouble, 30);
                             //goalCal[0] = goalMen(weightDouble, heightDouble, 30);
                         }
                         calorieGoal.setText(Double.toString(goalCal[0]));
@@ -124,7 +123,7 @@ public class CaloriesViewModel extends ViewModel {
 
     }
 
-    public void draw(String username,Button pieButton,PieChart pie,double[] goalCal){
+    public void draw(String username, Button pieButton, PieChart pie, double[] goalCal) {
         databaseRef = FirebaseDatabase.getInstance().getReference();
 
         databaseRef.child("Workouts").child(username)
