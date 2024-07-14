@@ -5,11 +5,11 @@ public class FakeWorkoutPlan {
     private String name;
     private String notes;
     private String time;
-    private int expectedCalories;
-    private int sets;
-    private int reps;
+    private String expectedCalories;
+    private String sets;
+    private String reps;
 
-    public FakeWorkoutPlan(String title, String name, String notes, String time, int calories, int sets, int reps) {
+    public FakeWorkoutPlan(String title, String name, String notes, String time, String calories, String sets, String reps) {
         this.title = title;
         this.name = name;
         this.notes = notes;
@@ -43,27 +43,27 @@ public class FakeWorkoutPlan {
         this.time = time;
     }
 
-    public int getExpectedCalories() {
+    public String getExpectedCalories() {
         return expectedCalories;
     }
 
-    public void setExpectedCalories(int expectedCalories) {
+    public void setExpectedCalories(String expectedCalories) {
         this.expectedCalories = expectedCalories;
     }
 
-    public int getSets() {
+    public String getSets() {
         return sets;
     }
 
-    public void setSets(int sets) {
+    public void setSets(String sets) {
         this.sets = sets;
     }
 
-    public int getReps() {
+    public String getReps() {
         return reps;
     }
 
-    public void setReps(int reps) {
+    public void setReps(String reps) {
         this.reps = reps;
     }
 }
