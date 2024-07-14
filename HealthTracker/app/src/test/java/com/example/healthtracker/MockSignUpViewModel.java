@@ -9,7 +9,7 @@ public class MockSignUpViewModel {
     private String generalErrorMessage;
     private Boolean errorMessage;
 
-    public SignUpViewModel() {
+    public MockSignUpViewModel() {
         changedUsername = null;
         passwordErrorMessage = null;
         usernameErrorMessage = null;

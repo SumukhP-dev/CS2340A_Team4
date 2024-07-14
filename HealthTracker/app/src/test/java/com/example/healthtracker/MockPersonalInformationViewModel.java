@@ -1,35 +1,23 @@
 package com.example.healthtracker;
 
-import androidx.annotation.NonNull;
-import androidx.lifecycle.MutableLiveData;
-
-import com.example.healthtracker.model.User;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-import java.util.HashMap;
-import java.util.Map;
-//requires some editing
 public class MockPersonalInformationViewModel {
-    private User user;
+    private FakeUser user;
     private String gender;
 
-    private DatabaseReference mDatabase;
+    private MockDatabase mDatabase;
 
-    public PersonalInformationViewModel() {
-        user = User.getInstance();
-        gender = new MutableLiveData<String>("male");
+    public MockPersonalInformationViewModel(FakeUser user, MockDatabase database) {
+        this.user = user;
+        mDatabase = database;
+        gender = "male";
     }
 
     public String getGender() {
-        return gender.getValue();
+        return gender;
     }
 
     public void setGender(String gender) {
-        this.gender.setValue(gender);
+        this.gender = gender;
     }
 
     public String getUsername() {
@@ -44,54 +32,37 @@ public class MockPersonalInformationViewModel {
     // document and enters said personal information in database
     public void addPersonalData(String username, String name, Double height, Double weight,
                                 String gender) {
-        DatabaseReference userRef = user.getDatabase().getReference("User");
-        userRef.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    createUserDocument(userRef, username, name, height, weight, gender);
-                } else {
-                    updateDocument(userRef, username, name, height, weight, gender);
-                }
+        FakeUser temp = mDatabase.getUser(user);
+        if(temp != null) {
+            if (user.getName() == null) {
+                createUserDocument(mDatabase, username, name, height, weight, gender);
+            } else {
+                updateDocument(mDatabase, username, name, height, weight, gender);
             }
-        });
+        }
     }
 
     // Creates a new user with name, height, weight, gender, and username
-    public void createUserDocument(DatabaseReference userRef, String username, String name,
+    public void createUserDocument(MockDatabase userRef, String username, String name,
                                    Double height, Double weight, String gender) {
-        userRef.child(username).push();
-        DatabaseReference ref = userRef.child(username);
+        user.setName(name);
 
-        ref.setValue("name");
-        ref.child("name").setValue(name);
+        user.setHeight(height);
 
-        ref.setValue("height");
-        ref.child("height").setValue(height);
+        user.setWeight(weight);
 
-        ref.setValue("weight");
-        ref.child("weight").setValue(weight);
-
-        ref.setValue("gender");
-        ref.child("gender").setValue(gender);
-
-        ref.setValue("Counter");
-        ref.child("Counter").setValue(0);
-
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-        mDatabase.child("Workouts").setValue(username);
+        user.setGender(gender);
     }
 
     // Updates personal information of user
-    public void updateDocument(DatabaseReference userRef, String username, String name,
+    public void updateDocument(MockDatabase userRef, String username, String name,
                                Double height, Double weight, String gender) {
-        DatabaseReference ref = userRef.child(username);
-        Map<String, Object> childUpdates = new HashMap<>();
-        childUpdates.put("name", name);
-        childUpdates.put("height", height);
-        childUpdates.put("weight", weight);
-        childUpdates.put("gender", gender);
+        user.setName(name);
 
-        ref.updateChildren(childUpdates);
+        user.setHeight(height);
+
+        user.setWeight(weight);
+
+        user.setGender(gender);
     }
 }
