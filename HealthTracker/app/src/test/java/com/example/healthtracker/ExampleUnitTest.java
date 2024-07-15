@@ -88,7 +88,7 @@ public class ExampleUnitTest {
     }
 
     public int logNumberOfWorkoutPlansForUser(FakeUser user) {
-        int res= user.getCounter();;
+        int res= user.getCounter();
         return res;
     }
 
