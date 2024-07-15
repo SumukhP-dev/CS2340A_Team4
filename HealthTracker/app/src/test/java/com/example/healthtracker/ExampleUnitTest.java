@@ -2,28 +2,12 @@ package com.example.healthtracker;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import androidx.annotation.NonNull;
-
-import com.example.healthtracker.view.CaloriesFragment;
-import com.example.healthtracker.view.TrackerFragment;
-import com.github.mikephil.charting.data.PieEntry;
-import com.example.healthtracker.ViewModel.WorkoutsViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
