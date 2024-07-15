@@ -84,8 +84,7 @@ public class FakeUser {
             workouts.add(workout);
             incrementCounter();
             return Boolean.TRUE;
-        }
-        else {
+        } else {
             return Boolean.FALSE;
         }
 
@@ -95,8 +94,12 @@ public class FakeUser {
         workoutPlans.add(workoutPlan);
     }
 
-    public ArrayList<FakeWorkout> getWorkout(){ return workouts;}
+    public ArrayList<FakeWorkout> getWorkout() {
+        return workouts;
+    }
 
-    public ArrayList<FakeWorkoutPlan> getWorkoutPlans(){ return workoutPlans;}
+    public ArrayList<FakeWorkoutPlan> getWorkoutPlans() {
+        return workoutPlans;
+    }
 
 }
