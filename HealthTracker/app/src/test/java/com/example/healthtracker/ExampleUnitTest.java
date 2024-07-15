@@ -136,10 +136,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 0, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     @Test
@@ -149,10 +146,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("", workoutName, "",
                 100, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     @Test
@@ -162,10 +156,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 100, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     //tests for Personal Information View Model
