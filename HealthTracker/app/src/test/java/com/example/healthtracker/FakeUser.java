@@ -79,9 +79,16 @@ public class FakeUser {
         this.weight = weight;
     }
 
-    public void addWorkout(FakeWorkout workout) {
-        workouts.add(workout);
-        incrementCounter();
+    public Boolean addWorkout(FakeWorkout workout) {
+        if (workout.check() == Boolean.TRUE) {
+            workouts.add(workout);
+            incrementCounter();
+            return Boolean.TRUE;
+        }
+        else {
+            return Boolean.FALSE;
+        }
+
     }
 
     public void addWorkoutPlan(FakeWorkoutPlan workoutPlan) {
