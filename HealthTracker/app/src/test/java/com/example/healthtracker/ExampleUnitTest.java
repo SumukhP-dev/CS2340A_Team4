@@ -1,28 +1,13 @@
 package com.example.healthtracker;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import androidx.annotation.NonNull;
-
-import com.example.healthtracker.view.CaloriesFragment;
-import com.example.healthtracker.view.TrackerFragment;
-import com.github.mikephil.charting.data.PieEntry;
-import com.example.healthtracker.ViewModel.WorkoutsViewModel;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -36,6 +21,9 @@ public class ExampleUnitTest {
     private FakeUser test1;
     private FakeUser test2;
     private FakeUser test3;
+    private MockPersonalInformationViewModel personalInfo;
+    private MockSignUpViewModel signUp;
+    private MockWorkoutsViewModel workoutsViewModel;
 
     @Before
     public void setUp() {
@@ -46,6 +34,7 @@ public class ExampleUnitTest {
         mDatabase.addUser(test2);
         test3 = new FakeUser("test3", "abcd");
         mDatabase.addUser(test3);
+        signUp = new MockSignUpViewModel();
     }
 
 
@@ -99,10 +88,9 @@ public class ExampleUnitTest {
     }
 
     public int logNumberOfWorkoutPlansForUser(FakeUser user) {
-        int res= user.getCounter();;
+        int res= user.getCounter();
         return res;
     }
-
 
 
 
@@ -177,5 +165,47 @@ public class ExampleUnitTest {
         FakeWorkout check = user.getWorkout().get(0);
         assertEquals(check, workout);
         assertEquals(1, user.getCounter());
+    }
+
+    //tests for Personal Information View Model
+
+    //tests for Workouts VeiwModel
+    @Test
+    public void testInvalidNameWorkoutPlan() {
+        FakeUser user = new FakeUser("aranava2004", "password");
+        mDatabase.addUser(user);
+        workoutsViewModel = new MockWorkoutsViewModel(user, mDatabase);
+        workoutsViewModel.publishWorkoutPlan("", "notes", "100", "100", "100", "100", user.getUsername());//reject
+        assertEquals(0, user.getWorkoutPlans().size());
+    }
+
+    @Test
+    public void testCheckForInvalidNameCalories() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        boolean valid = workoutsViewModel.checkForEmptyNameOrCalories("", "");
+        assertFalse(valid);
+    }
+
+    @Test
+    public void testCheckForValidNameCalories() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        boolean valid = workoutsViewModel.checkForEmptyNameOrCalories("hello", "20");
+        assertTrue(valid);
+    }
+
+    @Test
+    public void testCheckInvalidNameMessage() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        workoutsViewModel.checkForEmptyNameOrCalories("", "2");
+        String invalidNameMessage = workoutsViewModel.getNameErrorMessage();
+        assertEquals(invalidNameMessage, "Name is empty.");
+    }
+
+    @Test
+    public void testCheckInvalidCaloriesMessage() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        workoutsViewModel.checkForEmptyNameOrCalories("h", "");
+        String invalidCaloriesMessage = workoutsViewModel.getCaloriesErrorMessage();
+        assertEquals(invalidCaloriesMessage, "Calories per set is empty.");
     }
 }
