@@ -9,11 +9,15 @@ import androidx.annotation.NonNull;
 import com.example.healthtracker.view.CaloriesFragment;
 import com.example.healthtracker.view.TrackerFragment;
 import com.github.mikephil.charting.data.PieEntry;
+import com.example.healthtracker.ViewModel.WorkoutsViewModel;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -28,7 +32,21 @@ import java.util.Map;
 
 
 public class ExampleUnitTest {
-    private DatabaseReference mDatabase;
+    private MockDatabase mDatabase;
+    private FakeUser test1;
+    private FakeUser test2;
+    private FakeUser test3;
+
+    @Before
+    public void setUp() {
+        mDatabase = new MockDatabase();
+        test1 = new FakeUser("test1", "1234");
+        mDatabase.addUser(test1);
+        test2 = new FakeUser("test2", "5678");
+        mDatabase.addUser(test2);
+        test3 = new FakeUser("test3", "abcd");
+        mDatabase.addUser(test3);
+    }
 
 
 
@@ -51,6 +69,39 @@ public class ExampleUnitTest {
         assertEquals(expectedCalories, actualCalories, 0.0001);
     }
 
+    @Test
+    public void CheckForNegativeSetsOrRepsOrTime1() {
+        String SetsString = "-1";
+        String RepsString = "-1";
+        String TimeString = "-1";
+        boolean expectedRes = false;
+        boolean actualRes = checkForNegativeSetsOrRepsOrTime(SetsString, RepsString, TimeString);
+        assertEquals(expectedRes, actualRes);
+    }
+
+    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+        boolean check = true;
+        double sets=Double.parseDouble(Sets);
+        double reps=Double.parseDouble(Reps);
+        double time=Double.parseDouble(Time);
+        //
+        if (sets<0) {
+            check = false;
+        }
+        if (reps<0) {
+            check = false;
+        }
+        if (time<0) {
+
+            check = false;
+        }
+        return check;
+    }
+
+    public int logNumberOfWorkoutPlansForUser(FakeUser user) {
+        int res= user.getCounter();;
+        return res;
+    }
 
 
 
@@ -59,50 +110,16 @@ public class ExampleUnitTest {
 
 
 
+    @Test
+    public void testDatabaseUpdate() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "Workout Test";
+        FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
+                100, 3, 10);
+        user.addWorkout(workout);
 
-    public void trackerDatabaseUpdate() {
-        TrackerFragment test = new TrackerFragment();
-        String workoutName;
-        String counter;
-        String username = "TestName";
-        Map<String, Object> testUser = new HashMap<>();
-        testUser.put("additionalNotes", "");
-        testUser.put("caloriesBurned", "100");
-        testUser.put("reps", "10");
-        testUser.put("sets", "3");
-        testUser.put("workoutName", "push");
-        mDatabase.child("User").child(username).setValue("TestingCase");
-        mDatabase.child("Workouts").child(username)
-                .child("TestWorkout").setValue(testUser);
-        mDatabase.child("Workout").child(username).get()
-                .addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DataSnapshot> task) {
-                        DataSnapshot dataSnap = task.getResult();
-                        String additionalNotes = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("additionalNotes").getValue());
-                        assertEquals("", String.valueOf(additionalNotes));
-                        String calories = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("caloriesBurned").getValue());
-                        assertEquals("100", calories);
-                        String reps = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("reps").getValue());
-                        assertEquals("10", reps);
-                        String sets = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("sets").getValue());
-                        assertEquals("3", sets);
-                        String workoutName = String.valueOf(dataSnap
-                                .child("TestWorkout")
-                                .child("workoutName").getValue());
-                        assertEquals("push", workoutName);
-                    }
-                });
-
-        mDatabase.child("User").child(username).removeValue();
-        mDatabase.child("Workouts").child(username).child("TestWorkout").removeValue();
+        FakeWorkout check = user.getWorkout().get(0);
+        assertEquals(check, workout);
+        assertEquals(1, user.getCounter());
     }
 }

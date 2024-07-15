@@ -49,7 +49,7 @@ public class PersonalInformationViewModel extends ViewModel {
         userRef.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
+                if (task.getResult().getValue() == null) {
                     createUserDocument(userRef, username, name, height, weight, gender);
                 } else {
                     updateDocument(userRef, username, name, height, weight, gender);
@@ -77,7 +77,7 @@ public class PersonalInformationViewModel extends ViewModel {
         ref.child("gender").setValue(gender);
 
         ref.setValue("Counter");
-        ref.child("Counter").setValue(0);
+        ref.child("Counter").setValue("0");
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mDatabase.child("Workouts").setValue(username);
