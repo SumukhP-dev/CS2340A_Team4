@@ -2,7 +2,8 @@ package com.example.healthtracker;
 
 import java.util.ArrayList;
 
-//methods will be added on an as need basis to best be able to support functions in the Mock view models
+//methods will be added on an as need basis to best be
+// able to support functions in the Mock view models
 public class MockDatabase {
     private ArrayList<FakeUser> users;
 

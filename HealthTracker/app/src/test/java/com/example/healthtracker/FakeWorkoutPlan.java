@@ -9,7 +9,8 @@ public class FakeWorkoutPlan {
     private String sets;
     private String reps;
 
-    public FakeWorkoutPlan(String title, String name, String notes, String time, String calories, String sets, String reps) {
+    public FakeWorkoutPlan(String title, String name, String notes,
+                           String time, String calories, String sets, String reps) {
         this.title = title;
         this.name = name;
         this.notes = notes;
