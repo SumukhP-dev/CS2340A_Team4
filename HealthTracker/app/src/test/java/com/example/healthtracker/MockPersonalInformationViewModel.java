@@ -33,7 +33,7 @@ public class MockPersonalInformationViewModel {
     public void addPersonalData(String username, String name, Double height, Double weight,
                                 String gender) {
         FakeUser temp = mDatabase.getUser(user);
-        if(temp != null) {
+        if (temp != null) {
             if (user.getName() == null) {
                 createUserDocument(mDatabase, username, name, height, weight, gender);
             } else {
