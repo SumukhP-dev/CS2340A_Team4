@@ -38,7 +38,7 @@ public class MockSignUpViewModel {
     }
 
     public void updateGeneralErrorMessage(String error) {
-        generalErrorMessage= error;
+        generalErrorMessage = error;
     }
 
     public Boolean getErrorMessage() {

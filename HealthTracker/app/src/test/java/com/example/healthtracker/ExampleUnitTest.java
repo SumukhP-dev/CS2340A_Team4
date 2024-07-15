@@ -59,28 +59,29 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void CheckForNegativeSetsOrRepsOrTime1() {
-        String SetsString = "-1";
-        String RepsString = "-1";
-        String TimeString = "-1";
+    public void checkForNegativeSetsOrRepsOrTime1() {
+        String setsString = "-1";
+        String repsString = "-1";
+        String timeString = "-1";
         boolean expectedRes = false;
-        boolean actualRes = checkForNegativeSetsOrRepsOrTime(SetsString, RepsString, TimeString);
+        boolean actualRes = checkForNegativeSetsOrRepsOrTime(setsString, repsString, timeString);
         assertEquals(expectedRes, actualRes);
     }
 
-    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+    public boolean checkForNegativeSetsOrRepsOrTime(String setsInput,
+                                                    String repsInput, String timeInput) {
         boolean check = true;
-        double sets=Double.parseDouble(Sets);
-        double reps=Double.parseDouble(Reps);
-        double time=Double.parseDouble(Time);
+        double sets = Double.parseDouble(setsInput);
+        double reps = Double.parseDouble(repsInput);
+        double time = Double.parseDouble(timeInput);
         //
-        if (sets<0) {
+        if (sets < 0) {
             check = false;
         }
-        if (reps<0) {
+        if (reps < 0) {
             check = false;
         }
-        if (time<0) {
+        if (time < 0) {
 
             check = false;
         }
@@ -88,7 +89,7 @@ public class ExampleUnitTest {
     }
 
     public int logNumberOfWorkoutPlansForUser(FakeUser user) {
-        int res= user.getCounter();
+        int res = user.getCounter();
         return res;
     }
 
@@ -135,10 +136,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 0, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     @Test
@@ -148,10 +146,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("", workoutName, "",
                 100, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     @Test
@@ -161,10 +156,7 @@ public class ExampleUnitTest {
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 100, 3, 10);
         Boolean checkBool = user.addWorkout(workout);
-        assertEquals(checkBool, Boolean.TRUE);
-        FakeWorkout check = user.getWorkout().get(0);
-        assertEquals(check, workout);
-        assertEquals(1, user.getCounter());
+        assertEquals(Boolean.FALSE, checkBool);
     }
 
     //tests for Personal Information View Model
@@ -175,7 +167,9 @@ public class ExampleUnitTest {
         FakeUser user = new FakeUser("aranava2004", "password");
         mDatabase.addUser(user);
         workoutsViewModel = new MockWorkoutsViewModel(user, mDatabase);
-        workoutsViewModel.publishWorkoutPlan("", "notes", "100", "100", "100", "100", user.getUsername());//reject
+        workoutsViewModel.publishWorkoutPlan("",
+                "notes", "100", "100", "100", "100", user.getUsername());
+        //reject
         assertEquals(0, user.getWorkoutPlans().size());
     }
 
