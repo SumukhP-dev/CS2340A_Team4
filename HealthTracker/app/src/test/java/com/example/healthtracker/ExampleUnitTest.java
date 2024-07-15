@@ -129,7 +129,7 @@ public class ExampleUnitTest {
         String workoutName = "Workout Test";
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 100, 3, 10);
-        user.addWorkout(workout);
+        Boolean nun = user.addWorkout(workout);
         mDatabase.addUser(user);
         FakeUser test = mDatabase.getUser(user);
         FakeWorkout testWorkout = test.getWorkout().get(0);
@@ -146,7 +146,34 @@ public class ExampleUnitTest {
         String workoutName = "Workout Test";
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 0, 3, 10);
-        user.addWorkout(workout);
+        Boolean checkBool = user.addWorkout(workout);
+        assertEquals(checkBool, Boolean.TRUE);
+        FakeWorkout check = user.getWorkout().get(0);
+        assertEquals(check, workout);
+        assertEquals(1, user.getCounter());
+    }
+
+    @Test
+    public void testBlankTitle() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "Workout Test";
+        FakeWorkout workout = new FakeWorkout("", workoutName, "",
+                100, 3, 10);
+        Boolean checkBool = user.addWorkout(workout);
+        assertEquals(checkBool, Boolean.TRUE);
+        FakeWorkout check = user.getWorkout().get(0);
+        assertEquals(check, workout);
+        assertEquals(1, user.getCounter());
+    }
+
+    @Test
+    public void testBlankWorkoutName() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "";
+        FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
+                100, 3, 10);
+        Boolean checkBool = user.addWorkout(workout);
+        assertEquals(checkBool, Boolean.TRUE);
         FakeWorkout check = user.getWorkout().get(0);
         assertEquals(check, workout);
         assertEquals(1, user.getCounter());
