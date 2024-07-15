@@ -40,6 +40,14 @@ public class FakeWorkout {
     public void setAdditionalNotes(String additionalNotes) {
         this.additionalNotes = additionalNotes;
     }
+    public Boolean check(){
+        if (title.equals("") || workoutName.equals("") || caloriesBurned == 0 || sets == 0 || reps == 0) {
+            return Boolean.FALSE;
+        }
+        else{
+            return Boolean.TRUE;
+        }
+    }
 
     public int getCaloriesBurned()  {
         return caloriesBurned;
