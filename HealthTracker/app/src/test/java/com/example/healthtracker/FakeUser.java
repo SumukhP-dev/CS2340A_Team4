@@ -97,6 +97,6 @@ public class FakeUser {
 
     public ArrayList<FakeWorkout> getWorkout(){ return workouts;}
 
-    public ArrayList<FakeWorkoutPlan> getWorkoutPlan(){ return workoutPlans;}
+    public ArrayList<FakeWorkoutPlan> getWorkoutPlans(){ return workoutPlans;}
 
 }
