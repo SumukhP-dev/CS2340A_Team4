@@ -1,6 +1,7 @@
 package com.example.healthtracker;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -36,6 +37,9 @@ public class ExampleUnitTest {
     private FakeUser test1;
     private FakeUser test2;
     private FakeUser test3;
+    private MockPersonalInformationViewModel personalInfo;
+    private MockSignUpViewModel signUp;
+    private MockWorkoutsViewModel workoutsViewModel;
 
     @Before
     public void setUp() {
@@ -46,6 +50,7 @@ public class ExampleUnitTest {
         mDatabase.addUser(test2);
         test3 = new FakeUser("test3", "abcd");
         mDatabase.addUser(test3);
+        signUp = new MockSignUpViewModel();
     }
 
 
@@ -109,7 +114,6 @@ public class ExampleUnitTest {
 
 
 
-
     @Test
     public void testAddWorkout() {
         FakeUser user = new FakeUser("arnava2004", "password");
@@ -150,5 +154,39 @@ public class ExampleUnitTest {
         FakeWorkout check = user.getWorkout().get(0);
         assertEquals(check, workout);
         assertEquals(1, user.getCounter());
+    }
+
+    //tests for Personal Information View Model
+
+    //tests for Workouts VeiwModel
+    @Test
+    public void testInvalidNameWorkoutPlan() {
+        FakeUser user = new FakeUser("aranava2004", "password");
+        workoutsViewModel = new MockWorkoutsViewModel(user, mDatabase);
+        workoutsViewModel.publishWorkoutPlan("", "notes", "100", "100", "100", "100", user.getUsername());//reject
+        assertEquals(0, user.getWorkoutPlans().size());
+    }
+
+    @Test
+    public void testCheckForValidNameCalories() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        boolean valid = workoutsViewModel.checkForEmptyNameOrCalories("", "");
+        assertFalse(valid);
+    }
+
+    @Test
+    public void testCheckInvalidNameMessage() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        workoutsViewModel.checkForEmptyNameOrCalories("", "2");
+        String invalidNameMessage = workoutsViewModel.getNameErrorMessage();
+        assertEquals(invalidNameMessage, "Name is empty.");
+    }
+
+    @Test
+    public void testCheckInvalidCaloriesMessage() {
+        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
+        workoutsViewModel.checkForEmptyNameOrCalories("h", "");
+        String invalidCaloriesMessage = workoutsViewModel.getCaloriesErrorMessage();
+        assertEquals(invalidCaloriesMessage, "Calories per set is empty.");
     }
 }
