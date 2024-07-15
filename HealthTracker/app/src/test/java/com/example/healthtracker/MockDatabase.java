@@ -24,4 +24,13 @@ public class MockDatabase {
             return null;
         }
     }
+
+    public FakeUser removeUser(FakeUser user) {
+        if (users.contains(user)) {
+            int index = users.indexOf(user);
+            return users.remove(index);
+        } else {
+            return null;
+        }
+    }
 }
