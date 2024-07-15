@@ -227,6 +227,7 @@ public class WorkoutsFragment extends Fragment {
         workoutPlansRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                listOfButtons = new ArrayList<>();
                 container.removeAllViews(); // Clear existing views
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
