@@ -17,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashMap;
@@ -31,7 +32,21 @@ import java.util.Map;
 
 
 public class ExampleUnitTest {
-    private DatabaseReference mDatabase;
+    private MockDatabase mDatabase;
+    private FakeUser test1;
+    private FakeUser test2;
+    private FakeUser test3;
+
+    @Before
+    public void setUp() {
+        mDatabase = new MockDatabase();
+        test1 = new FakeUser("test1", "1234");
+        mDatabase.addUser(test1);
+        test2 = new FakeUser("test2", "5678");
+        mDatabase.addUser(test2);
+        test3 = new FakeUser("test3", "abcd");
+        mDatabase.addUser(test3);
+    }
 
 
 
@@ -96,13 +111,42 @@ public class ExampleUnitTest {
 
 
     @Test
-    public void testDatabaseUpdate() {
+    public void testAddWorkout() {
         FakeUser user = new FakeUser("arnava2004", "password");
         String workoutName = "Workout Test";
         FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
                 100, 3, 10);
         user.addWorkout(workout);
 
+        FakeWorkout check = user.getWorkout().get(0);
+        assertEquals(check, workout);
+        assertEquals(1, user.getCounter());
+    }
+
+    @Test
+    public void testDatabaseUpdate() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "Workout Test";
+        FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
+                100, 3, 10);
+        user.addWorkout(workout);
+        mDatabase.addUser(user);
+        FakeUser test = mDatabase.getUser(user);
+        FakeWorkout testWorkout = test.getWorkout().get(0);
+
+        assertEquals(testWorkout, workout);
+        assertEquals(1, user.getCounter());
+
+        mDatabase.removeUser(test);
+    }
+
+    @Test
+    public void testBlankCalorie() {
+        FakeUser user = new FakeUser("arnava2004", "password");
+        String workoutName = "Workout Test";
+        FakeWorkout workout = new FakeWorkout("Title", workoutName, "",
+                0, 3, 10);
+        user.addWorkout(workout);
         FakeWorkout check = user.getWorkout().get(0);
         assertEquals(check, workout);
         assertEquals(1, user.getCounter());
