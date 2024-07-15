@@ -388,4 +388,11 @@ public class WorkoutsFragment extends Fragment {
             }
         }
     }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("test", "test1");
+        getInfoToUpdateScreen();
+    }
 }
