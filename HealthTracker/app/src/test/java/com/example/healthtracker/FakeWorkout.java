@@ -8,7 +8,8 @@ public class FakeWorkout {
     private int sets;
     private int reps;
 
-    public FakeWorkout(String title, String workoutName, String notes, int calories, int sets, int reps) {
+    public FakeWorkout(String title, String workoutName,
+                       String notes, int calories, int sets, int reps) {
         this.title = title;
         this.workoutName = workoutName;
         this.additionalNotes = notes;
@@ -40,11 +41,12 @@ public class FakeWorkout {
     public void setAdditionalNotes(String additionalNotes) {
         this.additionalNotes = additionalNotes;
     }
-    public Boolean check(){
-        if (title.equals("") || workoutName.equals("") || caloriesBurned == 0 || sets == 0 || reps == 0) {
+
+    public Boolean check() {
+        if (title.equals("") || workoutName.equals("") || caloriesBurned == 0
+                || sets == 0 || reps == 0) {
             return Boolean.FALSE;
-        }
-        else{
+        } else {
             return Boolean.TRUE;
         }
     }
