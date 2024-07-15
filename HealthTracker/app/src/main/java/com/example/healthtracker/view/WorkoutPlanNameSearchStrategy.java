@@ -1,5 +1,6 @@
 package com.example.healthtracker.view;
 
+import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
@@ -12,10 +13,13 @@ public class WorkoutPlanNameSearchStrategy implements Strategy {
         for (Button button: listOfButtons) {
             container.addView(button);
         }
-        for (Button button: listOfButtons) {
-            String buttonText = button.getText().toString();
-            if ((!(buttonText.startsWith(query))) && (!query.contains("author:"))) {
-                container.removeView(button);
+        Log.d("bugcheck", String.valueOf(listOfButtons.size()));
+        if (!query.contains("author:")) {
+            for (Button button : listOfButtons) {
+                String buttonText = button.getText().toString();
+                if (!(buttonText.startsWith(query))) {
+                    container.removeView(button);
+                }
             }
         }
     }
