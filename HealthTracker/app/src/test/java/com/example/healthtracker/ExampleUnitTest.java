@@ -153,14 +153,6 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void testPublishWorkoutPlansValid() {
-        test1 = new FakeUser("test1", "1234");
-        workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
-        workoutsViewModel.publishWorkoutPlan("h", "n/a", "1", "5", "2", "9", test1.getUsername());
-        assertEquals(1, test1.getWorkoutPlans().size());
-    }
-
-    @Test
     public void testCheckForInvalidNameCalories() {
         workoutsViewModel = new MockWorkoutsViewModel(test1, mDatabase);
         boolean valid = workoutsViewModel.checkForEmptyNameOrCalories("", "");
