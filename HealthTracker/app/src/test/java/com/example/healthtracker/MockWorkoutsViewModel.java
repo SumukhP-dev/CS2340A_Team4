@@ -1,8 +1,5 @@
 package com.example.healthtracker;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class MockWorkoutsViewModel {
     private FakeUser user;
     private String nameErrorMessage;
@@ -58,8 +55,8 @@ public class MockWorkoutsViewModel {
         }
 
         if (database.getUser(user) != null) {
-            createWorkoutPlan(database, name, notes, sets, reps, time,
-                    expectedCalories, username);
+            createWorkoutPlan(name, notes, sets, reps, time,
+                    expectedCalories);
         }
     }
 
@@ -69,13 +66,12 @@ public class MockWorkoutsViewModel {
     }*/
 
 
-    public void createWorkoutPlan(MockDatabase workoutPlanRef,
-                                  String name, String notes, String sets,
+    public void createWorkoutPlan(String name, String notes, String sets,
                                   String reps, String time,
-                                  String expectedCalories,
-                                  String username) {
+                                  String expectedCalories) {
         String title = "WorkoutPlan " + user.getCounter();
-        FakeWorkoutPlan workoutPlan = new FakeWorkoutPlan(title, name, notes, time, expectedCalories, sets, reps);
+        FakeWorkoutPlan workoutPlan = new FakeWorkoutPlan(title, name,
+                notes, time, expectedCalories, sets, reps);
         user.addWorkoutPlan(workoutPlan);
     }
 
@@ -109,18 +105,19 @@ public class MockWorkoutsViewModel {
         return check;
     }
 
-    public boolean checkForNegativeSetsOrRepsOrTime(String Sets, String Reps, String Time) {
+    public boolean checkForNegativeSetsOrRepsOrTime(String setsInput,
+                                                    String repsInput, String timeInput) {
         boolean check = true;
-        double sets=Double.parseDouble(Sets);
-        double reps=Double.parseDouble(Reps);
-        double time=Double.parseDouble(Time);
-        if (sets<0) {
+        double sets = Double.parseDouble(setsInput);
+        double reps = Double.parseDouble(repsInput);
+        double time = Double.parseDouble(timeInput);
+        if (sets < 0) {
             check = false;
         }
-        if (reps<0) {
+        if (reps < 0) {
             check = false;
         }
-        if (time<0) {
+        if (time < 0) {
 
             check = false;
         }
