@@ -255,7 +255,7 @@ public class CommunityFragment extends Fragment {
                 challengeButton.setPadding(16, 16, 16, 16);
                 challengeButton.setBackgroundResource(R.drawable.gray_rounded_corner);
 
-                String buttonText = String.format("%s\t%s ", name, userID);
+                String buttonText = String.format("%s \t %s ", name, userID);
                 challengeButton.setText(buttonText);
 
                 challengeButton.setOnClickListener(v -> {
