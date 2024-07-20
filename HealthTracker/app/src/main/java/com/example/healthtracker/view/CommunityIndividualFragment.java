@@ -1,12 +1,15 @@
 package com.example.healthtracker.view;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.healthtracker.R;
 
@@ -25,6 +28,20 @@ public class CommunityIndividualFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ConstraintLayout constraintLayout;
+
+    private TextView setChallenger;
+
+    private TextView setChallengeName;
+
+    private TextView setDeadline;
+
+    private TextView setDescription;
+
+    private ScrollView setParticipants;
+
+    private ImageButton back;
 
     public CommunityIndividualFragment() {
         // Required empty public constructor
@@ -61,6 +78,37 @@ public class CommunityIndividualFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_community_individual, container, false);
+        View view = inflater.inflate(R.layout.fragment_community_individual, container, false);
+
+        constraintLayout = view.findViewById(R.id.frameLayout5);
+
+        setChallenger = constraintLayout.findViewById(R.id.challengerNameTextView);
+        setChallengeName = constraintLayout.findViewById(R.id.communityWorkoutPlanTitleTextView);
+        setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
+        setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
+        setParticipants = constraintLayout.findViewById(R.id.communityRecyclerView); // TODO: check functionality works as intended
+        back = constraintLayout.findViewById(R.id.communityBackButton);
+
+        Bundle args = getArguments();
+
+        if (args != null) {
+            String userID = args.getString("userID");
+            String name = args.getString("name");
+            String description = args.getString("description");
+            String deadline = args.getString("deadline");
+            setChallenger.setText(userID);
+            setChallengeName.setText(name);
+            setDescription.setText(description);
+            setDeadline.setText(deadline);
+        }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+        return view;
     }
 }

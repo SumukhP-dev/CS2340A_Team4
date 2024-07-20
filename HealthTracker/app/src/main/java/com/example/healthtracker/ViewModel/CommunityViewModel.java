@@ -57,6 +57,10 @@ public class CommunityViewModel extends ViewModel {
         boolean valid = true;
         valid = checkForEmptyName(name);
 
+        if (!valid) {
+            return;
+        }
+
         DatabaseReference challengeRef = user.getDatabase().getReference("Community");
         challengeRef.child(username).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
