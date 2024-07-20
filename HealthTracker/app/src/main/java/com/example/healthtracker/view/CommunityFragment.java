@@ -2,13 +2,22 @@ package com.example.healthtracker.view;
 
 import android.os.Bundle;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.CommunityViewModel;
+import com.google.firebase.database.DatabaseReference;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +30,23 @@ public class CommunityFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    // --
+    private CommunityViewModel communityViewModel;
+    private DatabaseReference mDatabase;
+    private ConstraintLayout constraintLayout;
+    private EditText challengeName;
+    private EditText description;
+    private EditText deadline;
+
+    private Button createChallenge;
+
+    private LinearLayout container;
+
+    private androidx.appcompat.widget.SearchView searchView;
+
+    private ArrayList<Button> listOfButtons;
+
 
     // Rename and change types of parameters
     private String mParam1;
@@ -61,6 +87,14 @@ public class CommunityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_community, container, false);
+        View view = inflater.inflate(R.layout.fragment_community, container, false);
+
+        communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
+        // pop-up
+
+
+
+        return view;
     }
 }
