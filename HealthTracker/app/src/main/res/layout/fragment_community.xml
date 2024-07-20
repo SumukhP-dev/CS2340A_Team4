@@ -65,4 +65,13 @@
         app:layout_constraintTop_toBottomOf="@+id/communityRecyclerView"
         tools:backgroundTint="#000000" />
 
+    <FrameLayout
+        android:id="@+id/communityChallengePopupScreenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/community_challenge_popup_screen_layout" />
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
