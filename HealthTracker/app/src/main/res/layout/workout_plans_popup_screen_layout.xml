@@ -83,7 +83,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/timeEditTextView"
+        app:layout_constraintTop_toBottomOf="@+id/editTextTime"
         app:layout_constraintVertical_bias="1.0" />
 
     <EditText
@@ -111,7 +111,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/expectedCaloriesEditTextView"
+        app:layout_constraintTop_toBottomOf="@+id/expectedCaloriesTextNumberDecimal"
         app:layout_constraintVertical_bias="1.0"
         tools:backgroundTint="#000000" />
 
