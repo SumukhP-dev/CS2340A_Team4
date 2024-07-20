@@ -111,7 +111,6 @@ public class CommunityFragment extends Fragment {
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
 
         // pop-up
-
         constraintLayout = view.findViewById(R.id.constraintLayout3);
 
         challengeName = constraintLayout.findViewById(R.id.challengeNameEditTextView);
@@ -191,6 +190,12 @@ public class CommunityFragment extends Fragment {
         if (communityViewModel.getNameErrorMessage() != null) {
             errorMessage = errorMessage + " " + communityViewModel.getNameErrorMessage();
         }
+        if (communityViewModel.getDescriptionErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getDescriptionErrorMessage();
+        }
+        if (communityViewModel.getDeadlineErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getDeadlineErrorMessage();
+        }
         if (errorMessage.length() != 0) {
             Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
             toast.show();
@@ -262,7 +267,8 @@ public class CommunityFragment extends Fragment {
                     boolean check = false;
                     int color = 0;
 
-                    if (challengeButton.getBackground().getClass().equals(GradientDrawable.class)) {
+                    if (challengeButton.getBackground()
+                            .getClass().equals(GradientDrawable.class)) {
                         check = true;
                     } else {
                         ColorDrawable challengeButtonColorDrawable

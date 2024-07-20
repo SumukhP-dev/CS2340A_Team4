@@ -23,7 +23,13 @@ public class CommunityViewModel extends ViewModel {
 
     private MutableLiveData<String> nameErrorMessage;
 
+    private MutableLiveData<String> descriptionErrorMessage;
+
+    private MutableLiveData<String> deadlineErrorMessage;
+
     private MutableLiveData<Integer> numOfUserChallenges;
+
+    // private String currentChallenge;
 
     public FirebaseDatabase getDatabase() {
         return user.getDatabase();
@@ -37,9 +43,27 @@ public class CommunityViewModel extends ViewModel {
         this.nameErrorMessage.setValue(nameErrorMessage);
     }
 
+    public String getDescriptionErrorMessage() {
+        return descriptionErrorMessage.getValue();
+    }
+
+    public void setDescriptionErrorMessage(String descriptionErrorMessage) {
+        this.descriptionErrorMessage.setValue(descriptionErrorMessage);
+    }
+
+    public String getDeadlineErrorMessage() {
+        return deadlineErrorMessage.getValue();
+    }
+
+    public void setDeadlineErrorMessage(String deadlineErrorMessage) {
+        this.deadlineErrorMessage.setValue(deadlineErrorMessage);
+    }
+
     public CommunityViewModel() {
         user = User.getInstance();
         nameErrorMessage = new MutableLiveData<>(null);
+        descriptionErrorMessage = new MutableLiveData<>(null);
+        deadlineErrorMessage = new MutableLiveData<>(null);
         numOfUserChallenges = new MutableLiveData<>(0);
     }
 
@@ -53,9 +77,11 @@ public class CommunityViewModel extends ViewModel {
 
     public void publishChallenge(String name, String description, String deadline, String username) {
         nameErrorMessage = new MutableLiveData<>(null);
+        descriptionErrorMessage = new MutableLiveData<>(null);
+        deadlineErrorMessage = new MutableLiveData<>(null);
 
         boolean valid = true;
-        valid = checkForEmptyName(name);
+        valid = checkForEmptyValues(name, description, deadline);
 
         if (!valid) {
             return;
@@ -132,10 +158,18 @@ public class CommunityViewModel extends ViewModel {
         challengeRef.child(username).addValueEventListener(challengeListener);
     }
 
-    public boolean checkForEmptyName(String name) {
+    public boolean checkForEmptyValues(String name, String description, String deadline) {
         boolean check = true;
         if ((name.length() == 0) || (name.isEmpty())) {
             nameErrorMessage.setValue("Challenge name cannot be empty.");
+            check = false;
+        }
+        if ((description.length() == 0) || (description.isEmpty())) {
+            descriptionErrorMessage.setValue("Challenge description cannot be empty.");
+            check = false;
+        }
+        if ((deadline.length() == 0) || (deadline.isEmpty())) {
+            deadlineErrorMessage.setValue("Challenge deadline cannot be empty.");
             check = false;
         }
         return check;

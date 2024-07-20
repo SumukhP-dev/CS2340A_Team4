@@ -1,17 +1,31 @@
 package com.example.healthtracker.view;
 
 import android.os.Bundle;
+import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.CommunityViewModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,6 +56,17 @@ public class CommunityIndividualFragment extends Fragment {
     private ScrollView setParticipants;
 
     private ImageButton back;
+
+    private Button acceptChallengeButton;
+
+    private Button completeChallengeButton;
+
+    private CommunityViewModel communityViewModel;
+    private DatabaseReference mDatabase;
+
+    private ArrayList<Button> listOfParticipants;
+
+    private LinearLayout participantsContainer;
 
     public CommunityIndividualFragment() {
         // Required empty public constructor
@@ -87,7 +112,14 @@ public class CommunityIndividualFragment extends Fragment {
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
         setParticipants = constraintLayout.findViewById(R.id.communityRecyclerView); // TODO: check functionality works as intended
+        acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
+        completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
         back = constraintLayout.findViewById(R.id.communityBackButton);
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
+
+
 
         Bundle args = getArguments();
 
@@ -100,6 +132,9 @@ public class CommunityIndividualFragment extends Fragment {
             setChallengeName.setText(name);
             setDescription.setText(description);
             setDeadline.setText(deadline);
+
+
+
         }
 
         back.setOnClickListener(new View.OnClickListener() {
@@ -109,6 +144,71 @@ public class CommunityIndividualFragment extends Fragment {
             }
         });
 
+        acceptChallengeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // System.out.println("hello"); -- button clicks work
+                String currentChallengerAuthor = setChallenger.getText().toString();
+                String currentChallengeName = setChallengeName.getText().toString();
+                String currentUser = communityViewModel.getUsername();
+
+                DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
+
+                mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                            String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                            challengeName = challengeName.toLowerCase();
+
+                            if (challengeName != null && challengeName.equals(currentChallengeName.toLowerCase())) {
+
+                                challengeSnapshot.getRef().child("participants").child(currentUser).setValue("accepted");
+
+                                acceptChallengeButton.setVisibility(View.GONE);
+                                completeChallengeButton.setVisibility(View.VISIBLE);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
+
         return view;
     }
+
+    private void getInfoToUpdateParticipants() {
+        DatabaseReference participantsRef = mDatabase.child("Community");
+        listOfParticipants = new ArrayList<>();
+
+        participantsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listOfParticipants = new ArrayList<>();
+                participantsContainer.removeAllViews();
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    addDataToScrollView(userSnapshot);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CommunityIndividualFragment", "Error fetching participants");
+            }
+        });
+    }
+
+    public void addDataToScrollView(DataSnapshot userSnapshot) {
+        String userID = userSnapshot.getKey();
+    }
+
 }
