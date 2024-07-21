@@ -133,7 +133,7 @@ public class CommunityIndividualFragment extends Fragment {
             setDescription.setText(description);
             setDeadline.setText(deadline);
 
-
+            getParticipantsToUpdateScreen(userID, name);
 
         }
 
@@ -185,30 +185,39 @@ public class CommunityIndividualFragment extends Fragment {
         return view;
     }
 
-    private void getInfoToUpdateParticipants() {
-        DatabaseReference participantsRef = mDatabase.child("Community");
-        listOfParticipants = new ArrayList<>();
-
-        participantsRef.addValueEventListener(new ValueEventListener() {
+    private void getParticipantsToUpdateScreen(String user, String name) {
+        DatabaseReference participantRef = mDatabase.child("Community").child(user);
+        // listOfButtons
+        participantRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listOfParticipants = new ArrayList<>();
-                participantsContainer.removeAllViews();
+                // listOfButtons
+                // container.removeAllViews()
+                for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                    String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                    System.out.println("iterating. currently at: " + challengeName);
+                    if (challengeName.equals(name)) {
+                        System.out.println("found a match! " + challengeName + " equals " + name);
+                        // challengeSnapshot.child("participants").getChildren()
 
-                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                    addDataToScrollView(userSnapshot);
+                        for (DataSnapshot participant : challengeSnapshot.child("participants").getChildren()) {
+                            System.out.println(participant.getKey());
+                            // capture the participantkeys.
+                            break;
+                        }
+
+
+                    }
+
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("CommunityIndividualFragment", "Error fetching participants");
+
             }
         });
-    }
 
-    public void addDataToScrollView(DataSnapshot userSnapshot) {
-        String userID = userSnapshot.getKey();
     }
 
 }
