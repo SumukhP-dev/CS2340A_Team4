@@ -74,4 +74,14 @@
 
     </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/workoutPlansPopupScreenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- This will be your small screen content -->
+        <include layout="@layout/workout_plans_popup_screen_layout" />
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
