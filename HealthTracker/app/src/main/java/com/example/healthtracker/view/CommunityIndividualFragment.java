@@ -1,7 +1,9 @@
 package com.example.healthtracker.view;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,7 +66,7 @@ public class CommunityIndividualFragment extends Fragment {
     private CommunityViewModel communityViewModel;
     private DatabaseReference mDatabase;
 
-    private ArrayList<Button> listOfParticipants;
+    private ArrayList<View> listOfParticipants;
 
     private LinearLayout participantsContainer;
 
@@ -112,8 +114,11 @@ public class CommunityIndividualFragment extends Fragment {
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
         setParticipants = constraintLayout.findViewById(R.id.communityRecyclerView); // TODO: check functionality works as intended
+        participantsContainer = view.findViewById(R.id.Container3); // TODO: see works as intended
+
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
+
         back = constraintLayout.findViewById(R.id.communityBackButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -187,26 +192,25 @@ public class CommunityIndividualFragment extends Fragment {
 
     private void getParticipantsToUpdateScreen(String user, String name) {
         DatabaseReference participantRef = mDatabase.child("Community").child(user);
-        // listOfButtons
+        listOfParticipants = new ArrayList<>();
         participantRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                // listOfButtons
-                // container.removeAllViews()
+                listOfParticipants = new ArrayList<>();
+                participantsContainer.removeAllViews();
                 for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
                     String challengeName = challengeSnapshot.child("name").getValue(String.class);
                     System.out.println("iterating. currently at: " + challengeName);
                     if (challengeName.equals(name)) {
                         System.out.println("found a match! " + challengeName + " equals " + name);
-                        // challengeSnapshot.child("participants").getChildren()
 
                         for (DataSnapshot participant : challengeSnapshot.child("participants").getChildren()) {
                             System.out.println(participant.getKey());
                             // capture the participantkeys.
-                            break;
+                            addParticipantView(participant.getKey(), "accepted");
                         }
 
-
+                        break;
                     }
 
                 }
@@ -214,10 +218,29 @@ public class CommunityIndividualFragment extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.e("CommunityIndividualFragment", "Error fetching participants");
             }
         });
 
+    }
+
+    private void addParticipantView(String participantID, String status) {
+        Context context = getContext();
+        if (context == null) {
+            return; // or handle this case appropriately
+        }
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View participantView = inflater.inflate(R.layout.button_community_individual_participant, null);
+
+        TextView participantTextView = participantView.findViewById(R.id.participantsTextView);
+        TextView statusTextView = participantView.findViewById(R.id.statusTextView);
+
+        participantTextView.setText(participantID);
+        statusTextView.setText(status);
+
+        participantsContainer.addView(participantView);
+        listOfParticipants.add(participantView);
     }
 
 }
