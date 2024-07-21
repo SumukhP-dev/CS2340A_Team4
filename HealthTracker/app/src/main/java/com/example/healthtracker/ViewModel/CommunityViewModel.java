@@ -140,5 +140,4 @@ public class CommunityViewModel extends ViewModel {
         }
         return check;
     }
-
 }
