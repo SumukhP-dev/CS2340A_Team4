@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/constraintLayout5"
+    android:layout_width="375dp"
+    android:layout_height="550dp"
+    android:layout_gravity="center"
+    android:background="@drawable/black_rounded_corner"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/nameCommunityChallengeEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Name"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newCommunityWorkoutTextView"
+        app:layout_constraintVertical_bias="0.042" />
+
+    <EditText
+        android:id="@+id/descriptionCommunityChallengeEditTextView"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:hint="    Description"
+        android:inputType="text"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/newCommunityWorkoutTextView"
+        app:layout_constraintVertical_bias="0.177" />
+
+    <TextView
+        android:id="@+id/newCommunityWorkoutTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Community Workout Plan"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/deadlineCommunityChallengeEditTextDate"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="@drawable/gray_rounded_corner"
+        android:ems="10"
+        android:hint="    Deadline"
+        android:inputType="date"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/descriptionCommunityChallengeEditTextView"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <androidx.appcompat.widget.SearchView
+        android:id="@+id/communitySearchView"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="220dp"
+        android:background="@drawable/gray_rounded_corner"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deadlineCommunityChallengeEditTextDate" />
+
+    <ScrollView
+        android:id="@+id/communityPopupScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_marginBottom="48dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/communitySearchView">
+
+
+        <LinearLayout
+            android:id="@+id/Container3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp" />
+
+    </ScrollView>
+
+    <Button
+        android:id="@+id/newCommunityWorkoutButton"
+        android:layout_width="294dp"
+        android:layout_height="48dp"
+        android:background="@drawable/black_rounded_corner"
+        android:text="Create new Community Workout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/communityPopupScrollView"
+        app:layout_constraintVertical_bias="1.0"
+        tools:backgroundTint="#000000" />
+
+    <!-- Add more views as needed -->
+</androidx.constraintlayout.widget.ConstraintLayout>
