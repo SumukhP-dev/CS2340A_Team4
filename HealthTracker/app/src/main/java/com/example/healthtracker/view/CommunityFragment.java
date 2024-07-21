@@ -112,13 +112,13 @@ public class CommunityFragment extends Fragment {
 
         // pop-up
 
-        constraintLayout = view.findViewById(R.id.constraintLayout3);
+        constraintLayout = view.findViewById(R.id.constraintLayout5);
 
-        challengeName = constraintLayout.findViewById(R.id.challengeNameEditTextView);
-        description = constraintLayout.findViewById(R.id.descriptionEditTextView);
-        deadline = constraintLayout.findViewById(R.id.deadlineEditTextView);
+        challengeName = constraintLayout.findViewById(R.id.nameCommunityChallengeEditTextView);
+        description = constraintLayout.findViewById(R.id.descriptionCommunityChallengeEditTextView);
+        deadline = constraintLayout.findViewById(R.id.deadlineCommunityChallengeEditTextDate);
 
-        publishChallenge = constraintLayout.findViewById(R.id.newChallengeButton);
+        publishChallenge = constraintLayout.findViewById(R.id.newCommunityWorkoutButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         this.container = view.findViewById(R.id.Container2);
         this.container.setVisibility(View.VISIBLE);
@@ -283,7 +283,7 @@ public class CommunityFragment extends Fragment {
 
                         FragmentManager fragmentManager = getParentFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frameLayout4, detailFragment)
+                                .replace(R.id.constraintLayout4, detailFragment)
                                 .addToBackStack(null)
                                 .commit();
                     }
