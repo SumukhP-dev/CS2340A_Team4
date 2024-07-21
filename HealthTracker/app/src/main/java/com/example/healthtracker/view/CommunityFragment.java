@@ -129,6 +129,7 @@ public class CommunityFragment extends Fragment {
         // Dismiss small screen
         constraintLayout.setVisibility(View.GONE);
 
+        communityViewModel.removeExpiredChallenges();
         getInfoToUpdateScreen();
 
         createChallenge.setOnClickListener(new View.OnClickListener() {
@@ -154,6 +155,7 @@ public class CommunityFragment extends Fragment {
 
                 constraintLayout.setVisibility(View.GONE);
 
+                communityViewModel.removeExpiredChallenges();
                 getInfoToUpdateScreen();
             }
         });
@@ -330,6 +332,7 @@ public class CommunityFragment extends Fragment {
     public void onResume() {
         super.onResume();
         Log.d("test", "test1");
+        communityViewModel.removeExpiredChallenges();
         getInfoToUpdateScreen();
     }
 }
