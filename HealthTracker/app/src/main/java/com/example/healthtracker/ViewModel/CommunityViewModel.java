@@ -17,7 +17,6 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -201,7 +200,7 @@ public class CommunityViewModel extends ViewModel {
             Calendar currentCalendar = Calendar.getInstance();
             Date currentDate = currentCalendar.getTime();
 
-            if (deadlineDate.before(currentDate) ) {
+            if (deadlineDate.before(currentDate)) {
                 deadlineErrorMessage.setValue("Deadline may not be before or equal to the current date.");
                 return false;
             }
