@@ -44,7 +44,6 @@ public class CommunityFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // --
     private CommunityViewModel communityViewModel;
     private DatabaseReference mDatabase;
     private ConstraintLayout constraintLayout;
@@ -266,56 +265,22 @@ public class CommunityFragment extends Fragment {
                 challengeButton.setText(buttonText);
 
                 challengeButton.setOnClickListener(v -> {
-                    boolean check = false;
-                    int color = 0;
+                    CommunityIndividualFragment detailFragment
+                            = new CommunityIndividualFragment();
 
-                    if (challengeButton.getBackground()
-                            .getClass().equals(GradientDrawable.class)) {
-                        check = true;
-                    } else {
-                        ColorDrawable challengeButtonColorDrawable
-                                = (ColorDrawable) challengeButton.getBackground();
-                        color = challengeButtonColorDrawable.getColor();
-                    }
+                    Bundle args = new Bundle();
+                    args.putString("userID", userID);
+                    args.putString("name", name);
+                    args.putString("description", description);
+                    args.putString("deadline", deadline);
+                    detailFragment.setArguments(args);
 
-                    if (check || color != Color.GREEN) {
-                        CommunityIndividualFragment detailFragment
-                                = new CommunityIndividualFragment();
-
-                        Bundle args = new Bundle();
-                        args.putString("userID", userID);
-                        args.putString("name", name);
-                        args.putString("description", description);
-                        args.putString("deadline", deadline);
-                        detailFragment.setArguments(args);
-
-                        FragmentManager fragmentManager = getParentFragmentManager();
-                        fragmentManager.beginTransaction()
-                                .replace(R.id.frameLayout4, detailFragment)
-                                .addToBackStack(null)
-                                .commit();
-                    }
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout4, detailFragment)
+                            .addToBackStack(null)
+                            .commit();
                 });
-
-                DatabaseReference userRef = communityViewModel.getDatabase()
-                        .getReference("Community");
-                userRef.child(communityViewModel.getUsername())
-                        .addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot postSnapshot: snapshot.getChildren()) {
-                                    if (name.equals(postSnapshot
-                                        .child("name").getValue())) {
-                                        challengeButton.setBackgroundColor(Color.GREEN);
-                                    }
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        });
 
                 container.addView(challengeButton);
                 listOfButtons.add(challengeButton);
