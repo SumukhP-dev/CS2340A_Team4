@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout3"
     android:layout_width="375dp"
-    android:layout_height="400dp"
+    android:layout_height="600dp"
     android:layout_gravity="center"
     android:background="@drawable/black_rounded_corner"
     android:orientation="vertical"
@@ -25,6 +25,7 @@
         app:layout_constraintTop_toBottomOf="@+id/newChallengeTextView"
         app:layout_constraintVertical_bias="0.0" />
 
+
     <EditText
         android:id="@+id/descriptionEditTextView"
         android:layout_width="match_parent"
@@ -36,24 +37,25 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/challengeNameEditTextView"
-        app:layout_constraintVertical_bias="0.48" />
+        app:layout_constraintVertical_bias="0.072" />
 
     <EditText
         android:id="@+id/deadlineEditTextView"
-        android:layout_width="100dp"
+        android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@drawable/gray_rounded_corner"
         android:hint="    Deadline"
-        android:inputType="time"
+        android:inputType="date"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/descriptionEditTextView"
-        app:layout_constraintVertical_bias="0.113" />
-
+        app:layout_constraintVertical_bias="0.042" />
 
     <Button
         android:id="@+id/newChallengeButton"
@@ -64,8 +66,10 @@
         android:text="Publish Community Challenge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.489"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/deadlineEditTextView"
+        app:layout_constraintTop_toBottomOf="@+id/communityPopupScrollView"
+        app:layout_constraintVertical_bias="1.0"
         tools:backgroundTint="#000000" />
 
     <TextView
@@ -81,32 +85,18 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/deadlineCommunityChallengeEditTextDate"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="@drawable/gray_rounded_corner"
-        android:ems="10"
-        android:hint="    Deadline"
-        android:inputType="date"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/descriptionCommunityChallengeEditTextView"
-        app:layout_constraintVertical_bias="0.061" />
-
     <androidx.appcompat.widget.SearchView
         android:id="@+id/communityPopupSearchView"
         android:layout_width="0dp"
         android:layout_height="48dp"
-        android:layout_marginBottom="220dp"
+        android:layout_marginBottom="216dp"
         android:background="@drawable/gray_rounded_corner"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/deadlineCommunityChallengeEditTextDate" />
+        app:layout_constraintTop_toBottomOf="@+id/deadlineEditTextView"
+        app:layout_constraintVertical_bias="0.269" />
 
     <ScrollView
         android:id="@+id/communityPopupScrollView"
@@ -117,7 +107,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/communityPopupSearchView">
+        app:layout_constraintTop_toBottomOf="@+id/communityPopupSearchView"
+        app:layout_constraintVertical_bias="0.254">
 
 
         <LinearLayout
@@ -128,20 +119,6 @@
             android:padding="16dp" />
 
     </ScrollView>
-
-    <Button
-        android:id="@+id/newCommunityWorkoutButton"
-        android:layout_width="294dp"
-        android:layout_height="48dp"
-        android:background="@drawable/black_rounded_corner"
-        android:text="Create new Community Workout"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.489"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/communityPopupScrollView"
-        app:layout_constraintVertical_bias="1.0"
-        tools:backgroundTint="#000000" />
 
     <!-- Add more views as needed -->
 </androidx.constraintlayout.widget.ConstraintLayout>
