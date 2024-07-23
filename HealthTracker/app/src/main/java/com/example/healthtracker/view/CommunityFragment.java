@@ -1,22 +1,31 @@
 package com.example.healthtracker.view;
 
+import android.app.Activity;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.CommunityPopupViewModel;
 import com.example.healthtracker.ViewModel.CommunityViewModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -31,12 +40,13 @@ public class CommunityFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ConstraintLayout constraintLayout;
+    private ConstraintLayout constraintLayoutCommunityPopup;
+    private FrameLayout frameLayoutWorkoutPlanPopup;
 
     // --
     private CommunityViewModel communityViewModel;
+    private CommunityPopupViewModel communityPopupViewModel;
     private DatabaseReference mDatabase;
-    private ConstraintLayout constraintLayout;
     private EditText challengeName;
     private EditText description;
     private EditText deadline;
@@ -44,19 +54,24 @@ public class CommunityFragment extends Fragment {
     private static VisitorWorkoutPlans visitor;
 
     private Button publishChallenge;
-
     private Button createChallenge;
 
     private LinearLayout container;
-
     private androidx.appcompat.widget.SearchView searchView;
 
     private WorkoutPlanNameSearchStrategy workoutPlanNameSearchStrategy;
     private WorkoutPlanAuthorSearchStrategy workoutPlanAuthorSearchStrategy;
 
     private ArrayList<Button> listOfButtons;
-
     private SearchModel searchModel = new SearchModel();
+
+    private EditText workoutPlanName;
+    private EditText notes;
+    private EditText sets;
+    private EditText reps;
+    private EditText time;
+    private EditText expectedCalories;
+    private Button publishWorkoutPlan;
 
     // Rename and change types of parameters
     private String mParam1;
@@ -100,34 +115,44 @@ public class CommunityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
-
+        communityPopupViewModel = new ViewModelProvider(this).get(CommunityPopupViewModel.class);
         // pop-up
 
-        constraintLayout = view.findViewById(R.id.constraintLayout5);
+        constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout5);
 
-        challengeName = constraintLayout.findViewById(R.id.nameCommunityChallengeEditTextView);
-        description = constraintLayout.findViewById(R.id.descriptionCommunityChallengeEditTextView);
-        deadline = constraintLayout.findViewById(R.id.deadlineCommunityChallengeEditTextDate);
+        challengeName = constraintLayoutCommunityPopup.findViewById(R.id.nameCommunityChallengeEditTextView);
+        description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionCommunityChallengeEditTextView);
+        deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineCommunityChallengeEditTextDate);
 
-        publishChallenge = constraintLayout.findViewById(R.id.newCommunityWorkoutButton);
+        publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newCommunityWorkoutButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         this.container = view.findViewById(R.id.Container2);
         this.container.setVisibility(View.VISIBLE);
 
         searchView = view.findViewById(R.id.communitySearchView);
         communityPopupSearchView = view.findViewById(R.id.communityPopupSearchView);
+        frameLayoutWorkoutPlanPopup = view.findViewById(R.id.workoutPlansPopupScreenLayout);
 
         createChallenge = view.findViewById(R.id.communityCreateChallengeButton);
 
+        workoutPlanName = frameLayoutWorkoutPlanPopup.findViewById(R.id.workoutPlanNameEditTextView);
+        notes = frameLayoutWorkoutPlanPopup.findViewById(R.id.notesEditTextView);
+        sets = frameLayoutWorkoutPlanPopup.findViewById(R.id.setsTextNumberDecimal);
+        reps = frameLayoutWorkoutPlanPopup.findViewById(R.id.repsTextNumberDecimal);
+        time = frameLayoutWorkoutPlanPopup.findViewById(R.id.editTextTime);
+        expectedCalories = frameLayoutWorkoutPlanPopup.findViewById(R.id.expectedCaloriesTextNumberDecimal);
+        publishWorkoutPlan = frameLayoutWorkoutPlanPopup.findViewById(R.id.newWorkoutPlanButton);
+
         // Dismiss small screen
-        constraintLayout.setVisibility(View.GONE);
+        constraintLayoutCommunityPopup.setVisibility(View.GONE);
+        frameLayoutWorkoutPlanPopup.setVisibility(View.GONE);
 
         getInfoToUpdateScreen();
 
         createChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                toggleSmallScreen();
+                toggleCommunityPopupScreen();
             }
         });
 
@@ -141,13 +166,9 @@ public class CommunityFragment extends Fragment {
                         communityViewModel.getUsername()
                 );
 
-                displayErrorMessages();
-
                 hideKeyboard(requireActivity());
 
-                constraintLayout.setVisibility(View.GONE);
-
-                getInfoToUpdateScreen();
+                constraintLayoutCommunityPopup.setVisibility(View.GONE);
             }
         });
 
@@ -179,8 +200,7 @@ public class CommunityFragment extends Fragment {
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-
-                        addDataToPopupScrollView(query);
+                        checkIfAlreadyCreated(query);
                         return true;
                     }
 
@@ -191,15 +211,77 @@ public class CommunityFragment extends Fragment {
                 });
 
         communityPopupSearchView.setOnCloseListener(() -> {
-            //
+            //TODO
             return true;
         });
 
         return view;
     }
 
-    public void addDataToPopupScrollView(String query) {
-        visitor = new VisitorWorkoutPlans();
+    public void checkIfAlreadyCreated(String query) {
+        DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
+        workoutPlanRef.child(communityViewModel.getUsername()).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    if (query.equals(postSnapshot.child("name").getValue())) {
+
+                        return;
+                    }
+                }
+                createWorkoutPlan();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    public void createWorkoutPlan() {
+        frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
+
+        publishWorkoutPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                communityPopupViewModel.publishWorkoutPlan(
+                        workoutPlanName.getText().toString(),
+                        notes.getText().toString(),
+                        sets.getText().toString(),
+                        reps.getText().toString(),
+                        time.getText().toString(),
+                        expectedCalories.getText().toString(),
+                        communityPopupViewModel.getUser().getUsername());
+
+                hideKeyboard(requireActivity());
+
+                // Dismiss the small screen
+                constraintLayoutCommunityPopup.setVisibility(View.GONE);
+            }
+        });
+    }
+
+    public static void hideKeyboard(Activity activity) {
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(
+                Activity.INPUT_METHOD_SERVICE);
+        //Find the currently focused view,
+        // so we can grab the correct window token from it.
+        View view = activity.getCurrentFocus();
+        //If no view currently has focus,
+        // create a new one, just so we can grab a window token from it
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    private void toggleCommunityPopupScreen() {
+        constraintLayoutCommunityPopup.setVisibility(View.VISIBLE);
+    }
+
+    //TODO
+    private void getInfoToUpdateScreen() {
 
     }
 }

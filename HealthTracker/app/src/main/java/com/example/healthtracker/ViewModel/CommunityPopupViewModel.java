@@ -25,6 +25,14 @@ public class CommunityPopupViewModel extends ViewModel {
         numOfUserWorkoutPlans = new MutableLiveData<Integer>(0);
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
     public void publishWorkoutPlan(String name, String notes,
                                    String sets,
                                    String reps, String time,
