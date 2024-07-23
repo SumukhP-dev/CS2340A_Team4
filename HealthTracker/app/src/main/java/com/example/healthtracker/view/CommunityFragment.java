@@ -126,7 +126,7 @@ public class CommunityFragment extends Fragment {
         description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionEditTextView);
         deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineEditTextView);
         containerWorkoutPlansScrollviewCommunityPopup =
-                view.findViewById(R.id.Container2);
+                constraintLayoutCommunityPopup.findViewById(R.id.ContainerCommunityPopup);
         publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newChallengeButton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -183,6 +183,7 @@ public class CommunityFragment extends Fragment {
         publishWorkoutPlan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                communityViewModel.clearWorkoutPlanArrayList();
                 communityPopupViewModel.publishWorkoutPlan(
                         workoutPlanName.getText().toString(),
                         notes.getText().toString(),
@@ -207,9 +208,6 @@ public class CommunityFragment extends Fragment {
                                         getContext(), getParentFragmentManager(),
                                         containerWorkoutPlansScrollviewCommunityPopup);
                                 visitor.visit(newWorkoutPlan);
-                                addDataToWorkoutPlansScrollView(userSnapshot,
-                                        getContext(),
-                                        containerWorkoutPlansScrollviewCommunityPopup);
                                 communityViewModel.addToWorkoutPlanArrayList(workoutPlanName
                                         .getText().toString());
                             }
@@ -299,9 +297,6 @@ public class CommunityFragment extends Fragment {
                                 getContext(), getParentFragmentManager(),
                                 containerWorkoutPlansScrollviewCommunityPopup);
                         visitor.visit(oldWorkoutPlan);
-                        addDataToWorkoutPlansScrollView(postSnapshot,
-                                getContext(),
-                                containerWorkoutPlansScrollviewCommunityPopup);
                         communityViewModel.addToWorkoutPlanArrayList(query);
                         return;
                     }
@@ -433,68 +428,5 @@ public class CommunityFragment extends Fragment {
         Log.d("test", "test1");
         communityViewModel.removeExpiredChallenges();
         getInfoToUpdateScreen();
-    }
-
-    public void addDataToWorkoutPlansScrollView(DataSnapshot userSnapshot, Context context,
-                                                LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
-        String userId = userSnapshot.getKey();
-
-        for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
-            String workoutId = workoutSnapshot.getKey();
-            String cals = workoutSnapshot.child("expectedCalories")
-                    .getValue(String.class);
-            String name = workoutSnapshot.child("name")
-                    .getValue(String.class);
-            String notes = workoutSnapshot.child("notes")
-                    .getValue(String.class);
-            String reps = workoutSnapshot.child("reps")
-                    .getValue(String.class);
-            String sets = workoutSnapshot.child("sets")
-                    .getValue(String.class);
-            String time = workoutSnapshot.child("time")
-                    .getValue(String.class);
-
-            if ((name != null) && (context != null)) {
-                Button workoutButton = new Button(context);
-                workoutButton.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                workoutButton.setPadding(16, 16, 16, 16);
-                workoutButton.setBackgroundResource(R.drawable.gray_rounded_corner);
-
-                String buttonText = String.format("%s\t%s ", name, userId);
-                workoutButton.setText(buttonText);
-
-                workoutButton.setOnClickListener(v -> {
-                    boolean check = false;
-                    int color = 0;
-                    if (workoutButton.getBackground()
-                            .getClass().equals(GradientDrawable.class)) {
-                        check = true;
-                    } else {
-                        ColorDrawable workoutButtonColorDrawable
-                                = (ColorDrawable) workoutButton.getBackground();
-                        color = workoutButtonColorDrawable.getColor();
-                    }
-                    if (check || color != Color.GREEN) {
-                        WorkoutsIndividualFragment detailFragment
-                                = new WorkoutsIndividualFragment();
-
-                        // Create a Bundle to pass data to the new fragment
-                        Bundle args = new Bundle();
-                        args.putString("userId", userId);
-                        args.putString("expectedCalories", cals);
-                        args.putString("name", name);
-                        args.putString("notes", notes);
-                        args.putString("reps", reps);
-                        args.putString("sets", sets);
-                        args.putString("time", time);
-                        detailFragment.setArguments(args);
-                    }
-                });
-
-                linearLayoutWorkoutPlanPopupScrollView.addView(workoutButton);
-            }
-        }
     }
 }
