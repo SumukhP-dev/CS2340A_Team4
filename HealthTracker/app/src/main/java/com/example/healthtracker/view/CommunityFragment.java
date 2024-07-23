@@ -122,7 +122,7 @@ public class CommunityFragment extends Fragment {
         description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionEditTextView);
         deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineEditTextView);
         containerWorkoutPlansScrollviewCommunityPopup =
-                constraintLayoutCommunityPopup.findViewById(R.id.ContainerCommunityPopup);
+                constraintLayoutCommunityPopup.findViewById(R.id.Container2);
         publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newChallengeButton);
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -285,6 +285,7 @@ public class CommunityFragment extends Fragment {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            Log.d("nameDataSnapshot", userSnapshot.child("name").getValue(String.class));
                             if (userSnapshot.child("name").getValue(String.class)
                                     .equals(workoutPlanName.getText().toString())) {
                                 NewWorkoutPlan newWorkoutPlan = new NewWorkoutPlan(userSnapshot,
