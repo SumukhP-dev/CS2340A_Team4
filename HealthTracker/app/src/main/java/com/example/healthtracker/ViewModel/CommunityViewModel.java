@@ -26,6 +26,14 @@ public class CommunityViewModel extends ViewModel {
     private MutableLiveData<Integer> numOfUserChallenges;
     private MutableLiveData<Boolean> completed;
 
+    public CommunityViewModel() {
+        user = User.getInstance();
+        completed = new MutableLiveData<>(false);
+        nameErrorMessage = new MutableLiveData<>(null);
+        workoutPlans = new ArrayList<>();
+        numOfUserChallenges = new MutableLiveData<>(0);
+    }
+
     public boolean getCompleted() {
         return completed.getValue();
     }
@@ -46,16 +54,12 @@ public class CommunityViewModel extends ViewModel {
         this.nameErrorMessage.setValue(nameErrorMessage);
     }
 
-    public void addWorkoutPlan(String workoutPlan) {
+    public void addToWorkoutPlanArrayList(String workoutPlan) {
         this.workoutPlans.add(workoutPlan);
     }
 
-    public CommunityViewModel() {
-        user = User.getInstance();
-        completed = new MutableLiveData<>(false);
-        nameErrorMessage = new MutableLiveData<>(null);
+    public void clearWorkoutPlanArrayList() {
         workoutPlans = new ArrayList<>();
-        numOfUserChallenges = new MutableLiveData<>(0);
     }
 
     public String getUsername() {
@@ -67,10 +71,6 @@ public class CommunityViewModel extends ViewModel {
     }
 
     public void publishChallenge(String name, String description, String deadline, String username) {
-        // temp data for workoutplans
-        addWorkoutPlan("abs");
-        addWorkoutPlan("jumping jacks");
-
         nameErrorMessage = new MutableLiveData<>(null);
 
         boolean valid = true;
