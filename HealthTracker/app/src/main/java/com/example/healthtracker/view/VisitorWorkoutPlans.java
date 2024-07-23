@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -38,7 +39,6 @@ public class VisitorWorkoutPlans implements Visitor {
                                     FragmentManager fragmentManager,
                                     LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
         String userId = userSnapshot.getKey();
-
 
         for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
             String workoutId = workoutSnapshot.getKey();
@@ -110,6 +110,7 @@ public class VisitorWorkoutPlans implements Visitor {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         8)); // 8dp height
                 linearLayoutWorkoutPlanPopupScrollView.addView(spacer);
+                
             }
         }
     }
