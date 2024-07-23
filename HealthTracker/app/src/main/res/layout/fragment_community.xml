@@ -5,6 +5,7 @@
     android:id="@+id/frameLayout4"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fef7ff"
     tools:context=".view.CommunityFragment" >
 
     <TextView
@@ -53,16 +54,25 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/communityCreateWorkoutPlansButton"
+        android:id="@+id/communityCreateChallengeButton"
         android:layout_width="294dp"
         android:layout_height="48dp"
         android:background="@drawable/gray_rounded_corner"
-        android:text="Create new public workout plan"
+        android:text="Create new Community Challenge"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/communityRecyclerView"
         tools:backgroundTint="#000000" />
+
+    <FrameLayout
+        android:id="@+id/communityChallengePopupScreenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <include layout="@layout/community_challenge_popup_screen_layout" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
