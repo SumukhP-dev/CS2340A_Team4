@@ -1,14 +1,33 @@
 package com.example.healthtracker.view;
 
+import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.provider.ContactsContract;
+import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.CommunityViewModel;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +44,29 @@ public class CommunityIndividualFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private ConstraintLayout constraintLayout;
+
+    private TextView setChallenger;
+
+    private TextView setChallengeName;
+
+    private TextView setDeadline;
+
+    private TextView setDescription;
+
+    private ImageButton back;
+
+    private Button acceptChallengeButton;
+
+    private Button completeChallengeButton;
+
+    private CommunityViewModel communityViewModel;
+    private DatabaseReference mDatabase;
+
+    private LinearLayout participantsContainer;
+
+    private CommunityConcreteSubject challengeStatus; // TODO: CHECK THAT WORKS
 
     public CommunityIndividualFragment() {
         // Required empty public constructor
@@ -61,6 +103,188 @@ public class CommunityIndividualFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_community_individual, container, false);
+        View view = inflater.inflate(R.layout.fragment_community_individual, container, false);
+
+        constraintLayout = view.findViewById(R.id.frameLayout5);
+
+        setChallenger = constraintLayout.findViewById(R.id.challengerNameTextView);
+        setChallengeName = constraintLayout.findViewById(R.id.communityWorkoutPlanTitleTextView);
+        setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
+        setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
+
+        participantsContainer = view.findViewById(R.id.Container3); // TODO: see works as intended
+
+        acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
+        completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
+        back = constraintLayout.findViewById(R.id.communityBackButton);
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
+
+        challengeStatus = new CommunityConcreteSubject(); // TODO: CHECK THAT WORKS
+
+        Bundle args = getArguments();
+
+        if (args != null) {
+            String userID = args.getString("userID");
+            String name = args.getString("name");
+            String description = args.getString("description");
+            String deadline = args.getString("deadline");
+            setChallenger.setText(userID);
+            setChallengeName.setText(name);
+            setDescription.setText(description);
+            setDeadline.setText(deadline);
+
+            getParticipantsToUpdateScreen(userID, name);
+
+        }
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+        acceptChallengeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // System.out.println("hello"); -- button clicks work
+                String currentChallengerAuthor = setChallenger.getText().toString();
+                String currentChallengeName = setChallengeName.getText().toString();
+                String currentUser = communityViewModel.getUsername();
+
+                DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
+
+                mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                            String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                            challengeName = challengeName.toLowerCase();
+
+                            if (challengeName != null && challengeName.equals(currentChallengeName.toLowerCase())) {
+
+                                challengeSnapshot.getRef().child("participants").child(currentUser).setValue("accepted");
+
+                                challengeStatus.notifyObservers(currentUser, "accepted"); // TODO: SEE THAT WORKS
+
+                                acceptChallengeButton.setVisibility(View.GONE);
+                                completeChallengeButton.setVisibility(View.VISIBLE);
+
+                                break;
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+        });
+
+        completeChallengeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String currentChallengerAuthor = setChallenger.getText().toString();
+                String currentChallengeName = setChallengeName.getText().toString();
+                String currentUser = communityViewModel.getUsername();
+
+                DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
+
+                mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                            String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                            challengeName = challengeName.toLowerCase();
+
+                            if (challengeName != null && challengeName.equals(currentChallengeName.toLowerCase())) {
+                                challengeSnapshot.getRef().child("participants").child(currentUser).setValue("completed");
+
+                                challengeStatus.notifyObservers(currentUser,"completed");
+
+                                completeChallengeButton.setVisibility(View.GONE);
+
+                                break;
+                            }
+
+                        }
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+            }
+
+
+        });
+
+
+        return view;
     }
+
+    private void getParticipantsToUpdateScreen(String user, String name) {
+        DatabaseReference participantRef = mDatabase.child("Community").child(user);
+        participantRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                participantsContainer.removeAllViews();
+                for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                    String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                    System.out.println("iterating. currently at: " + challengeName);
+
+                    if (challengeName.equals(name)) {
+                        System.out.println("found a match! " + challengeName + " equals " + name);
+
+                        for (DataSnapshot participant : challengeSnapshot.child("participants").getChildren()) {
+                            System.out.println(participant.getKey());
+                            addParticipantView(participant.getKey(), participant.getValue(String.class));
+                        }
+
+                        break;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CommunityIndividualFragment", "Error fetching participants");
+            }
+        });
+
+    }
+
+    private void addParticipantView(String participantID, String status) {
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View participantView = inflater.inflate(R.layout.button_community_individual_participant, null);
+
+        TextView participantTextView = participantView.findViewById(R.id.participantsTextView);
+        TextView statusTextView = participantView.findViewById(R.id.statusTextView);
+
+        participantTextView.setText(participantID);
+        statusTextView.setText(status);
+
+        CommunityConcreteObserver participantObserver = new CommunityConcreteObserver(participantID, statusTextView);
+        challengeStatus.addObserver(participantObserver);
+
+        participantsContainer.addView(participantView);
+    }
+
 }
