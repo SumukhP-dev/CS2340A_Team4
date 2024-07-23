@@ -6,6 +6,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.CommunityPopupViewModel;
@@ -40,6 +42,10 @@ public class CommunityFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private ConstraintLayout constraintLayoutCommunityPopup;
+    private FrameLayout frameLayoutWorkoutPlanPopup;
+    private LinearLayout containerWorkoutPlansScrollviewCommunityPopup;
 
     private CommunityViewModel communityViewModel;
     private CommunityPopupViewModel communityPopupViewModel;
@@ -114,11 +120,9 @@ public class CommunityFragment extends Fragment {
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         communityPopupViewModel = new ViewModelProvider(this).get(CommunityPopupViewModel.class);
         // pop-up
-        constraintLayout = view.findViewById(R.id.constraintLayout3);
+        constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout3);
 
-        constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout5);
-
-        challengeName = constraintLayoutCommunityPopup.findViewById(R.id.nameCommunityChallengeEditTextView);
+        challengeName = constraintLayoutCommunityPopup.findViewById(R.id.challengeNameEditTextView);
         description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionCommunityChallengeEditTextView);
         deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineCommunityChallengeEditTextDate);
 
@@ -167,8 +171,8 @@ public class CommunityFragment extends Fragment {
 
                 hideKeyboard(requireActivity());
 
-                constraintLayoutCommunityPopup.setVisibility(View.GONE);
-                constraintLayout.setVisibility(View.GONE);
+                constraintLayoutCommunityPopup.setVisibility(View.VISIBLE);
+                frameLayoutWorkoutPlanPopup.setVisibility(View.GONE);
 
                 communityViewModel.removeExpiredChallenges();
                 getInfoToUpdateScreen();
@@ -235,6 +239,8 @@ public class CommunityFragment extends Fragment {
             Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
             toast.show();
         }
+    }
+
     public void checkIfAlreadyCreated(String query) {
         visitor = new VisitorWorkoutPlans();
         DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
@@ -323,8 +329,36 @@ public class CommunityFragment extends Fragment {
         constraintLayoutCommunityPopup.setVisibility(View.VISIBLE);
     }
 
-    //TODO: Create method to refresh scrollview
-    public void getInfoToUpdateScreen() {
+    private void getInfoToUpdateScreen() {
+        DatabaseReference challengeRef = mDatabase.child("Community");
+        listOfButtons = new ArrayList<>();
+
+        challengeRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listOfButtons = new ArrayList<>();
+                container.removeAllViews();
+
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    addDataToScrollView(userSnapshot);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CommunityFragment", "Error fetching workouts: " + error.getMessage());
+            }
+        });
+    }
+
+    public void addDataToScrollView(DataSnapshot userSnapshot) {
+        String userID = userSnapshot.getKey();
+
+        for (DataSnapshot challengeSnapshot : userSnapshot.getChildren()) {
+            String challengeID = challengeSnapshot.getKey();
+            String name = challengeSnapshot.child("name").getValue(String.class);
+            String description = challengeSnapshot.child("description").getValue(String.class);
+            String deadline = challengeSnapshot.child("deadline").getValue(String.class);
 
             if ((name != null) && (getContext() != null)) {
                 Button challengeButton = new Button(getContext());
@@ -351,7 +385,7 @@ public class CommunityFragment extends Fragment {
 
                     FragmentManager fragmentManager = getParentFragmentManager();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.frameLayout4, detailFragment)
+                            .replace(R.id.constraintLayout4, detailFragment)
                             .addToBackStack(null)
                             .commit();
                 });
