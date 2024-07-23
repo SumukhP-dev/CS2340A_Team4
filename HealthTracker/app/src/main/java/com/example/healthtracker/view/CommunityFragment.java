@@ -40,10 +40,7 @@ public class CommunityFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-    private ConstraintLayout constraintLayoutCommunityPopup;
-    private FrameLayout frameLayoutWorkoutPlanPopup;
-    private LinearLayout containerWorkoutPlansScrollviewCommunityPopup;
-    // --
+
     private CommunityViewModel communityViewModel;
     private CommunityPopupViewModel communityPopupViewModel;
     private DatabaseReference mDatabase;
@@ -117,6 +114,7 @@ public class CommunityFragment extends Fragment {
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
         communityPopupViewModel = new ViewModelProvider(this).get(CommunityPopupViewModel.class);
         // pop-up
+        constraintLayout = view.findViewById(R.id.constraintLayout3);
 
         constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout5);
 
@@ -147,6 +145,7 @@ public class CommunityFragment extends Fragment {
         constraintLayoutCommunityPopup.setVisibility(View.GONE);
         frameLayoutWorkoutPlanPopup.setVisibility(View.GONE);
 
+        communityViewModel.removeExpiredChallenges();
         getInfoToUpdateScreen();
 
         createChallenge.setOnClickListener(new View.OnClickListener() {
@@ -169,6 +168,10 @@ public class CommunityFragment extends Fragment {
                 hideKeyboard(requireActivity());
 
                 constraintLayoutCommunityPopup.setVisibility(View.GONE);
+                constraintLayout.setVisibility(View.GONE);
+
+                communityViewModel.removeExpiredChallenges();
+                getInfoToUpdateScreen();
             }
         });
 
@@ -217,6 +220,21 @@ public class CommunityFragment extends Fragment {
         return view;
     }
 
+    public void displayErrorMessages() {
+        String errorMessage = "";
+        if (communityViewModel.getNameErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getNameErrorMessage();
+        }
+        if (communityViewModel.getDescriptionErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getDescriptionErrorMessage();
+        }
+        if (communityViewModel.getDeadlineErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getDeadlineErrorMessage();
+        }
+        if (errorMessage.length() != 0) {
+            Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
+            toast.show();
+        }
     public void checkIfAlreadyCreated(String query) {
         visitor = new VisitorWorkoutPlans();
         DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
@@ -308,5 +326,52 @@ public class CommunityFragment extends Fragment {
     //TODO: Create method to refresh scrollview
     public void getInfoToUpdateScreen() {
 
+            if ((name != null) && (getContext() != null)) {
+                Button challengeButton = new Button(getContext());
+
+                challengeButton.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                challengeButton.setPadding(16, 16, 16, 16);
+                challengeButton.setBackgroundResource(R.drawable.gray_rounded_corner);
+
+                String buttonText = String.format("%s \t %s ", name, userID);
+                challengeButton.setText(buttonText);
+
+                challengeButton.setOnClickListener(v -> {
+                    CommunityIndividualFragment detailFragment
+                            = new CommunityIndividualFragment();
+
+                    Bundle args = new Bundle();
+                    args.putString("userID", userID);
+                    args.putString("name", name);
+                    args.putString("description", description);
+                    args.putString("deadline", deadline);
+                    detailFragment.setArguments(args);
+
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frameLayout4, detailFragment)
+                            .addToBackStack(null)
+                            .commit();
+                });
+
+                container.addView(challengeButton);
+                listOfButtons.add(challengeButton);
+
+                View spacer = new View(getContext());
+                spacer.setLayoutParams(new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, 8));
+                container.addView(spacer);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d("test", "test1");
+        communityViewModel.removeExpiredChallenges();
+        getInfoToUpdateScreen();
     }
 }
