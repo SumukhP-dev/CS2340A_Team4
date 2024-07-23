@@ -14,26 +14,31 @@ import androidx.fragment.app.FragmentManager;
 
 import com.example.healthtracker.R;
 import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 public class VisitorWorkoutPlans implements Visitor {
 
     @Override
     public void visit(OldWorkoutPlan oldWorkoutPlan) {
-        //addDataToScrollView(oldWorkoutPlan.getUserSnapshot(), oldWorkoutPlan.getC);
+        addDataToScrollView(oldWorkoutPlan.getUserSnapshot(),
+                oldWorkoutPlan.getContext(),
+                oldWorkoutPlan.getFragmentManager(),
+                oldWorkoutPlan.getLinearLayoutWorkoutPlanPopupScrollView());
     }
 
     @Override
     public void visit(NewWorkoutPlan newWorkoutPlan) {
-        //addDataToScrollView(newWorkoutPlan.getUserSnapshot(), newWorkoutPlan.getContext(), );
+        addDataToScrollView(newWorkoutPlan.getUserSnapshot(),
+                newWorkoutPlan.getContext(),
+                newWorkoutPlan.getFragmentManager(),
+                newWorkoutPlan.getLinearLayoutWorkoutPlanPopupScrollView());
     }
 
-/*
+
     public void addDataToScrollView(DataSnapshot userSnapshot, Context context,
-                                    FragmentManager fragmentManager) {
+                                    FragmentManager fragmentManager,
+                                    LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
         String userId = userSnapshot.getKey();
+
 
         for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
             String workoutId = workoutSnapshot.getKey();
@@ -50,8 +55,8 @@ public class VisitorWorkoutPlans implements Visitor {
             String time = workoutSnapshot.child("time")
                     .getValue(String.class);
 
-            if ((name != null) && (getContext() != null)) {
-                Button workoutButton = new Button(getContext());
+            if ((name != null) && (context != null)) {
+                Button workoutButton = new Button(context);
                 workoutButton.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -88,7 +93,7 @@ public class VisitorWorkoutPlans implements Visitor {
                         detailFragment.setArguments(args);
 
                         // Perform the fragment transaction
-                        FragmentManager fragmentManager = getParentFragmentManager();
+                        //FragmentManager fragmentManager = getParentFragmentManager();
                         fragmentManager.beginTransaction()
                                 .replace(R.id.frameLayout2, detailFragment)
                                 // Replace R.id.frameLayout2 with your container ID
@@ -97,17 +102,15 @@ public class VisitorWorkoutPlans implements Visitor {
                     }
                 });
 
-                container.addView(workoutButton);
+                linearLayoutWorkoutPlanPopupScrollView.addView(workoutButton);
 
                 // Add some space between buttons
-                View spacer = new View(getContext());
+                View spacer = new View(context);
                 spacer.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         8)); // 8dp height
-                container.addView(spacer);
+                linearLayoutWorkoutPlanPopupScrollView.addView(spacer);
             }
         }
     }
-
- */
 }
