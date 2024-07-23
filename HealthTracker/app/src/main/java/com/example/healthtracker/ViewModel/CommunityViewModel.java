@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,40 +22,39 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class CommunityViewModel extends ViewModel {
     private User user;
-    private MutableLiveData<String> nameErrorMessage;
     private ArrayList<String> workoutPlans;
-
-    private MutableLiveData<String> descriptionErrorMessage;
-
-    private MutableLiveData<String> deadlineErrorMessage;
-
+    private ArrayList<String> participants;
     private MutableLiveData<Integer> numOfUserChallenges;
-    private MutableLiveData<Boolean> completed;
+
+    private MutableLiveData<String> nameErrorMessage;
+    private MutableLiveData<String> descriptionErrorMessage;
+    private MutableLiveData<String> deadlineErrorMessage;
+    private MutableLiveData<String> workoutPlansMinimumErrorMessage;
 
     public CommunityViewModel() {
         user = User.getInstance();
-        completed = new MutableLiveData<>(false);
         nameErrorMessage = new MutableLiveData<>(null);
         descriptionErrorMessage = new MutableLiveData<>(null);
         deadlineErrorMessage = new MutableLiveData<>(null);
+        workoutPlansMinimumErrorMessage = new MutableLiveData<>(null);
         workoutPlans = new ArrayList<>();
+        participants = new ArrayList<>();
         numOfUserChallenges = new MutableLiveData<>(0);
-    }
-
-    public boolean getCompleted() {
-        return completed.getValue();
-    }
-
-    public void setCompleted(boolean completed) {
-        this.completed.setValue(completed);
     }
 
     public FirebaseDatabase getDatabase() {
         return user.getDatabase();
+    }
+
+    public String getWorkoutPlansMinimumErrorMessage() {
+        return workoutPlansMinimumErrorMessage.getValue();
+    }
+
+    public void setWorkoutPlansMinimumErrorMessage(String workoutPlansMinimumErrorMessage) {
+        this.workoutPlansMinimumErrorMessage.setValue(workoutPlansMinimumErrorMessage);
     }
 
     public String getNameErrorMessage() {
@@ -71,8 +69,16 @@ public class CommunityViewModel extends ViewModel {
         this.workoutPlans.add(workoutPlan);
     }
 
+    public void addToParticipantsArrayList(String participants) {
+        this.participants.add(participants);
+    }
+
     public void clearWorkoutPlanArrayList() {
         workoutPlans = new ArrayList<>();
+    }
+
+    public void clearParticipantsArrayList() {
+        participants = new ArrayList<>();
     }
 
     public String getDescriptionErrorMessage () {
@@ -108,6 +114,10 @@ public class CommunityViewModel extends ViewModel {
             boolean valid = true;
             valid = checkForEmptyValues(name, description, deadline);
 
+            if (!checkForMinimumWorkoutPlans()) {
+                return;
+            }
+
             if (!valid) {
                 return;
             }
@@ -121,7 +131,7 @@ public class CommunityViewModel extends ViewModel {
                     }
                 }
             });
-            createChallenge(name, description, deadline, username, workoutPlans);
+            createChallenge(name, description, deadline, username, workoutPlans, participants);
         }
 
         public void addUsernameToCommunity (DatabaseReference challengeRef, String username){
@@ -129,9 +139,8 @@ public class CommunityViewModel extends ViewModel {
         }
 
         public void createChallenge (String name, String description, String deadline,
-                String username, ArrayList <String> workoutPlans){
-            workoutPlans.add("run");
-            workoutPlans.add("swim");
+                                     String username, ArrayList<String> workoutPlans,
+                                     ArrayList<String> participants){
 
             DatabaseReference challengeRef = user.getDatabase().getReference("Community");
             challengeRef.child(username).addValueEventListener(new ValueEventListener() {
@@ -158,7 +167,6 @@ public class CommunityViewModel extends ViewModel {
                         childUpdates.put("description", description);
                         childUpdates.put("deadline", deadline);
                         childUpdates.put("workoutPlans", workoutPlans);
-                        childUpdates.put("completed", completed);
 
                         ref.updateChildren(childUpdates);
                     }
@@ -214,7 +222,6 @@ public class CommunityViewModel extends ViewModel {
             try {
                 Date deadlineDate = dateFormat.parse(deadline);
 
-
                 // Check if the deadline is not before the current date
                 Calendar currentCalendar = Calendar.getInstance();
                 Date currentDate = currentCalendar.getTime();
@@ -231,7 +238,7 @@ public class CommunityViewModel extends ViewModel {
             return true;
         }
 
-        public void removeExpiredChallenges () {
+        public void removeExpiredChallenges() {
             DatabaseReference challengeRef = user.getDatabase().getReference("Community");
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
             dateFormat.setLenient(false);
@@ -264,5 +271,13 @@ public class CommunityViewModel extends ViewModel {
 
                 }
             });
+        }
+
+        public boolean checkForMinimumWorkoutPlans() {
+            if(workoutPlans.isEmpty()) {
+                workoutPlansMinimumErrorMessage.setValue("Must add at least 1 workout plan.");
+                return false;
+            }
+            return true;
         }
 }
