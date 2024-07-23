@@ -1,5 +1,6 @@
 package com.example.healthtracker.view;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.GradientDrawable;
@@ -21,16 +22,17 @@ public class VisitorWorkoutPlans implements Visitor {
 
     @Override
     public void visit(OldWorkoutPlan oldWorkoutPlan) {
-        addDataToScrollView(oldWorkoutPlan.getUserSnapshot());
+        //addDataToScrollView(oldWorkoutPlan.getUserSnapshot(), oldWorkoutPlan.getC);
     }
 
     @Override
     public void visit(NewWorkoutPlan newWorkoutPlan) {
-        addDataToScrollView(newWorkoutPlan.getUserSnapshot());
+        //addDataToScrollView(newWorkoutPlan.getUserSnapshot(), newWorkoutPlan.getContext(), );
     }
 
-
-    public void addDataToScrollView(DataSnapshot userSnapshot) {
+/*
+    public void addDataToScrollView(DataSnapshot userSnapshot, Context context,
+                                    FragmentManager fragmentManager) {
         String userId = userSnapshot.getKey();
 
         for (DataSnapshot workoutSnapshot : userSnapshot.getChildren()) {
@@ -96,7 +98,6 @@ public class VisitorWorkoutPlans implements Visitor {
                 });
 
                 container.addView(workoutButton);
-                listOfButtons.add(workoutButton);
 
                 // Add some space between buttons
                 View spacer = new View(getContext());
@@ -107,4 +108,6 @@ public class VisitorWorkoutPlans implements Visitor {
             }
         }
     }
+
+ */
 }
