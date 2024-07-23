@@ -64,7 +64,7 @@ public class CommunityIndividualFragment extends Fragment {
     private CommunityViewModel communityViewModel;
     private DatabaseReference mDatabase;
 
-    private LinearLayout participantsContainer;
+    private ScrollView participantsContainer;
 
     private CommunityConcreteSubject challengeStatus; // TODO: CHECK THAT WORKS
 
@@ -112,7 +112,7 @@ public class CommunityIndividualFragment extends Fragment {
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
 
-        participantsContainer = view.findViewById(R.id.Container3); // TODO: see works as intended
+        participantsContainer = view.findViewById(R.id.communityRecyclerView); // TODO: see works as intended
 
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
