@@ -19,7 +19,7 @@ public class VisitorWorkoutPlans implements Visitor {
 
     @Override
     public void visit(OldWorkoutPlan oldWorkoutPlan) {
-        addDataToScrollView(oldWorkoutPlan.getUserSnapshot(),
+        addDataToWorkoutPlansScrollView(oldWorkoutPlan.getUserSnapshot(),
                 oldWorkoutPlan.getContext(),
                 oldWorkoutPlan.getFragmentManager(),
                 oldWorkoutPlan.getLinearLayoutWorkoutPlanPopupScrollView());
@@ -27,14 +27,14 @@ public class VisitorWorkoutPlans implements Visitor {
 
     @Override
     public void visit(NewWorkoutPlan newWorkoutPlan) {
-        addDataToScrollView(newWorkoutPlan.getUserSnapshot(),
+        addDataToWorkoutPlansScrollView(newWorkoutPlan.getUserSnapshot(),
                 newWorkoutPlan.getContext(),
                 newWorkoutPlan.getFragmentManager(),
                 newWorkoutPlan.getLinearLayoutWorkoutPlanPopupScrollView());
     }
 
 
-    public void addDataToScrollView(DataSnapshot userSnapshot, Context context,
+    public void addDataToWorkoutPlansScrollView(DataSnapshot userSnapshot, Context context,
                                     FragmentManager fragmentManager,
                                     LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
         String userId = userSnapshot.getKey();

@@ -62,11 +62,7 @@ public class CommunityFragment extends Fragment {
     private LinearLayout container;
     private androidx.appcompat.widget.SearchView searchView;
 
-    private WorkoutPlanNameSearchStrategy workoutPlanNameSearchStrategy;
-    private WorkoutPlanAuthorSearchStrategy workoutPlanAuthorSearchStrategy;
-
     private ArrayList<Button> listOfButtons;
-    private SearchModel searchModel = new SearchModel();
 
     private EditText workoutPlanName;
     private EditText notes;
@@ -123,17 +119,18 @@ public class CommunityFragment extends Fragment {
         constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout3);
 
         challengeName = constraintLayoutCommunityPopup.findViewById(R.id.challengeNameEditTextView);
-        description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionCommunityChallengeEditTextView);
-        deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineCommunityChallengeEditTextDate);
+        description = constraintLayoutCommunityPopup.findViewById(R.id.descriptionEditTextView);
+        deadline = constraintLayoutCommunityPopup.findViewById(R.id.deadlineEditTextView);
+        containerWorkoutPlansScrollviewCommunityPopup =
+                constraintLayoutCommunityPopup.findViewById(R.id.ContainerCommunityPopup);
+        publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newChallengeButton);
 
-        publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newCommunityWorkoutButton);
         mDatabase = FirebaseDatabase.getInstance().getReference();
         this.container = view.findViewById(R.id.Container2);
         this.container.setVisibility(View.VISIBLE);
 
         searchView = view.findViewById(R.id.communitySearchView);
         communityPopupSearchView = view.findViewById(R.id.communityPopupSearchView);
-        containerWorkoutPlansScrollviewCommunityPopup = view.findViewById(R.id.ContainerCommunityPopup);
         frameLayoutWorkoutPlanPopup = view.findViewById(R.id.workoutPlansPopupScreenLayout);
 
         createChallenge = view.findViewById(R.id.communityCreateChallengeButton);
@@ -183,12 +180,8 @@ public class CommunityFragment extends Fragment {
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
-                        workoutPlanNameSearchStrategy = new WorkoutPlanNameSearchStrategy();
-                        searchModel.setStrategy(workoutPlanNameSearchStrategy);
-                        searchModel.remove(CommunityFragment.this.container, query, listOfButtons);
-                        workoutPlanAuthorSearchStrategy = new WorkoutPlanAuthorSearchStrategy();
-                        searchModel.setStrategy(workoutPlanAuthorSearchStrategy);
-                        searchModel.remove(CommunityFragment.this.container, query, listOfButtons);
+                        remove(CommunityFragment.this.container, query, listOfButtons);
+                        Log.d("removeFromScrollview", query);
                         return true;
                     }
 
@@ -218,7 +211,8 @@ public class CommunityFragment extends Fragment {
                 });
 
         communityPopupSearchView.setOnCloseListener(() -> {
-            return false;
+            getInfoToUpdateScreen();
+            return true;
         });
 
         return view;
@@ -248,7 +242,7 @@ public class CommunityFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    if (query.equals(postSnapshot.child("name").getValue())) {
+                    if (query.equals(postSnapshot.child("name").getValue(String.class))) {
                         OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
                                 getContext(), getParentFragmentManager(),
                                 containerWorkoutPlansScrollviewCommunityPopup);
@@ -286,16 +280,21 @@ public class CommunityFragment extends Fragment {
                 hideKeyboard(requireActivity());
 
                 DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
-                DatabaseReference workoutRef = workoutPlanRef.child(workoutPlanName.getText().toString());
+                DatabaseReference workoutRef = workoutPlanRef.child(communityViewModel.getUsername());
                 workoutRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        NewWorkoutPlan newWorkoutPlan = new NewWorkoutPlan(dataSnapshot,
-                                getContext(), getParentFragmentManager(),
-                                containerWorkoutPlansScrollviewCommunityPopup);
-                        visitor.visit(newWorkoutPlan);
-                        communityViewModel.addToWorkoutPlanArrayList(workoutPlanName
-                                .getText().toString());
+                        for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                            if (userSnapshot.child("name").getValue(String.class)
+                                    .equals(workoutPlanName.getText().toString())) {
+                                NewWorkoutPlan newWorkoutPlan = new NewWorkoutPlan(userSnapshot,
+                                        getContext(), getParentFragmentManager(),
+                                        containerWorkoutPlansScrollviewCommunityPopup);
+                                visitor.visit(newWorkoutPlan);
+                                communityViewModel.addToWorkoutPlanArrayList(workoutPlanName
+                                        .getText().toString());
+                            }
+                        }
                     }
 
                     @Override
@@ -397,6 +396,22 @@ public class CommunityFragment extends Fragment {
                 spacer.setLayoutParams(new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, 8));
                 container.addView(spacer);
+            }
+        }
+    }
+
+    public void remove(LinearLayout container, String query, ArrayList<Button> listOfButtons) {
+        container.removeAllViews();
+        for (Button button: listOfButtons) {
+            container.addView(button);
+        }
+        Log.d("bugcheck", String.valueOf(listOfButtons.size()));
+        Log.d("query text: ", query);
+        for (Button button : listOfButtons) {
+            String buttonText = button.getText().toString().toLowerCase();
+            Log.d("button text: ", buttonText);
+            if (!(buttonText.startsWith(query))) {
+                container.removeView(button);
             }
         }
     }
