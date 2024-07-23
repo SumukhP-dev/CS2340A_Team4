@@ -14,16 +14,25 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class CommunityViewModel extends ViewModel {
-
     private User user;
-
     private MutableLiveData<String> nameErrorMessage;
-
+    private ArrayList<String> workoutPlans;
     private MutableLiveData<Integer> numOfUserChallenges;
+    private MutableLiveData<Boolean> completed;
+
+    public boolean getCompleted() {
+        return completed.getValue();
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed.setValue(completed);
+    }
 
     public FirebaseDatabase getDatabase() {
         return user.getDatabase();
@@ -37,9 +46,15 @@ public class CommunityViewModel extends ViewModel {
         this.nameErrorMessage.setValue(nameErrorMessage);
     }
 
+    public void addWorkoutPlan(String workoutPlan) {
+        this.workoutPlans.add(workoutPlan);
+    }
+
     public CommunityViewModel() {
         user = User.getInstance();
+        completed = new MutableLiveData<>(false);
         nameErrorMessage = new MutableLiveData<>(null);
+        workoutPlans = new ArrayList<>();
         numOfUserChallenges = new MutableLiveData<>(0);
     }
 
@@ -52,6 +67,10 @@ public class CommunityViewModel extends ViewModel {
     }
 
     public void publishChallenge(String name, String description, String deadline, String username) {
+        // temp data for workoutplans
+        addWorkoutPlan("abs");
+        addWorkoutPlan("jumping jacks");
+
         nameErrorMessage = new MutableLiveData<>(null);
 
         boolean valid = true;
@@ -70,14 +89,15 @@ public class CommunityViewModel extends ViewModel {
                 }
             }
         });
-        createChallenge(name, description, deadline, username);
+        createChallenge(name, description, deadline, username, workoutPlans);
     }
 
     public void addUsernameToCommunity(DatabaseReference challengeRef, String username) {
         challengeRef.child(username).push();
     }
 
-    public void createChallenge(String name, String description, String deadline, String username) {
+    public void createChallenge(String name, String description, String deadline,
+                                String username, ArrayList<String> workoutPlans) {
 
         DatabaseReference challengeRef = user.getDatabase().getReference("Community");
         challengeRef.child(username).addValueEventListener(new ValueEventListener() {
@@ -103,6 +123,8 @@ public class CommunityViewModel extends ViewModel {
                     childUpdates.put("name", name);
                     childUpdates.put("description", description);
                     childUpdates.put("deadline", deadline);
+                    childUpdates.put("workoutPlans", workoutPlans);
+                    childUpdates.put("completed", completed);
 
                     ref.updateChildren(childUpdates);
                 }
