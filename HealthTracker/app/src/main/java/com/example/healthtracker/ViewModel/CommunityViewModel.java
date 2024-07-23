@@ -1,5 +1,7 @@
 package com.example.healthtracker.ViewModel;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -15,6 +17,10 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -23,6 +29,11 @@ public class CommunityViewModel extends ViewModel {
     private User user;
     private MutableLiveData<String> nameErrorMessage;
     private ArrayList<String> workoutPlans;
+
+    private MutableLiveData<String> descriptionErrorMessage;
+
+    private MutableLiveData<String> deadlineErrorMessage;
+
     private MutableLiveData<Integer> numOfUserChallenges;
     private MutableLiveData<Boolean> completed;
 
@@ -60,6 +71,28 @@ public class CommunityViewModel extends ViewModel {
 
     public void clearWorkoutPlanArrayList() {
         workoutPlans = new ArrayList<>();
+    public String getDescriptionErrorMessage() {
+        return descriptionErrorMessage.getValue();
+    }
+
+    public void setDescriptionErrorMessage(String descriptionErrorMessage) {
+        this.descriptionErrorMessage.setValue(descriptionErrorMessage);
+    }
+
+    public String getDeadlineErrorMessage() {
+        return deadlineErrorMessage.getValue();
+    }
+
+    public void setDeadlineErrorMessage(String deadlineErrorMessage) {
+        this.deadlineErrorMessage.setValue(deadlineErrorMessage);
+    }
+
+    public CommunityViewModel() {
+        user = User.getInstance();
+        nameErrorMessage = new MutableLiveData<>(null);
+        descriptionErrorMessage = new MutableLiveData<>(null);
+        deadlineErrorMessage = new MutableLiveData<>(null);
+        numOfUserChallenges = new MutableLiveData<>(0);
     }
 
     public String getUsername() {
@@ -72,9 +105,11 @@ public class CommunityViewModel extends ViewModel {
 
     public void publishChallenge(String name, String description, String deadline, String username) {
         nameErrorMessage = new MutableLiveData<>(null);
+        descriptionErrorMessage = new MutableLiveData<>(null);
+        deadlineErrorMessage = new MutableLiveData<>(null);
 
         boolean valid = true;
-        valid = checkForEmptyName(name);
+        valid = checkForEmptyValues(name, description, deadline);
 
         if (!valid) {
             return;
@@ -154,12 +189,90 @@ public class CommunityViewModel extends ViewModel {
         challengeRef.child(username).addValueEventListener(challengeListener);
     }
 
-    public boolean checkForEmptyName(String name) {
+    public boolean checkForEmptyValues(String name, String description, String deadline) {
         boolean check = true;
         if ((name.length() == 0) || (name.isEmpty())) {
             nameErrorMessage.setValue("Challenge name cannot be empty.");
             check = false;
         }
+        if ((description.length() == 0) || (description.isEmpty())) {
+            descriptionErrorMessage.setValue("Challenge description cannot be empty.");
+            check = false;
+        }
+        if ((deadline.length() == 0) || (deadline.isEmpty())) {
+            deadlineErrorMessage.setValue("Challenge deadline cannot be empty.");
+            check = false;
+        } else {
+            check = check && validateDeadline(deadline);
+        }
         return check;
     }
+
+    public boolean validateDeadline(String deadline) {
+        // Check if deadline only contains digits & is 8 characters long
+        if (!deadline.matches("\\d{8}")) {
+            deadlineErrorMessage.setValue("Deadline must be in format YYYYMMDD and contain only digits.");
+            return false;
+        }
+
+        // Check if deadline is not before the current date
+        // - Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        dateFormat.setLenient(false);
+
+        try {
+            Date deadlineDate = dateFormat.parse(deadline);
+
+
+            // Check if the deadline is not before the current date
+            Calendar currentCalendar = Calendar.getInstance();
+            Date currentDate = currentCalendar.getTime();
+
+            if (deadlineDate.before(currentDate)) {
+                deadlineErrorMessage.setValue("Deadline may not be before or equal to the current date.");
+                return false;
+            }
+
+        } catch (ParseException e) {
+            deadlineErrorMessage.setValue("Invalid deadline format.");
+            return false;
+        }
+        return true;
+    }
+
+    public void removeExpiredChallenges() {
+        DatabaseReference challengeRef = user.getDatabase().getReference("Community");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+        dateFormat.setLenient(false);
+
+        challengeRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                    for (DataSnapshot challengeSnapshot : userSnapshot.getChildren()) {
+                        String deadline = challengeSnapshot.child("deadline").getValue(String.class);
+                        if (deadline != null) {
+                            try {
+                                Date deadlineDate = dateFormat.parse(deadline);
+                                Date currentDate = Calendar.getInstance().getTime();
+
+                                if (deadlineDate.before(currentDate)) {
+                                    challengeSnapshot.getRef().removeValue();
+                                    Log.d("RemoveExpiredChallenges", "Removed challenge: " + challengeSnapshot.getKey());
+                                }
+                            } catch (ParseException e) {
+                                Log.e("RemoveExpiredChallenges", "Error parsing date: " + deadline, e);
+                            }
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
