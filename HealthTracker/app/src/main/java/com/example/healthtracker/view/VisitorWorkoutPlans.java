@@ -95,7 +95,7 @@ public class VisitorWorkoutPlans implements Visitor {
                         // Perform the fragment transaction
                         //FragmentManager fragmentManager = getParentFragmentManager();
                         fragmentManager.beginTransaction()
-                                .replace(R.id.frameLayout2, detailFragment)
+                                .replace(R.id.constraintLayout4, detailFragment)
                                 // Replace R.id.frameLayout2 with your container ID
                                 .addToBackStack(null)
                                 .commit();
@@ -110,7 +110,7 @@ public class VisitorWorkoutPlans implements Visitor {
                         ViewGroup.LayoutParams.MATCH_PARENT,
                         8)); // 8dp height
                 linearLayoutWorkoutPlanPopupScrollView.addView(spacer);
-                
+
             }
         }
     }

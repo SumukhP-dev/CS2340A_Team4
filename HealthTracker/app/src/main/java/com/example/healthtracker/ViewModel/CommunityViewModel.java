@@ -129,7 +129,9 @@ public class CommunityViewModel extends ViewModel {
         }
 
         public void createChallenge (String name, String description, String deadline,
-                String username, ArrayList < String > workoutPlans){
+                String username, ArrayList <String> workoutPlans){
+            workoutPlans.add("run");
+            workoutPlans.add("swim");
 
             DatabaseReference challengeRef = user.getDatabase().getReference("Community");
             challengeRef.child(username).addValueEventListener(new ValueEventListener() {
@@ -160,7 +162,6 @@ public class CommunityViewModel extends ViewModel {
 
                         ref.updateChildren(childUpdates);
                     }
-
                 }
 
                 @Override
@@ -205,15 +206,9 @@ public class CommunityViewModel extends ViewModel {
         }
 
         public boolean validateDeadline (String deadline){
-            // Check if deadline only contains digits & is 8 characters long
-            if (!deadline.matches("\\d{8}")) {
-                deadlineErrorMessage.setValue("Deadline must be in format YYYYMMDD and contain only digits.");
-                return false;
-            }
-
             // Check if deadline is not before the current date
             // - Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
             dateFormat.setLenient(false);
 
             try {
