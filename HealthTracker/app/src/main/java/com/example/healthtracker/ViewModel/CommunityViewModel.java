@@ -131,7 +131,7 @@ public class CommunityViewModel extends ViewModel {
                     }
                 }
             });
-            createChallenge(name, description, deadline, username, workoutPlans, participants);
+            createChallenge(name, description, deadline, username, workoutPlans);
         }
 
         public void addUsernameToCommunity (DatabaseReference challengeRef, String username){
@@ -139,8 +139,7 @@ public class CommunityViewModel extends ViewModel {
         }
 
         public void createChallenge (String name, String description, String deadline,
-                                     String username, ArrayList<String> workoutPlans,
-                                     ArrayList<String> participants){
+                                     String username, ArrayList<String> workoutPlans){
 
             DatabaseReference challengeRef = user.getDatabase().getReference("Community");
             challengeRef.child(username).addValueEventListener(new ValueEventListener() {
@@ -157,7 +156,7 @@ public class CommunityViewModel extends ViewModel {
                     if (noDuplicates) {
                         logNumberOfChallengesForUser(challengeRef, username);
 
-                        String challengeNumber = "Challenge " + numOfUserChallenges.getValue();
+                        String challengeNumber = "Challenge " + (numOfUserChallenges.getValue() + 1);
                         challengeRef.child(username).child(challengeNumber).push();
 
                         DatabaseReference ref = challengeRef.child(username).child(challengeNumber);
