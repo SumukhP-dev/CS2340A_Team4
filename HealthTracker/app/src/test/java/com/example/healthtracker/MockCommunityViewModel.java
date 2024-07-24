@@ -62,7 +62,7 @@ public class MockCommunityViewModel {
         this.deadlineErrorMessage = deadlineErrorMessage;
     }
 
-    public CommunityViewModel(FakeUser user, MockDatabase mDatabase) {
+    public MockCommunityViewModel(FakeUser user, MockDatabase mDatabase) {
         this.user = user;
         nameErrorMessage = null;
         descriptionErrorMessage = null;
@@ -100,7 +100,7 @@ public class MockCommunityViewModel {
             }
         });*/
         createChallenge(name, description, deadline, username);
-        logNumberOfChallengesForUser();
+        logNumberOfChallengesForUser(mDatabase, user);
     }
 
     /*public void addUsernameToCommunity(DatabaseReference challengeRef, String username) {
@@ -163,13 +163,13 @@ public class MockCommunityViewModel {
             }
 
         } catch (ParseException e) {
-            deadlineErrorMessage "Invalid deadline format.";
+            deadlineErrorMessage = "Invalid deadline format.";
             return false;
         }
         return true;
     }
 
-    public void removeExpiredChallenges(String currentDate) {
+    public void removeExpiredChallenges() {
         MockDatabase challengeRef = mDatabase;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
         dateFormat.setLenient(false);
