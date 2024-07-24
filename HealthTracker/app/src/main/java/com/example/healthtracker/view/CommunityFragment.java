@@ -170,6 +170,7 @@ public class CommunityFragment extends Fragment {
                         communityViewModel.getUsername()
                 );
 
+                displayErrorMessages();
                 hideKeyboard(requireActivity());
 
                 constraintLayoutCommunityPopup.setVisibility(View.GONE);
@@ -278,6 +279,9 @@ public class CommunityFragment extends Fragment {
         }
         if (communityViewModel.getDeadlineErrorMessage() != null) {
             errorMessage = errorMessage + " " + communityViewModel.getDeadlineErrorMessage();
+        }
+        if (communityViewModel.getWorkoutPlansMinimumErrorMessage() != null) {
+            errorMessage = errorMessage + " " + communityViewModel.getWorkoutPlansMinimumErrorMessage();
         }
         if (errorMessage.length() != 0) {
             Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
