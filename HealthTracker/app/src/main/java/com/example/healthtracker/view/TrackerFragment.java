@@ -26,7 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -120,7 +119,7 @@ public class TrackerFragment extends Fragment {
                         spinnerCount = Integer.parseInt(workoutNum);
                         Log.d("counter inside class:", String.valueOf(spinnerCount));
                         for (int i = 0; i < spinnerCount && i < 5; i++) {
-                            int counter = spinnerCount -i;
+                            int counter = spinnerCount - i;
                             mDatabase.child("Workouts").child(username)
                                     .child("workout "
                                             + String.valueOf(counter))
@@ -137,7 +136,8 @@ public class TrackerFragment extends Fragment {
                                                                     .getValue());
 
                                                     // Adding Date
-                                                    String date = String.valueOf(dataSnap.child("Date").getValue());
+                                                    String date = String.valueOf(dataSnap
+                                                            .child("Date").getValue());
                                                     TextView textView = new TextView(getContext());
                                                     textView.setLayoutParams(
                                                             new LinearLayout.LayoutParams(
@@ -147,7 +147,8 @@ public class TrackerFragment extends Fragment {
                                                             16, 16);
 
                                                     String displayText = String
-                                                            .format("%s    Workout: %s", date, workoutNa);
+                                                            .format("%s    Workout: %s", date,
+                                                                    workoutNa);
                                                     textView.setText(displayText);
 
                                                     // Add the TextView to the container
