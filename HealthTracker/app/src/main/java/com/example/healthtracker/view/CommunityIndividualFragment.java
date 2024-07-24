@@ -9,7 +9,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -273,9 +275,16 @@ public class CommunityIndividualFragment extends Fragment {
 
         TextView participantTextView = participantView.findViewById(R.id.participantsTextView);
         TextView statusTextView = participantView.findViewById(R.id.statusTextView);
+        ImageView checkMarkImageView = participantView.findViewById(R.id.checkMarkImageView);
 
         participantTextView.setText(participantID);
         statusTextView.setText(status);
+
+        if (statusTextView.getText().toString().equals("completed")) {
+            checkMarkImageView.setVisibility(View.VISIBLE);
+        } else {
+            checkMarkImageView.setVisibility(View.GONE);
+        }
 
         CommunityConcreteObserver participantObserver = new CommunityConcreteObserver(participantID, statusTextView);
         challengeStatus.addObserver(participantObserver);
