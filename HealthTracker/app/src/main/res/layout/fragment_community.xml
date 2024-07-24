@@ -2,7 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout4"
+    android:id="@+id/constraintLayout4"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#fef7ff"
@@ -72,6 +73,16 @@
         android:layout_height="match_parent">
 
         <include layout="@layout/community_challenge_popup_screen_layout" />
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/workoutPlansPopupScreenLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- This will be your small screen content -->
+        <include layout="@layout/workout_plans_popup_screen_layout" />
 
     </FrameLayout>
 
