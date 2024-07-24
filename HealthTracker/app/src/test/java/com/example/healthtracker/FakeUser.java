@@ -13,7 +13,7 @@ public class FakeUser {
     private ArrayList<FakeWorkout> workouts;
     private ArrayList<FakeWorkoutPlan> workoutPlans;
 
-
+    private ArrayList<FakeCommunityChallenge> challenges;
 
     public FakeUser(String username, String password) {
         this.username = username;
@@ -21,6 +21,7 @@ public class FakeUser {
         this.counter = 0;
         workouts = new ArrayList<FakeWorkout>();
         workoutPlans = new ArrayList<FakeWorkoutPlan>();
+        challenges = new ArrayList<FakeCommunityChallenge>();
     }
 
     public String getUsername() {
@@ -100,6 +101,14 @@ public class FakeUser {
 
     public ArrayList<FakeWorkoutPlan> getWorkoutPlans() {
         return workoutPlans;
+    }
+
+    public ArrayList<FakeCommunityChallenge> getChallenges() {
+        return challenges;
+    }
+
+    public void addChallenges(FakeCommunityChallenge challenge) {
+        challenges.add(challenge);
     }
 
 }
