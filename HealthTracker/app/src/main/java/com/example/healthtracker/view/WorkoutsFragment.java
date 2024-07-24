@@ -245,7 +245,7 @@ public class WorkoutsFragment extends Fragment {
          mDatabase.child("WorkoutPlans")
          .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
         @Override
-        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        public void onComplete(@NonNull Element<DataSnapshot> task) {
         DataSnapshot dataSnap = task.getResult();
         for (DataSnapshot childSnapshot : dataSnap.getChildren()) {
         String childKey = childSnapshot.getKey();
@@ -255,7 +255,7 @@ public class WorkoutsFragment extends Fragment {
         mDatabase.child("WorkoutPlans").child(childKey)
         .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
         @Override
-        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        public void onComplete(@NonNull Element<DataSnapshot> task) {
         DataSnapshot data = task.getResult();
         for (DataSnapshot childData: data.getChildren()) {
         String workout = childData.getKey();
@@ -265,7 +265,7 @@ public class WorkoutsFragment extends Fragment {
         mDatabase.child("WorkoutPlans").child(childKey).child(workout)
         .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
         @Override
-        public void onComplete(@NonNull Task<DataSnapshot> task) {
+        public void onComplete(@NonNull Element<DataSnapshot> task) {
         DataSnapshot info = task.getResult();
         for (DataSnapshot childInfo: info.getChildren()) {
         String infoKey = childInfo.getKey();
