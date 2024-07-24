@@ -202,4 +202,16 @@ public class ExampleUnitTest {
         String invalidCaloriesMessage = workoutsViewModel.getCaloriesErrorMessage();
         assertEquals(invalidCaloriesMessage, "Calories per set is empty.");
     }
+
+
+    @Test
+    public void testInvalidTimeWorkoutPlan() {
+        FakeUser user = new FakeUser("aranava2004", "password");
+        mDatabase.addUser(user);
+        workoutsViewModel = new MockWorkoutsViewModel(user, mDatabase);
+        workoutsViewModel.publishWorkoutPlan("workout1",
+                "notes", "100", "100", "", "100", user.getUsername());
+        //reject
+        assertEquals(0, user.getWorkoutPlans().size());
+    }
 }
