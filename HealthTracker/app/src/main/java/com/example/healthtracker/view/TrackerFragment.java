@@ -131,9 +131,12 @@ public class TrackerFragment extends Fragment {
                                                                        Task<DataSnapshot> task) {
                                                     DataSnapshot dataSnap = task
                                                             .getResult();
+                                                    // Adding workoutNa
                                                     String workoutNa = String.valueOf(
                                                             dataSnap.child("workoutName")
                                                                     .getValue());
+
+                                                    // Adding Date
                                                     String date = String.valueOf(dataSnap.child("Date").getValue());
                                                     TextView textView = new TextView(getContext());
                                                     textView.setLayoutParams(
@@ -252,13 +255,6 @@ public class TrackerFragment extends Fragment {
                                     .child(username).child(workoutString).setValue(user);
                     }
                 });
-
-
-
-
-
-
-
 
         TextView textView = new TextView(getContext());
         textView.setLayoutParams(new LinearLayout.LayoutParams(
