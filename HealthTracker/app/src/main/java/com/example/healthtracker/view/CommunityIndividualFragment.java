@@ -112,7 +112,7 @@ public class CommunityIndividualFragment extends Fragment {
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
 
-        participantsContainer = view.findViewById(R.id.Container3); // TODO: see works as intended
+        participantsContainer = view.findViewById(R.id.ContainerCommunity); // TODO: see works as intended
 
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
