@@ -17,6 +17,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
@@ -48,23 +49,18 @@ public class CommunityIndividualFragment extends Fragment {
     private ConstraintLayout constraintLayout;
 
     private TextView setChallenger;
-
     private TextView setChallengeName;
-
     private TextView setDeadline;
-
     private TextView setDescription;
-
     private ImageButton back;
-
     private Button acceptChallengeButton;
-
     private Button completeChallengeButton;
 
     private CommunityViewModel communityViewModel;
     private DatabaseReference mDatabase;
 
     private LinearLayout participantsContainer;
+    private LinearLayout workoutPlansContainer;
 
     private CommunityConcreteSubject challengeStatus; // TODO: CHECK THAT WORKS
 
@@ -113,7 +109,7 @@ public class CommunityIndividualFragment extends Fragment {
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
 
         participantsContainer = view.findViewById(R.id.ContainerCommunity); // TODO: see works as intended
-
+        workoutPlansContainer = view.findViewById(R.id.ContainerWorkoutPlans);
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
         back = constraintLayout.findViewById(R.id.communityBackButton);
@@ -137,6 +133,7 @@ public class CommunityIndividualFragment extends Fragment {
             setDeadline.setText(deadline);
 
             getParticipantsToUpdateScreen(userID, name);
+            getWorkoutPlansToUpdateScreen(userID, name);
 
         }
 
@@ -156,7 +153,6 @@ public class CommunityIndividualFragment extends Fragment {
                 String currentUser = communityViewModel.getUsername();
 
                 DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
-
                 mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -285,6 +281,106 @@ public class CommunityIndividualFragment extends Fragment {
         challengeStatus.addObserver(participantObserver);
 
         participantsContainer.addView(participantView);
+    }
+
+    // user is the name of the community challenge creator
+    private void getWorkoutPlansToUpdateScreen(String user, String name) {
+        DatabaseReference communityRef = mDatabase.child("Community").child(user);
+        communityRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                workoutPlansContainer.removeAllViews();
+                for (DataSnapshot challengeSnapshot: snapshot.getChildren()) {
+                    String challengeName = challengeSnapshot.child("name").getValue(String.class);
+                    System.out.println("iterating. currently at: " + challengeName);
+
+                    if (challengeName.equals(name)) {
+                        System.out.println("found a match! " + challengeName + " equals " + name);
+
+                        for (DataSnapshot workoutPlans : challengeSnapshot.child("workoutPlans").getChildren()) {
+                            addWorkoutPlansView(user, workoutPlans.getValue(String.class));
+                        }
+
+                        break;
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("CommunityIndividualFragment", "Error fetching participants");
+            }
+        });
+
+    }
+
+    // userID is the name of the community challenge creator
+    private void addWorkoutPlansView(String userID, String workoutPlanName) {
+        Context context = getContext();
+        if (context == null) {
+            return;
+        }
+
+        if ((workoutPlanName != null) && (getContext() != null)) {
+            Button workoutPlanButton = new Button(getContext());
+
+            workoutPlanButton.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+            workoutPlanButton.setPadding(16, 16, 16, 16);
+            workoutPlanButton.setBackgroundResource(R.drawable.gray_rounded_corner);
+
+            String buttonText = String.format("%s \t %s ", workoutPlanName, userID);
+            workoutPlanButton.setText(buttonText);
+
+            workoutPlanButton.setOnClickListener(v -> {
+                WorkoutsIndividualFragment detailFragment
+                        = new WorkoutsIndividualFragment();
+
+                DatabaseReference workoutPlansRef = mDatabase.child("WorkoutPlans").child(userID);
+                workoutPlansRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot workoutPlanSnapshot : snapshot.getChildren()) {
+                            String workoutPlanNameQueried = workoutPlanSnapshot.child("name").getValue(String.class);
+                            if (workoutPlanName.equals(workoutPlanNameQueried)) {
+                                // Create a Bundle to pass data to the new fragment
+                                Bundle args = new Bundle();
+                                args.putString("userId", userID);
+                                args.putString("expectedCalories",
+                                        workoutPlanSnapshot.child("expectedCalories").getValue(String.class));
+                                args.putString("name", workoutPlanSnapshot.child("name").getValue(String.class));
+                                args.putString("notes", workoutPlanSnapshot.child("notes").getValue(String.class));
+                                args.putString("reps", workoutPlanSnapshot.child("reps").getValue(String.class));
+                                args.putString("sets", workoutPlanSnapshot.child("sets").getValue(String.class));
+                                args.putString("time", workoutPlanSnapshot.child("time").getValue(String.class));
+                                detailFragment.setArguments(args);
+
+                                // Perform the fragment transaction
+                                FragmentManager fragmentManager = getParentFragmentManager();
+                                fragmentManager.beginTransaction()
+                                        .replace(R.id.frameLayout5, detailFragment)
+                                        // Replace R.id.frameLayout2 with your container ID
+                                        .addToBackStack(null)
+                                        .commit();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                    }
+                });
+            });
+
+            workoutPlansContainer.addView(workoutPlanButton);
+
+            View spacer = new View(getContext());
+            spacer.setLayoutParams(new LinearLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT, 8));
+            workoutPlansContainer.addView(spacer);
+        }
     }
 
 }
