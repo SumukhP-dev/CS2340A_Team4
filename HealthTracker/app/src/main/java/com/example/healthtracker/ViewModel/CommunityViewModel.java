@@ -28,6 +28,7 @@ public class CommunityViewModel extends ViewModel {
     private ArrayList<String> workoutPlans;
     private ArrayList<String> participants;
     private MutableLiveData<Integer> numOfUserChallenges;
+    private MutableLiveData<Boolean> duplicate;
 
     private MutableLiveData<String> nameErrorMessage;
     private MutableLiveData<String> descriptionErrorMessage;
@@ -43,6 +44,15 @@ public class CommunityViewModel extends ViewModel {
         workoutPlans = new ArrayList<>();
         participants = new ArrayList<>();
         numOfUserChallenges = new MutableLiveData<>(0);
+        duplicate = new MutableLiveData<>(false);
+    }
+
+    public boolean getDuplicate() {
+        return Boolean.TRUE.equals(duplicate.getValue());
+    }
+
+    public void setDuplicate(boolean duplicate) {
+        this.duplicate.setValue(duplicate);
     }
 
     public FirebaseDatabase getDatabase() {

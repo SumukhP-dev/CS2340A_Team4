@@ -22,7 +22,7 @@ public class NewWorkoutPlan implements WorkoutPlan {
         this.context = context;
         this.fragmentManager = fragmentManager;
         this.linearLayoutWorkoutPlanPopupScrollView = linearLayoutWorkoutPlanPopupScrollView;
-        color = Color.BLUE;
+        color = Color.GRAY;
     }
 
     public int getColor() {
