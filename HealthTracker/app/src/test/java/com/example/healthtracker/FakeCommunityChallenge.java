@@ -7,12 +7,14 @@ public class FakeCommunityChallenge {
     private String description;
     private String name;
     private HashMap<String, String> participants;
+    private ArrayList<FakeWorkoutPlan> workouts;
 
     public FakeCommunityChallenge(String deadline, String description, String name) {
         this.deadline = deadline;
         this.description = description;
         this.name = name;
         this.participants = new HashMap<String, String>();
+        this.workouts = new ArrayList<FakeWorkoutPlan>();
     }
 
     public String getName() {
@@ -53,5 +55,13 @@ public class FakeCommunityChallenge {
 
     public void setParticipantStatus(String participantName, String participantStatus) {
         participants.replace(participantName, participantStatus);
+    }
+
+    public void addWorkout(FakeWorkoutPlan workoutPlan) {
+        workouts.add(workoutPlan);
+    }
+
+    public ArrayList<FakeWorkoutPlan> getWorkouts() {
+        return workouts;
     }
 }
