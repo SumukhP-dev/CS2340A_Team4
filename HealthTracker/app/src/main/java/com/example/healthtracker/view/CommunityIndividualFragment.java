@@ -2,18 +2,14 @@ package com.example.healthtracker.view;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CheckedTextView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -30,8 +26,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CommunityIndividualFragment#newInstance} factory method to
@@ -39,12 +33,10 @@ import java.util.ArrayList;
  */
 public class CommunityIndividualFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -64,7 +56,7 @@ public class CommunityIndividualFragment extends Fragment {
     private LinearLayout participantsContainer;
     private LinearLayout workoutPlansContainer;
 
-    private CommunityConcreteSubject challengeStatus; // TODO: CHECK THAT WORKS
+    private CommunityConcreteSubject challengeStatus;
 
     public CommunityIndividualFragment() {
         // Required empty public constructor
@@ -78,7 +70,6 @@ public class CommunityIndividualFragment extends Fragment {
      * @param param2 Parameter 2.
      * @return A new instance of fragment CommunityIndividualFragment.
      */
-    // TODO: Rename and change types and number of parameters
     public static CommunityIndividualFragment newInstance(String param1, String param2) {
         CommunityIndividualFragment fragment = new CommunityIndividualFragment();
         Bundle args = new Bundle();
@@ -110,7 +101,7 @@ public class CommunityIndividualFragment extends Fragment {
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
 
-        participantsContainer = view.findViewById(R.id.ContainerCommunity); // TODO: see works as intended
+        participantsContainer = view.findViewById(R.id.ContainerCommunity);
         workoutPlansContainer = view.findViewById(R.id.ContainerWorkoutPlans);
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
@@ -120,7 +111,7 @@ public class CommunityIndividualFragment extends Fragment {
 
         communityViewModel = new ViewModelProvider(requireActivity()).get(CommunityViewModel.class);
 
-        challengeStatus = new CommunityConcreteSubject(); // TODO: CHECK THAT WORKS
+        challengeStatus = new CommunityConcreteSubject();
 
         Bundle args = getArguments();
 
@@ -155,33 +146,36 @@ public class CommunityIndividualFragment extends Fragment {
                 String currentUser = communityViewModel.getUsername();
 
                 DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
-                mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
-                            String challengeName = challengeSnapshot.child("name").getValue(String.class);
-                            challengeName = challengeName.toLowerCase();
+                mDatabase.child("Community").child(currentChallengerAuthor)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                                    String challengeName = challengeSnapshot.child("name")
+                                            .getValue(String.class);
+                                    challengeName = challengeName.toLowerCase();
 
-                            if (challengeName != null && challengeName.equals(currentChallengeName.toLowerCase())) {
+                                    if (challengeName != null && challengeName
+                                            .equals(currentChallengeName.toLowerCase())) {
+                                        challengeSnapshot.getRef().child("participants")
+                                                .child(currentUser).setValue("accepted");
 
-                                challengeSnapshot.getRef().child("participants").child(currentUser).setValue("accepted");
+                                        challengeStatus
+                                                .notifyObservers(currentUser, "accepted");
 
-                                challengeStatus.notifyObservers(currentUser, "accepted"); // TODO: SEE THAT WORKS
+                                        acceptChallengeButton.setVisibility(View.GONE);
+                                        completeChallengeButton.setVisibility(View.VISIBLE);
 
-                                acceptChallengeButton.setVisibility(View.GONE);
-                                completeChallengeButton.setVisibility(View.VISIBLE);
-
-                                break;
+                                        break;
+                                    }
+                                }
                             }
-                        }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
-
+                            }
+                        });
             }
         });
 
@@ -194,39 +188,38 @@ public class CommunityIndividualFragment extends Fragment {
 
                 DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
 
-                mDatabase.child("Community").child(currentChallengerAuthor).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                mDatabase.child("Community").child(currentChallengerAuthor)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                        for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
-                            String challengeName = challengeSnapshot.child("name").getValue(String.class);
-                            challengeName = challengeName.toLowerCase();
+                                for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
+                                    String challengeName = challengeSnapshot.child("name")
+                                            .getValue(String.class);
+                                    challengeName = challengeName.toLowerCase();
 
-                            if (challengeName != null && challengeName.equals(currentChallengeName.toLowerCase())) {
-                                challengeSnapshot.getRef().child("participants").child(currentUser).setValue("completed");
+                                    if (challengeName != null && challengeName
+                                            .equals(currentChallengeName.toLowerCase())) {
+                                        challengeSnapshot.getRef().child("participants")
+                                                .child(currentUser).setValue("completed");
 
-                                challengeStatus.notifyObservers(currentUser,"completed");
+                                        challengeStatus.notifyObservers(currentUser, "completed");
 
-                                completeChallengeButton.setVisibility(View.GONE);
+                                        completeChallengeButton.setVisibility(View.GONE);
 
-                                break;
+                                        break;
+                                    }
+
+                                }
                             }
 
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
+                            }
+                        });
             }
-
-
         });
-
 
         return view;
     }
@@ -245,9 +238,11 @@ public class CommunityIndividualFragment extends Fragment {
                     if (challengeName.equals(name)) {
                         System.out.println("found a match! " + challengeName + " equals " + name);
 
-                        for (DataSnapshot participant : challengeSnapshot.child("participants").getChildren()) {
+                        for (DataSnapshot participant
+                                : challengeSnapshot.child("participants").getChildren()) {
                             System.out.println(participant.getKey());
-                            addParticipantView(participant.getKey(), participant.getValue(String.class));
+                            addParticipantView(participant.getKey(),
+                                    participant.getValue(String.class));
                         }
 
                         break;
@@ -270,8 +265,10 @@ public class CommunityIndividualFragment extends Fragment {
             return;
         }
 
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View participantView = inflater.inflate(R.layout.button_community_individual_participant, null);
+        LayoutInflater inflater = (LayoutInflater) getContext()
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View participantView = inflater
+                .inflate(R.layout.button_community_individual_participant, null);
 
         TextView participantTextView = participantView.findViewById(R.id.participantsTextView);
         TextView statusTextView = participantView.findViewById(R.id.statusTextView);
@@ -286,7 +283,8 @@ public class CommunityIndividualFragment extends Fragment {
             checkMarkImageView.setVisibility(View.GONE);
         }
 
-        CommunityConcreteObserver participantObserver = new CommunityConcreteObserver(participantID, statusTextView);
+        CommunityConcreteObserver participantObserver
+                = new CommunityConcreteObserver(participantID, statusTextView);
         challengeStatus.addObserver(participantObserver);
 
         participantsContainer.addView(participantView);
@@ -306,7 +304,8 @@ public class CommunityIndividualFragment extends Fragment {
                     if (challengeName.equals(name)) {
                         System.out.println("found a match! " + challengeName + " equals " + name);
 
-                        for (DataSnapshot workoutPlans : challengeSnapshot.child("workoutPlans").getChildren()) {
+                        for (DataSnapshot workoutPlans
+                                : challengeSnapshot.child("workoutPlans").getChildren()) {
                             addWorkoutPlansView(user, workoutPlans.getValue(String.class));
                         }
 
@@ -351,19 +350,27 @@ public class CommunityIndividualFragment extends Fragment {
                 workoutPlansRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        for (DataSnapshot workoutPlanSnapshot : snapshot.getChildren()) {
-                            String workoutPlanNameQueried = workoutPlanSnapshot.child("name").getValue(String.class);
+                        for (DataSnapshot workoutPlanSnapshot
+                                : snapshot.getChildren()) {
+                            String workoutPlanNameQueried = workoutPlanSnapshot
+                                    .child("name").getValue(String.class);
                             if (workoutPlanName.equals(workoutPlanNameQueried)) {
                                 // Create a Bundle to pass data to the new fragment
                                 Bundle args = new Bundle();
                                 args.putString("userId", userID);
                                 args.putString("expectedCalories",
-                                        workoutPlanSnapshot.child("expectedCalories").getValue(String.class));
-                                args.putString("name", workoutPlanSnapshot.child("name").getValue(String.class));
-                                args.putString("notes", workoutPlanSnapshot.child("notes").getValue(String.class));
-                                args.putString("reps", workoutPlanSnapshot.child("reps").getValue(String.class));
-                                args.putString("sets", workoutPlanSnapshot.child("sets").getValue(String.class));
-                                args.putString("time", workoutPlanSnapshot.child("time").getValue(String.class));
+                                        workoutPlanSnapshot.child("expectedCalories")
+                                                .getValue(String.class));
+                                args.putString("name", workoutPlanSnapshot.child("name")
+                                        .getValue(String.class));
+                                args.putString("notes", workoutPlanSnapshot.child("notes")
+                                        .getValue(String.class));
+                                args.putString("reps", workoutPlanSnapshot.child("reps")
+                                        .getValue(String.class));
+                                args.putString("sets", workoutPlanSnapshot.child("sets")
+                                        .getValue(String.class));
+                                args.putString("time", workoutPlanSnapshot.child("time")
+                                        .getValue(String.class));
                                 detailFragment.setArguments(args);
 
                                 // Perform the fragment transaction
