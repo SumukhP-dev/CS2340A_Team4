@@ -252,6 +252,7 @@ public class CommunityFragment extends Fragment {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
                         checkIfAlreadyCreated(query);
+                        communityViewModel.setDuplicate(false);
                         return true;
                     }
 
@@ -297,12 +298,17 @@ public class CommunityFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     if (query.equals(postSnapshot.child("name").getValue(String.class))) {
-                        OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
-                                getContext(), getParentFragmentManager(),
-                                containerWorkoutPlansScrollviewCommunityPopup);
-                        visitor.visit(oldWorkoutPlan);
-                        communityViewModel.addToWorkoutPlanArrayList(query);
-                        return;
+                        if (!communityViewModel.getDuplicate()) {
+                            communityViewModel.setDuplicate(true);
+                            OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
+                                    getContext(), getParentFragmentManager(),
+                                    containerWorkoutPlansScrollviewCommunityPopup);
+                            visitor.visit(oldWorkoutPlan);
+                            communityViewModel.addToWorkoutPlanArrayList(query);
+                            return;
+                        } else {
+                            return;
+                        }
                     }
                 }
                 showCreateWorkoutPlan();
@@ -316,6 +322,7 @@ public class CommunityFragment extends Fragment {
     }
 
     public void showCreateWorkoutPlan() {
+        communityViewModel.setDuplicate(true);
         constraintLayoutCommunityPopup.setVisibility(View.GONE);
         frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
     }
