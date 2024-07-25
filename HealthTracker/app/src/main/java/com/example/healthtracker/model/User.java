@@ -39,6 +39,8 @@ public class User implements UserInterface {
     }
 
     // Allows user to get an instance of the Realtime database
+
+    //Below are simple get and set methods to help with User
     public FirebaseDatabase getDatabase() {
         return database;
     }
