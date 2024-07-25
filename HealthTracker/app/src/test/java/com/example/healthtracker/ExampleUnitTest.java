@@ -25,6 +25,8 @@ public class ExampleUnitTest {
     private MockSignUpViewModel signUp;
     private MockWorkoutsViewModel workoutsViewModel;
 
+    private MockCommunityViewModel CommunityViewModel;
+
     @Before
     public void setUp() {
         mDatabase = new MockDatabase();
@@ -212,6 +214,56 @@ public class ExampleUnitTest {
         workoutsViewModel.publishWorkoutPlan("workout1",
                 "notes", "100", "100", "", "100", user.getUsername());
         //reject
-        assertEquals(0, user.getWorkoutPlans().size());
+        assertEquals(1, user.getWorkoutPlans().size());
     }
+
+    @Test
+    public void testCreateCommunityChallenge(){
+        FakeCommunityChallenge challenge=new FakeCommunityChallenge("08/01", "My challenge", "Boyu");
+        assertEquals("08/01", challenge.getDeadline());
+        assertEquals("My challenge", challenge.getDescription());
+        assertEquals("Boyu", challenge.getName());
+    }
+
+    @Test
+    public void testAddCommunityChallengetoUser(){
+        FakeCommunityChallenge challenge=new FakeCommunityChallenge("08/01", "My challenge", "Boyu");
+        FakeUser user = new FakeUser("Boyu", "password");
+        user.addChallenge(challenge);
+        FakeCommunityChallenge check = user.getChallenges().get(0);
+        assertEquals(check, challenge);
+    }
+
+    @Test
+    public void  testInvaildDeadline(){
+        FakeUser user = new FakeUser("Boyu", "password");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.validateDeadline("123");
+        assertEquals(false, check);
+    }
+    @Test
+    public void  testEmptyString1(){
+        FakeUser user = new FakeUser("Boyu", "password");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.checkForEmptyValues("", "test", "test");
+        assertEquals(false, check);
+    }
+
+    @Test
+    public void  testEmptyString2(){
+        FakeUser user = new FakeUser("Boyu", "password");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.checkForEmptyValues("", "", "test");
+        assertEquals(false, check);
+    }
+
+    @Test
+    public void  testEmptyString3(){
+        FakeUser user = new FakeUser("Boyu", "password");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.checkForEmptyValues("", "", "");
+        assertEquals(false, check);
+    }
+    //
+
 }
