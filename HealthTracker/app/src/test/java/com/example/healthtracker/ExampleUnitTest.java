@@ -60,6 +60,7 @@ public class ExampleUnitTest {
         assertEquals(expectedCalories, actualCalories, 0.0001);
     }
 
+    // THis test checks for negative values and makes sure false inputs aren't messed with
     @Test
     public void checkForNegativeSetsOrRepsOrTime1() {
         String setsString = "-1";
@@ -89,7 +90,7 @@ public class ExampleUnitTest {
         }
         return check;
     }
-
+    // This helper method is to help with checking how many workouts there are for the user
     public int logNumberOfWorkoutPlansForUser(FakeUser user) {
         int res = user.getCounter();
         return res;
