@@ -26,6 +26,8 @@ import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.CommunityPopupViewModel;
 
 import com.example.healthtracker.ViewModel.CommunityViewModel;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -286,36 +288,33 @@ public class CommunityFragment extends Fragment {
         DatabaseReference workoutPlanRef = communityViewModel
                 .getDatabase().getReference("WorkoutPlans");
         workoutPlanRef.child(communityViewModel
-                .getUsername()).addValueEventListener(new ValueEventListener() {
+                .getUsername()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                            if (query.equals(postSnapshot.child("name").getValue(String.class))) {
-                                if (!communityViewModel.getDuplicate()) {
-                                    communityViewModel.setDuplicate(true);
-                                    OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
-                                            getContext(), getParentFragmentManager(),
-                                            containerWorkoutPlansScrollviewCommunityPopup);
-                                    visitor.visit(oldWorkoutPlan);
-                                    communityViewModel.addToWorkoutPlanArrayList(query);
+                    public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                for (DataSnapshot postSnapshot: task.getResult().getChildren()) {
+                                    if (query.equals(postSnapshot.child("name").getValue(String.class))) {
+                                        if (!communityViewModel.getDuplicate()) {
+                                            communityViewModel.setDuplicate(true);
+                                            OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
+                                                    getContext(), getParentFragmentManager(),
+                                                    containerWorkoutPlansScrollviewCommunityPopup);
+                                            visitor.visit(oldWorkoutPlan);
+                                            communityViewModel.addToWorkoutPlanArrayList(query);
+                                            break;
+                                        }
+                                    }
                                 }
-                                return;
-                            }
-                        }
-                        showCreateWorkoutPlan();
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
+                                showCreateWorkoutPlan();
                     }
                 });
     }
 
     public void showCreateWorkoutPlan() {
-        communityViewModel.setDuplicate(true);
-        constraintLayoutCommunityPopup.setVisibility(View.GONE);
-        frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
+        if(!communityViewModel.getDuplicate()) {
+            communityViewModel.setDuplicate(true);
+            constraintLayoutCommunityPopup.setVisibility(View.GONE);
+            frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
+        }
 
     }
 

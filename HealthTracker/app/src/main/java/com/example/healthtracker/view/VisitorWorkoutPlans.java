@@ -29,8 +29,7 @@ public class VisitorWorkoutPlans implements Visitor {
 
 
     public void addDataToWorkoutPlansScrollView(DataSnapshot userSnapshot, Context context,
-
-                                    LinearLayout linearLayoutWorkoutPlanPopupScrollView,
+                                                LinearLayout linearLayoutWorkoutPlanPopupScrollView,
                                                 int color) {
         String name = userSnapshot.child("name")
                 .getValue(String.class);
