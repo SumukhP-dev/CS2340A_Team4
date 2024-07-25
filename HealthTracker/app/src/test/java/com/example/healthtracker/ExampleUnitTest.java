@@ -264,5 +264,6 @@ public class ExampleUnitTest {
         boolean check=CommunityViewModel.checkForEmptyValues("", "", "");
         assertEquals(false, check);
     }
+    //
 
 }
