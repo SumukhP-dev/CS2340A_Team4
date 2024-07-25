@@ -218,6 +218,8 @@ public class ExampleUnitTest {
         assertEquals(1, user.getWorkoutPlans().size());
     }
 
+
+    //Tests for the Community Challenge View model
     @Test
     public void testCreateCommunityChallenge(){
         FakeCommunityChallenge challenge=new FakeCommunityChallenge("08/01", "My challenge", "Boyu");
@@ -282,5 +284,31 @@ public class ExampleUnitTest {
         boolean check=CommunityViewModel.checkForEmptyValues("name",
                 "description", "20241010");
         assertEquals(true, check);
+    }
+
+    @Test
+    public void testCheckForEmtpyValuesNoEmpties() {
+        CommunityViewModel = new MockCommunityViewModel(test1, mDatabase);
+        assertEquals(true, CommunityViewModel.checkForEmptyValues("Abe", "ow", "20341221"));
+
+    }
+
+    @Test
+    public void CheckForEmptyNameEmpty() {
+        CommunityViewModel = new MockCommunityViewModel(test1, mDatabase);
+        assertEquals(false, CommunityViewModel.checkForEmptyValues("", "ow", "20341221"));
+    }
+
+    @Test
+    public void CheckForEmptyNameEmptyErrorMessage() {
+        CommunityViewModel = new MockCommunityViewModel(test1, mDatabase);
+        CommunityViewModel.checkForEmptyValues("", "ow", "2134");
+        assertEquals("Challenge name cannot be empty.", CommunityViewModel.getNameErrorMessage());
+    }
+
+    @Test
+    public void CheckForEmptyDescriptionEmpty() {
+        CommunityViewModel = new MockCommunityViewModel(test1, mDatabase);
+        assertEquals(false, CommunityViewModel.checkForEmptyValues("Abe", "", "112233"));
     }
 }
