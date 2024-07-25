@@ -109,8 +109,8 @@ public class MockCommunityViewModel {
 
     public void createChallenge(String name, String description, String deadline, String username) {
 
-            FakeCommunityChallenge newChallenge = new FakeCommunityChallenge(deadline, description, name);
-            user.addChallenge(newChallenge);
+        FakeCommunityChallenge newChallenge = new FakeCommunityChallenge(deadline, description, name);
+        user.addChallenge(newChallenge);
 
     }
 
