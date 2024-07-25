@@ -1,18 +1,7 @@
 package com.example.healthtracker.view;
 
 import android.app.Activity;
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +12,12 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
 import com.example.healthtracker.ViewModel.CommunityPopupViewModel;
@@ -138,13 +133,16 @@ public class CommunityFragment extends Fragment {
         frameLayoutWorkoutPlanPopup = view.findViewById(R.id.workoutPlansPopupScreenLayout);
 
         createChallenge = view.findViewById(R.id.communityCreateChallengeButton);
-        workoutPlanName = frameLayoutWorkoutPlanPopup.findViewById(R.id.workoutPlanNameEditTextView);
+        workoutPlanName = frameLayoutWorkoutPlanPopup
+                .findViewById(R.id.workoutPlanNameEditTextView);
         notes = frameLayoutWorkoutPlanPopup.findViewById(R.id.notesEditTextView);
         sets = frameLayoutWorkoutPlanPopup.findViewById(R.id.setsTextNumberDecimal);
         reps = frameLayoutWorkoutPlanPopup.findViewById(R.id.repsTextNumberDecimal);
         time = frameLayoutWorkoutPlanPopup.findViewById(R.id.editTextTime);
-        expectedCalories = frameLayoutWorkoutPlanPopup.findViewById(R.id.expectedCaloriesTextNumberDecimal);
-        publishWorkoutPlan = frameLayoutWorkoutPlanPopup.findViewById(R.id.newWorkoutPlanButton);
+        expectedCalories = frameLayoutWorkoutPlanPopup
+                .findViewById(R.id.expectedCaloriesTextNumberDecimal);
+        publishWorkoutPlan = frameLayoutWorkoutPlanPopup
+                .findViewById(R.id.newWorkoutPlanButton);
 
         // Dismiss small screen
         constraintLayoutCommunityPopup.setVisibility(View.GONE);
@@ -196,30 +194,7 @@ public class CommunityFragment extends Fragment {
 
                 hideKeyboard(requireActivity());
 
-                DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
-                DatabaseReference workoutRef = workoutPlanRef.child(communityViewModel.getUsername());
-                workoutRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for(DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                            Log.d("nameDataSnapshot", userSnapshot.child("name").getValue(String.class));
-                            if (userSnapshot.child("name").getValue(String.class)
-                                    .equals(workoutPlanName.getText().toString())) {
-                                NewWorkoutPlan newWorkoutPlan = new NewWorkoutPlan(userSnapshot,
-                                        getContext(), getParentFragmentManager(),
-                                        containerWorkoutPlansScrollviewCommunityPopup);
-                                visitor.visit(newWorkoutPlan);
-                                communityViewModel.addToWorkoutPlanArrayList(workoutPlanName
-                                        .getText().toString());
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d("databaseError", "error fetching workoutPlan dataScnapshot");
-                    }
-                });
+                createNewWorkoutPlan();
 
                 // Dismiss the small screen
                 frameLayoutWorkoutPlanPopup.setVisibility(View.GONE);
@@ -282,7 +257,8 @@ public class CommunityFragment extends Fragment {
             errorMessage = errorMessage + " " + communityViewModel.getDeadlineErrorMessage();
         }
         if (communityViewModel.getWorkoutPlansMinimumErrorMessage() != null) {
-            errorMessage = errorMessage + " " + communityViewModel.getWorkoutPlansMinimumErrorMessage();
+            errorMessage = errorMessage + " "
+                    + communityViewModel.getWorkoutPlansMinimumErrorMessage();
         }
         if (errorMessage.length() != 0) {
             Toast toast = Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT);
@@ -292,33 +268,33 @@ public class CommunityFragment extends Fragment {
 
     public void checkIfAlreadyCreated(String query) {
         visitor = new VisitorWorkoutPlans();
-        DatabaseReference workoutPlanRef = communityViewModel.getDatabase().getReference("WorkoutPlans");
-        workoutPlanRef.child(communityViewModel.getUsername()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
-                    if (query.equals(postSnapshot.child("name").getValue(String.class))) {
-                        if (!communityViewModel.getDuplicate()) {
-                            communityViewModel.setDuplicate(true);
-                            OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
-                                    getContext(), getParentFragmentManager(),
-                                    containerWorkoutPlansScrollviewCommunityPopup);
-                            visitor.visit(oldWorkoutPlan);
-                            communityViewModel.addToWorkoutPlanArrayList(query);
-                            return;
-                        } else {
-                            return;
+        DatabaseReference workoutPlanRef = communityViewModel
+                .getDatabase().getReference("WorkoutPlans");
+        workoutPlanRef.child(communityViewModel
+                .getUsername()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                            if (query.equals(postSnapshot.child("name").getValue(String.class))) {
+                                if (!communityViewModel.getDuplicate()) {
+                                    communityViewModel.setDuplicate(true);
+                                    OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
+                                            getContext(), getParentFragmentManager(),
+                                            containerWorkoutPlansScrollviewCommunityPopup);
+                                    visitor.visit(oldWorkoutPlan);
+                                    communityViewModel.addToWorkoutPlanArrayList(query);
+                                }
+                                return;
+                            }
                         }
+                        showCreateWorkoutPlan();
                     }
-                }
-                showCreateWorkoutPlan();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                    }
+                });
     }
 
     public void showCreateWorkoutPlan() {
@@ -431,6 +407,36 @@ public class CommunityFragment extends Fragment {
                 container.removeView(button);
             }
         }
+    }
+
+    public void createNewWorkoutPlan() {
+        DatabaseReference workoutPlanRef
+                = communityViewModel.getDatabase().getReference("WorkoutPlans");
+        DatabaseReference workoutRef
+                = workoutPlanRef.child(communityViewModel.getUsername());
+        workoutRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot userSnapshot: dataSnapshot.getChildren()) {
+                    Log.d("nameDataSnapshot",
+                            userSnapshot.child("name").getValue(String.class));
+                    if (userSnapshot.child("name").getValue(String.class)
+                            .equals(workoutPlanName.getText().toString())) {
+                        NewWorkoutPlan newWorkoutPlan = new NewWorkoutPlan(userSnapshot,
+                                getContext(), getParentFragmentManager(),
+                                containerWorkoutPlansScrollviewCommunityPopup);
+                        visitor.visit(newWorkoutPlan);
+                        communityViewModel.addToWorkoutPlanArrayList(workoutPlanName
+                                .getText().toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.d("databaseError", "error fetching workoutPlan dataScnapshot");
+            }
+        });
     }
 
     @Override
