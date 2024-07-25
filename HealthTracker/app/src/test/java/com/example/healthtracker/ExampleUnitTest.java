@@ -277,7 +277,7 @@ public class ExampleUnitTest {
         assertEquals(false, check);
     }
     @Test
-    public void testEmptyString4(){
+    public void testEmptyString5(){
         FakeUser user = new FakeUser("Boyu", "password");
         CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
         boolean check=CommunityViewModel.checkForEmptyValues("", "", "");
