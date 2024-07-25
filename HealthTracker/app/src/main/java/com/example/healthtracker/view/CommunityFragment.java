@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+
 import android.widget.FrameLayout;
+
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -20,7 +22,9 @@ import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
+
 import com.example.healthtracker.ViewModel.CommunityPopupViewModel;
+
 import com.example.healthtracker.ViewModel.CommunityViewModel;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -113,6 +117,7 @@ public class CommunityFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_community, container, false);
 
         communityViewModel = new ViewModelProvider(this).get(CommunityViewModel.class);
+
         communityPopupViewModel = new ViewModelProvider(this).get(CommunityPopupViewModel.class);
         // pop-up
         constraintLayoutCommunityPopup = view.findViewById(R.id.constraintLayout3);
@@ -123,12 +128,13 @@ public class CommunityFragment extends Fragment {
         containerWorkoutPlansScrollviewCommunityPopup =
                 constraintLayoutCommunityPopup.findViewById(R.id.ContainerCommunityPopup);
         publishChallenge = constraintLayoutCommunityPopup.findViewById(R.id.newChallengeButton);
-
+      
         mDatabase = FirebaseDatabase.getInstance().getReference();
         this.container = view.findViewById(R.id.Container2);
         this.container.setVisibility(View.VISIBLE);
 
         searchView = view.findViewById(R.id.communitySearchView);
+
         communityPopupSearchView = view.findViewById(R.id.communityPopupSearchView);
         frameLayoutWorkoutPlanPopup = view.findViewById(R.id.workoutPlansPopupScreenLayout);
 
@@ -148,13 +154,16 @@ public class CommunityFragment extends Fragment {
         constraintLayoutCommunityPopup.setVisibility(View.GONE);
         frameLayoutWorkoutPlanPopup.setVisibility(View.GONE);
 
+
         communityViewModel.removeExpiredChallenges();
         getInfoToUpdateScreen();
 
         createChallenge.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 toggleCommunityPopupScreen();
+              
             }
         });
 
@@ -169,6 +178,7 @@ public class CommunityFragment extends Fragment {
                 );
 
                 displayErrorMessages();
+
                 hideKeyboard(requireActivity());
 
                 constraintLayoutCommunityPopup.setVisibility(View.GONE);
@@ -206,8 +216,10 @@ public class CommunityFragment extends Fragment {
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
                     @Override
                     public boolean onQueryTextSubmit(String query) {
+
                         remove(CommunityFragment.this.container, query, listOfButtons);
                         Log.d("removeFromScrollview", query);
+
                         return true;
                     }
 
@@ -221,6 +233,7 @@ public class CommunityFragment extends Fragment {
             getInfoToUpdateScreen();
             return true;
         });
+
 
         communityPopupSearchView.setOnQueryTextListener(
                 new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
@@ -242,6 +255,7 @@ public class CommunityFragment extends Fragment {
             return true;
         });
 
+
         return view;
     }
 
@@ -256,6 +270,7 @@ public class CommunityFragment extends Fragment {
         if (communityViewModel.getDeadlineErrorMessage() != null) {
             errorMessage = errorMessage + " " + communityViewModel.getDeadlineErrorMessage();
         }
+
         if (communityViewModel.getWorkoutPlansMinimumErrorMessage() != null) {
             errorMessage = errorMessage + " "
                     + communityViewModel.getWorkoutPlansMinimumErrorMessage();
@@ -301,6 +316,7 @@ public class CommunityFragment extends Fragment {
         communityViewModel.setDuplicate(true);
         constraintLayoutCommunityPopup.setVisibility(View.GONE);
         frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
+
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -316,6 +332,7 @@ public class CommunityFragment extends Fragment {
         }
         imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
+
 
     private void toggleCommunityPopupScreen() {
         constraintLayoutCommunityPopup.setVisibility(View.VISIBLE);
@@ -377,7 +394,9 @@ public class CommunityFragment extends Fragment {
 
                     FragmentManager fragmentManager = getParentFragmentManager();
                     fragmentManager.beginTransaction()
+
                             .replace(R.id.constraintLayout4, detailFragment)
+
                             .addToBackStack(null)
                             .commit();
                 });

@@ -100,7 +100,6 @@ public class CommunityIndividualFragment extends Fragment {
         setChallengeName = constraintLayout.findViewById(R.id.communityWorkoutPlanTitleTextView);
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
-
         participantsContainer = view.findViewById(R.id.ContainerCommunity);
         workoutPlansContainer = view.findViewById(R.id.ContainerWorkoutPlans);
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
