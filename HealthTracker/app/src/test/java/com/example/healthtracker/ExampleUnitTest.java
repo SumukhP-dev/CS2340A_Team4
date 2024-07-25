@@ -235,12 +235,21 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void  testInvaildDeadline(){
+    public void testInvaildDeadline(){
         FakeUser user = new FakeUser("Boyu", "password");
         CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
         boolean check=CommunityViewModel.validateDeadline("123");
         assertEquals(false, check);
     }
+
+    @Test
+    public void testValidDeadline(){
+        FakeUser user = new FakeUser("Sumukh", "thisisapassword");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.validateDeadline("20301010");
+        assertEquals(true, check);
+    }
+
     @Test
     public void  testEmptyString1(){
         FakeUser user = new FakeUser("Boyu", "password");
@@ -250,7 +259,7 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void  testEmptyString2(){
+    public void testEmptyString2(){
         FakeUser user = new FakeUser("Boyu", "password");
         CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
         boolean check=CommunityViewModel.checkForEmptyValues("", "", "test");
@@ -258,12 +267,19 @@ public class ExampleUnitTest {
     }
 
     @Test
-    public void  testEmptyString3(){
+    public void testEmptyString3(){
         FakeUser user = new FakeUser("Boyu", "password");
         CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
         boolean check=CommunityViewModel.checkForEmptyValues("", "", "");
         assertEquals(false, check);
     }
-    //
 
+    @Test
+    public void testValidString() {
+        FakeUser user = new FakeUser("Sumukh", "examplepassword");
+        CommunityViewModel=new MockCommunityViewModel(user, mDatabase);
+        boolean check=CommunityViewModel.checkForEmptyValues("name",
+                "description", "20241010");
+        assertEquals(true, check);
+    }
 }
