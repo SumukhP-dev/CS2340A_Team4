@@ -19,7 +19,8 @@ support through forums and challenges for motivation and guidance.
 - [Tejes Prabakaran]()
 - [Ashley Vaia](https://github.com/ashleyvaia)
 
-## Sprint 1
+## :iphone: Sprint 1
+Game/App Foundation, Login, Firebase, UI Screens, MVVM, Domain Model, Use Case Diagram, Agile
 | **Task**                | **Subtask**                      | **Boyu Cheng** | **Miranda Dominguez** | **Sumukh Paspuleti** | **Ashley Vaia** |
 |-------------------------|----------------------------------|----------------|-----------------------|----------------------|-----------------|
 |       Domain Model      |                                  |                |           X           |           X          |                 |
@@ -35,7 +36,8 @@ support through forums and challenges for motivation and guidance.
 |    MVVM Architecture    |                                  |                |           X           |                      |                 |
 |    Agile Development    |                                  |                |                       |                      |        X        |
 
-## Sprint 2
+## :muscle: Sprint 2
+Workout Tracking and Personal Information, Singleton, SD, SOLID
 | **Task**                         | **Arora Arnav** | **Boyu Cheng** | **Miranda Dominguez** | **Sumukh Paspuleti** | **Tejes Prabakaran** | **Ashley Vaia** |
 |----------------------------------|-----------------|----------------|-----------------------|----------------------|----------------------|-----------------|
 | Revised Domain Model             |                 |                |           X           |                      |                      |        X        |
@@ -50,7 +52,8 @@ support through forums and challenges for motivation and guidance.
 | Design Pattern Evidence          |                 |                |           X           |                      |                      |        X        |
 | SOLID Evidence                   |        X        |        X       |                       |                      |                      |                 |
 
-## Sprint 3
+## :memo: Sprint 3
+DCD, GRASP, Strategy/Observer, Developing workout plans integration
 | **Task**                   | **Arora Arnav** | **Boyu Cheng** | **Miranda Dominguez** | **Sumukh Paspuleti** | **Tejes Prabakaran** | **Ashley Vaia** |
 |----------------------------|-----------------|----------------|-----------------------|----------------------|----------------------|-----------------|
 | Design Class Diagram       |                 |                |                       |           X          |                      |                 |
@@ -60,7 +63,8 @@ support through forums and challenges for motivation and guidance.
 | 6 JUnit Tests             |        X        |        X       |           X           |                      |                      |                 |
 | GRASP Evidence             |        X        |                |                       |                      |                      |        X        |
 | Design Pattern Evidence    |        X        |                |                       |                      |                      |        X        |
-## Sprint 4
+## :earth_americas: Sprint 4
+Design Patterns, Community Challenge Screen 
 | **Task**                          | **Arora Arnav** | **Boyu Cheng** | **Miranda Dominguez** | **Sumukh Paspuleti** | **Tejes Prabakaran** | **Ashley Vaia** |
 |-----------------------------------|-----------------|----------------|-----------------------|----------------------|----------------------|-----------------|
 | Community Challenge UI            |                 |                |                       |           X          |                      |        X        |
