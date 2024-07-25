@@ -124,7 +124,7 @@
 
 
         <LinearLayout
-            android:id="@+id/Container4"
+            android:id="@+id/ContainerWorkoutPlans"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
