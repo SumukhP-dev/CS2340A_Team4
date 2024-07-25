@@ -132,6 +132,7 @@ public class TrackerFragment extends Fragment {
                                                     String workoutNa = String.valueOf(
                                                             dataSnap.child("workoutName")
                                                                     .getValue());
+
                                                     // Forgot to add this comment :)
                                                     // Adding Date
                                                     String date = String

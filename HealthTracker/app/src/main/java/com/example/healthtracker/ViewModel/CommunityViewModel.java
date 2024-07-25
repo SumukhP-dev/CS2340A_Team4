@@ -15,7 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CommunityViewModel extends ViewModel {
+
     private User user;
     private ArrayList<String> workoutPlans;
     private ArrayList<String> participants;
@@ -59,6 +59,7 @@ public class CommunityViewModel extends ViewModel {
         return user.getDatabase();
     }
 
+
     public String getWorkoutPlansMinimumErrorMessage() {
         return workoutPlansMinimumErrorMessage.getValue();
     }
@@ -74,6 +75,8 @@ public class CommunityViewModel extends ViewModel {
     public void setNameErrorMessage(String nameErrorMessage) {
         this.nameErrorMessage.setValue(nameErrorMessage);
     }
+
+
 
     public void addToWorkoutPlanArrayList(String workoutPlan) {
         this.workoutPlans.add(workoutPlan);
@@ -248,7 +251,6 @@ public class CommunityViewModel extends ViewModel {
         }
         return true;
     }
-
     public void removeExpiredChallenges() {
         DatabaseReference challengeRef = user.getDatabase().getReference("Community");
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
