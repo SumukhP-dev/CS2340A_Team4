@@ -107,8 +107,12 @@ public class FakeUser {
         return challenges;
     }
 
-    public void addChallenges(FakeCommunityChallenge challenge) {
+    public void addChallenge(FakeCommunityChallenge challenge) {
         challenges.add(challenge);
+    }
+
+    public void removeChallenge(FakeCommunityChallenge challenge) {
+        challenges.remove(challenge);
     }
 
 }
