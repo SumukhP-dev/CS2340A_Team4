@@ -252,6 +252,7 @@ public class CommunityViewModel extends ViewModel {
         }
         return true;
     }
+  
     public void removeExpiredChallenges() {
         DatabaseReference challengeRef = user.getDatabase().getReference("Community");
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
