@@ -37,7 +37,8 @@ public class OldWorkoutPlan implements WorkoutPlan {
         return linearLayoutWorkoutPlanPopupScrollView;
     }
 
-    public void setLinearLayoutWorkoutPlanPopupScrollView(LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
+    public void setLinearLayoutWorkoutPlanPopupScrollView(
+            LinearLayout linearLayoutWorkoutPlanPopupScrollView) {
         this.linearLayoutWorkoutPlanPopupScrollView = linearLayoutWorkoutPlanPopupScrollView;
     }
 
