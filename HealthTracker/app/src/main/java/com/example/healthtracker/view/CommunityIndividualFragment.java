@@ -2,6 +2,7 @@ package com.example.healthtracker.view;
 
 import android.content.Context;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -100,8 +102,10 @@ public class CommunityIndividualFragment extends Fragment {
         setChallengeName = constraintLayout.findViewById(R.id.communityWorkoutPlanTitleTextView);
         setDeadline = constraintLayout.findViewById(R.id.deadlineDataTextView);
         setDescription = constraintLayout.findViewById(R.id.descriptionDataTextView);
+
         participantsContainer = view.findViewById(R.id.ContainerCommunity);
         workoutPlansContainer = view.findViewById(R.id.ContainerWorkoutPlans);
+
         acceptChallengeButton = constraintLayout.findViewById(R.id.challengeButton);
         completeChallengeButton = constraintLayout.findViewById(R.id.completeChallengeButton);
         back = constraintLayout.findViewById(R.id.communityBackButton);
@@ -145,6 +149,7 @@ public class CommunityIndividualFragment extends Fragment {
                 String currentUser = communityViewModel.getUsername();
 
                 DatabaseReference mDatabase = communityViewModel.getDatabase().getReference();
+
                 mDatabase.child("Community").child(currentChallengerAuthor)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
@@ -164,7 +169,6 @@ public class CommunityIndividualFragment extends Fragment {
 
                                         acceptChallengeButton.setVisibility(View.GONE);
                                         completeChallengeButton.setVisibility(View.VISIBLE);
-
                                         break;
                                     }
                                 }
@@ -284,6 +288,7 @@ public class CommunityIndividualFragment extends Fragment {
 
         CommunityConcreteObserver participantObserver
                 = new CommunityConcreteObserver(participantID, statusTextView);
+      
         challengeStatus.addObserver(participantObserver);
 
         participantsContainer.addView(participantView);

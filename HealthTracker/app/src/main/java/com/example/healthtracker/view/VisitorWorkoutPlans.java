@@ -1,6 +1,7 @@
 package com.example.healthtracker.view;
 
 import android.content.Context;
+
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -28,6 +29,7 @@ public class VisitorWorkoutPlans implements Visitor {
 
 
     public void addDataToWorkoutPlansScrollView(DataSnapshot userSnapshot, Context context,
+
                                     LinearLayout linearLayoutWorkoutPlanPopupScrollView,
                                                 int color) {
         String name = userSnapshot.child("name")
@@ -46,6 +48,7 @@ public class VisitorWorkoutPlans implements Visitor {
 
             workoutButton.setBackgroundColor(color);
             linearLayoutWorkoutPlanPopupScrollView.addView(workoutButton);
+
         }
     }
 }
