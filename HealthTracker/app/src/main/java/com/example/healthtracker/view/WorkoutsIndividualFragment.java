@@ -4,13 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.example.healthtracker.R;
+import com.example.healthtracker.ViewModel.WorkoutsViewModel;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -38,7 +41,17 @@ public class WorkoutsIndividualFragment extends Fragment {
     private TextView setName;
 
     private ImageButton back;
+    private Button addWorkoutPlanButton;
 
+    private String userId;
+    private String cals;
+    private String name;
+    private String notes;
+    private String reps;
+    private String sets;
+    private String time;
+
+    private WorkoutsViewModel workoutsViewModel;
 
     public WorkoutsIndividualFragment() {
         // Required empty public constructor
@@ -76,6 +89,9 @@ public class WorkoutsIndividualFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_workouts_individual, container, false);
 
+        workoutsViewModel = new ViewModelProvider(this)
+                .get(WorkoutsViewModel.class);
+
         constraintLayout = view.findViewById(R.id.frameLayout3);
 
         setAuthor = constraintLayout.findViewById(R.id.authorDataTextView);
@@ -86,16 +102,17 @@ public class WorkoutsIndividualFragment extends Fragment {
         setNotes = constraintLayout.findViewById(R.id.notesDataTextView);
         setName = constraintLayout.findViewById(R.id.workoutPlanTitleTextView);
         back = constraintLayout.findViewById(R.id.imageButton3);
+        addWorkoutPlanButton = constraintLayout.findViewById(R.id.addWorkoutPlanButton);
 
         Bundle args = getArguments();
         if (args != null) {
-            String userId = args.getString("userId");
-            String cals = args.getString("expectedCalories");
-            String name = args.getString("name");
-            String notes = args.getString("notes");
-            String reps = args.getString("reps");
-            String sets = args.getString("sets");
-            String time = args.getString("time");
+            userId = args.getString("userId");
+            cals = args.getString("expectedCalories");
+            name = args.getString("name");
+            notes = args.getString("notes");
+            reps = args.getString("reps");
+            sets = args.getString("sets");
+            time = args.getString("time");
 
             setAuthor.setText(userId);
             setSets.setText(sets);
@@ -110,6 +127,15 @@ public class WorkoutsIndividualFragment extends Fragment {
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getParentFragmentManager().popBackStack();
+            }
+        });
+
+        addWorkoutPlanButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                workoutsViewModel.publishWorkoutPlan(name, notes, sets,
+                        reps, time, cals, workoutsViewModel.getUsername());
                 getParentFragmentManager().popBackStack();
             }
         });

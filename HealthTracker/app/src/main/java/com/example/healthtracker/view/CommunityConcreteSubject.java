@@ -3,7 +3,7 @@ package com.example.healthtracker.view;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CommunityConcreteSubject implements CommunitySubject{
+public class CommunityConcreteSubject implements CommunitySubject {
 
     private List<CommunityObserver> observerList;
     // private String status;
