@@ -29,9 +29,11 @@ public class VisitorWorkoutPlans implements Visitor {
 
 
     public void addDataToWorkoutPlansScrollView(DataSnapshot userSnapshot, Context context,
-        LinearLayout linearLayoutWorkoutPlanPopupScrollView, int color) {
 
-        String name = userSnapshot.child("name").getValue(String.class);
+                                    LinearLayout linearLayoutWorkoutPlanPopupScrollView,
+                                                int color) {
+        String name = userSnapshot.child("name")
+                .getValue(String.class);
 
         if ((name != null) && (context != null)) {
             Button workoutButton = new Button(context);
@@ -46,15 +48,7 @@ public class VisitorWorkoutPlans implements Visitor {
 
             workoutButton.setBackgroundColor(color);
             linearLayoutWorkoutPlanPopupScrollView.addView(workoutButton);
-            /*
-                // Add some space between buttons
-                View spacer = new View(context);
-                spacer.setLayoutParams(new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        8)); // 8dp height
-                linearLayoutWorkoutPlanPopupScrollView.addView(spacer);
-                8
-             */
+
         }
     }
 }

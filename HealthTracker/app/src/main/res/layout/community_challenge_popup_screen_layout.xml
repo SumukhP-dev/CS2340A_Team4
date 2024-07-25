@@ -25,7 +25,6 @@
         app:layout_constraintTop_toBottomOf="@+id/newChallengeTextView"
         app:layout_constraintVertical_bias="0.0" />
 
-
     <EditText
         android:id="@+id/descriptionEditTextView"
         android:layout_width="match_parent"
@@ -121,4 +120,5 @@
     </ScrollView>
 
     <!-- Add more views as needed -->
+
 </androidx.constraintlayout.widget.ConstraintLayout>
