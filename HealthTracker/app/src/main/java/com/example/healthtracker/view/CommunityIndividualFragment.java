@@ -143,7 +143,7 @@ public class CommunityIndividualFragment extends Fragment {
         acceptChallengeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // System.out.println("hello"); -- button clicks work
+
                 String currentChallengerAuthor = setChallenger.getText().toString();
                 String currentChallengeName = setChallengeName.getText().toString();
                 String currentUser = communityViewModel.getUsername();
@@ -236,14 +236,14 @@ public class CommunityIndividualFragment extends Fragment {
                 participantsContainer.removeAllViews();
                 for (DataSnapshot challengeSnapshot : snapshot.getChildren()) {
                     String challengeName = challengeSnapshot.child("name").getValue(String.class);
-                    System.out.println("iterating. currently at: " + challengeName);
+
 
                     if (challengeName.equals(name)) {
-                        System.out.println("found a match! " + challengeName + " equals " + name);
+
 
                         for (DataSnapshot participant
                                 : challengeSnapshot.child("participants").getChildren()) {
-                            System.out.println(participant.getKey());
+
                             addParticipantView(participant.getKey(),
                                     participant.getValue(String.class));
                         }
