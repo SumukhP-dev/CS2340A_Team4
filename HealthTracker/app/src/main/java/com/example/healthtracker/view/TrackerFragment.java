@@ -133,8 +133,12 @@ public class TrackerFragment extends Fragment {
                                                     TextView textView = new TextView(getContext());
                                                     textView.setLayoutParams(
                                                             new LinearLayout.LayoutParams(
-                                                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                                    ViewGroup
+                                                                            .LayoutParams
+                                                                            .MATCH_PARENT,
+                                                                    ViewGroup
+                                                                            .LayoutParams
+                                                                            .WRAP_CONTENT));
                                                     textView.setPadding(16, 16,
                                                             16, 16);
 

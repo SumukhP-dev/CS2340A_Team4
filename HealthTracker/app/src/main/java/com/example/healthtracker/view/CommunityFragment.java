@@ -291,26 +291,26 @@ public class CommunityFragment extends Fragment {
                 .getUsername()).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                for (DataSnapshot postSnapshot: task.getResult().getChildren()) {
-                                    if (query.equals(postSnapshot.child("name").getValue(String.class))) {
-                                        if (!communityViewModel.getDuplicate()) {
-                                            communityViewModel.setDuplicate(true);
-                                            OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
-                                                    getContext(), getParentFragmentManager(),
-                                                    containerWorkoutPlansScrollviewCommunityPopup);
-                                            visitor.visit(oldWorkoutPlan);
-                                            communityViewModel.addToWorkoutPlanArrayList(query);
-                                            break;
-                                        }
-                                    }
+                        for (DataSnapshot postSnapshot: task.getResult().getChildren()) {
+                            if (query.equals(postSnapshot.child("name").getValue(String.class))) {
+                                if (!communityViewModel.getDuplicate()) {
+                                    communityViewModel.setDuplicate(true);
+                                    OldWorkoutPlan oldWorkoutPlan = new OldWorkoutPlan(postSnapshot,
+                                            getContext(), getParentFragmentManager(),
+                                            containerWorkoutPlansScrollviewCommunityPopup);
+                                    visitor.visit(oldWorkoutPlan);
+                                    communityViewModel.addToWorkoutPlanArrayList(query);
+                                    break;
                                 }
-                                showCreateWorkoutPlan();
+                            }
+                        }
+                        showCreateWorkoutPlan();
                     }
                 });
     }
 
     public void showCreateWorkoutPlan() {
-        if(!communityViewModel.getDuplicate()) {
+        if (!communityViewModel.getDuplicate()) {
             communityViewModel.setDuplicate(true);
             constraintLayoutCommunityPopup.setVisibility(View.GONE);
             frameLayoutWorkoutPlanPopup.setVisibility(View.VISIBLE);
