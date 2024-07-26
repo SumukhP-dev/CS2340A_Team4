@@ -22,8 +22,9 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.Calendar;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -117,9 +118,10 @@ public class TrackerFragment extends Fragment {
                         spinnerCount = Integer.parseInt(workoutNum);
                         Log.d("counter inside class:", String.valueOf(spinnerCount));
                         for (int i = 0; i < spinnerCount && i < 5; i++) {
+                            int counter = spinnerCount - i;
                             mDatabase.child("Workouts").child(username)
                                     .child("workout "
-                                            + String.valueOf(spinnerCount - i))
+                                            + String.valueOf(counter))
                                     .get().addOnCompleteListener(
                                             new OnCompleteListener<DataSnapshot>() {
                                                 @Override
@@ -127,9 +129,18 @@ public class TrackerFragment extends Fragment {
                                                                        Task<DataSnapshot> task) {
                                                     DataSnapshot dataSnap = task
                                                             .getResult();
+                                                    // Adding workoutNa
                                                     String workoutNa = String.valueOf(
                                                             dataSnap.child("workoutName")
                                                                     .getValue());
+
+                                                    // Forgot to add this comment :)
+                                                    // Adding Date
+
+                                                    String date = String
+                                                            .valueOf(dataSnap
+                                                                    .child("Date").getValue());
+
                                                     TextView textView = new TextView(getContext());
                                                     textView.setLayoutParams(
                                                             new LinearLayout.LayoutParams(
@@ -139,7 +150,10 @@ public class TrackerFragment extends Fragment {
                                                             16, 16);
 
                                                     String displayText = String
-                                                            .format("Workout: %s", workoutNa);
+
+                                                            .format("%s    Workout: %s",
+                                                                    date, workoutNa);
+
                                                     textView.setText(displayText);
 
                                                     // Add the TextView to the container
@@ -221,9 +235,10 @@ public class TrackerFragment extends Fragment {
         user.put("sets", sets);
         user.put("workoutName", workout);
 
-        Date currentDate = Calendar.getInstance().getTime();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+        String currentDateandTime = sdf.format(new Date());
 
-        user.put("Date", currentDate);
+        user.put("Date", currentDateandTime);
 
 
         mDatabase.child("User").child(username)
@@ -247,13 +262,6 @@ public class TrackerFragment extends Fragment {
                     }
                 });
 
-
-
-
-
-
-
-
         TextView textView = new TextView(getContext());
         textView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -261,7 +269,7 @@ public class TrackerFragment extends Fragment {
         textView.setPadding(16, 16, 16, 16);
 
         // Set the text
-        String displayText = String.format("Workout: %s", workout);
+        String displayText = String.format("%s    Workout: %s", currentDateandTime, workout);
         textView.setText(displayText);
 
         // Add the TextView to the container
