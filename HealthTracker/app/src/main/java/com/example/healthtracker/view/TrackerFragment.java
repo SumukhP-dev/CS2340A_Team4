@@ -144,8 +144,10 @@ public class TrackerFragment extends Fragment {
                                                     TextView textView = new TextView(getContext());
                                                     textView.setLayoutParams(
                                                             new LinearLayout.LayoutParams(
-                                                            ViewGroup.LayoutParams.MATCH_PARENT,
-                                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                                                    ViewGroup.LayoutParams
+                                                                            .MATCH_PARENT,
+                                                                    ViewGroup.LayoutParams
+                                                                            .WRAP_CONTENT));
                                                     textView.setPadding(16, 16,
                                                             16, 16);
 
@@ -245,20 +247,20 @@ public class TrackerFragment extends Fragment {
                 .get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DataSnapshot> task) {
-                            DataSnapshot dataSnap = task.getResult();
-                            String workoutNum = String.valueOf(
-                                    dataSnap.child("Counter").getValue());
-                            if (workoutNum.equals("null")) {
-                                workoutNum = String.valueOf(0);
-                            }
-                            workoutString = "workout "
-                                    + String.valueOf(Integer
-                                    .valueOf(workoutNum) + 1);
-                            mDatabase.child("User").child(username)
-                                    .child("Counter").setValue(
-                                            String.valueOf(Integer.valueOf(workoutNum) + 1));
-                            mDatabase.child("Workouts")
-                                    .child(username).child(workoutString).setValue(user);
+                        DataSnapshot dataSnap = task.getResult();
+                        String workoutNum = String.valueOf(
+                                dataSnap.child("Counter").getValue());
+                        if (workoutNum.equals("null")) {
+                            workoutNum = String.valueOf(0);
+                        }
+                        workoutString = "workout "
+                                + String.valueOf(Integer
+                                .valueOf(workoutNum) + 1);
+                        mDatabase.child("User").child(username)
+                                .child("Counter").setValue(
+                                        String.valueOf(Integer.valueOf(workoutNum) + 1));
+                        mDatabase.child("Workouts")
+                                .child(username).child(workoutString).setValue(user);
                     }
                 });
 
