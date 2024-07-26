@@ -14,7 +14,7 @@ support through forums and challenges for motivation and guidance.
 ## :busts_in_silhouette: Contributors 
 - [Arnav Arora]()
 - [Boyu Cheng]()
-- [Miranda Dominguez]()
+- [Miranda Dominguez](https://github.com/MirandaJDom)
 - [Sumukh Paspuleti](https://github.com/SumukhP-dev)
 - [Tejes Prabakaran]()
 - [Ashley Vaia](https://github.com/ashleyvaia)
